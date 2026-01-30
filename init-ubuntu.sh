@@ -38,35 +38,31 @@ configure_ssh() {
     local ssh_key="$1"
 
     cat > /etc/ssh/sshd_config <<'EOF'
-# Supported HostKey algorithms by order of preference.
-HostKey /etc/ssh/ssh_host_ed25519_key
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_ecdsa_key
-
-# Network
+# --- Network Configuration ---
 ListenAddress 0.0.0.0
 Port 8080
 
-# Cryptographic
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+# --- Cryptographic Hardening ---
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+KexAlgorithms sntrup761x25519-sha512@openssh.com
 
-# Authentication
-PubkeyAuthentication yes
-AuthenticationMethods publickey
+# --- Authentication Settings ---
 PermitRootLogin prohibit-password
+PubkeyAuthentication yes
+PasswordAuthentication no
+PermitEmptyPasswords no
+KbdInteractiveAuthentication no
 UsePAM no
 
-# Session
+# --- SSH Session Behavior ---
 X11Forwarding yes
 PrintMotd no
 
-# Environment
+# --- Environment Configuration ---
 AcceptEnv LANG LC_*
 
-# SFTP
-Subsystem sftp  /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO
+# --- SFTP Subsystem ---
+Subsystem sftp /usr/lib/openssh/sftp-server
 EOF
 
     mkdir -p ~/.ssh && chmod 700 ~/.ssh
