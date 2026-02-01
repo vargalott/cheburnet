@@ -1,18 +1,18 @@
 ## cheburnet & etc
 
 ```sh
-bash <((wget -qO- https://raw.githubusercontent.com/vargalott/configs/refs/heads/main/init-ubuntu.sh) "<ssh_key>" "<cert_email>" "<cert_domain>"
+bash <(wget -qO- https://raw.githubusercontent.com/vargalott/configs/refs/heads/main/init-ubuntu.sh) "<ssh_key>" "<cert_email>" "<cert_domain>"
 ```
 
 ```sh
 ssh -p <port> user@host -L <local_port>:127.0.0.1:<remote_port>
 
-wget -qO- IP.Check.Place | bash -s -- -l en
-bash <(wget -qO- https://github.com/vernette/censorcheck/raw/master/censorcheck.sh)
-wget -qO- "https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh" | bash
-wget -qO- check.unlock.media | bash -s -- -E en -R 0
-wget -qO- bench.sh | bash
-wget -qO- nws.sh | bash
+bash <(wget -qO- IP.Check.Place) -l en
+bash <(wget -qO- https://raw.githubusercontent.com/vernette/censorcheck/master/censorcheck.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh)
+bash <(wget -qO- check.unlock.media) -E en -R 0
+bash <(wget -qO- bench.sh)
+bash <(wget -qO- nws.sh)
 ```
 
 ```sh
