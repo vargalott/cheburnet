@@ -1,28 +1,27 @@
-# cheburnet & etc
+## cheburnet & etc
 
-## vps init
 ```sh
 bash <((wget -qO- https://raw.githubusercontent.com/vargalott/configs/refs/heads/main/init-ubuntu.sh) "<ssh_key>" "<cert_email>" "<cert_domain>"
 ```
 
-## some stuff
 ```sh
 ssh -p <port> user@host -L <local_port>:127.0.0.1:<remote_port>
 
 wget -qO- IP.Check.Place | bash -s -- -l en
-bash <(wget -qO- https://github.com/vernette/censorcheck/raw/master/censorcheck.sh) --mode dpi
+bash <(wget -qO- https://github.com/vernette/censorcheck/raw/master/censorcheck.sh)
 wget -qO- "https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh" | bash
 wget -qO- check.unlock.media | bash -s -- -E en -R 0
 wget -qO- bench.sh | bash
 wget -qO- nws.sh | bash
+```
 
-certbot certonly --standalone --agree-tos -m EMAIL -d DOMAIN
-certbot renew --dry-run
-
-docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
-
+```sh
+echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
 uuidgen
 docker run ghcr.io/sagernet/sing-box:latest generate reality-keypair
 
-echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
+docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
+
+certbot certonly --standalone --agree-tos -m EMAIL -d DOMAIN
+certbot renew --dry-run
 ```
