@@ -11,9 +11,9 @@ tcp-concurrent: true
 global-client-fingerprint: chrome
 
 
-# profile:
-#   store-selected: true
-#   store-fake-ip: true
+profile:
+  store-selected: true
+  store-fake-ip: true
 
 
 tun:
@@ -55,8 +55,8 @@ dns:
   respect-rules: false
   ipv6: false
   enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.0/16  
-  
+  fake-ip-range: 198.18.0.0/16
+
   default-nameserver:
     - 1.1.1.1
     - 9.9.9.9
@@ -72,153 +72,211 @@ dns:
 
 proxies:
 
-  # GATEWAY
-  - name: "RU-GATEWAY"
-    # ...
-
-  # ---------
-  
-  - name: "PROXY"
-    dialer-proxy: GATEWAY
-    # ...  
-
-
-  # type: hysteria2
-  # server: DOMAIN
-  # # up: "100 Mbps"
-  # # down: "100 Mbps"
-  # port: 443
-  # udp: true
-  # password: "PASSWORD"
-  # # obfs: salamander
-  # # obfs-password: "OBFS-PASSWORD"
-  # sni: DOMAIN
-  # skip-cert-verify: false
-
-  # type: vless
-  # network: tcp
-  # server: DOMAIN
-  # port: 443
-  # udp: true
-  # uuid: UUID
-  # flow: xtls-rprx-vision
-  # packet-encoding: xudp
-  # tls: true
-  # servername: DOMAIN
-  # client-fingerprint: chrome
-  # reality-opts:
-  #   public-key: PBK
+  - name: VLESS
+    dialer-proxy: GATEWAY-PROXY
+    type: vless
+    network: tcp
+    server: 
+    port: 443
+    udp: true
+    uuid: 
+    flow: xtls-rprx-vision
+    packet-encoding: xudp
+    tls: true
+    servername: 
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 
 
 
-# proxy-providers:
-#   istanbulsydneyhotel:
-#     type: http
-#     url: https://istanbulsydneyhotel.com/blogs/site/sni.php?security=reality&country=de;fi;se;nl&kind=vless
-#     path: ./providers/istanbulsydneyhotel.yaml
-#     interval: 3600
-#     proxy: DIRECT
-#     override:
-#       udp: true
+proxy-providers-defaults: &pp-defaults
+  type: http
+  interval: 21600
+  proxy: DIRECT
+  exclude-type: ss|vmess
 
+proxy-providers-override:
+  udp-and-dialer: &ppo-1
+    override:
+      dialer-proxy: GATEWAY-PROXY
+      udp: true
+
+  udp-only: &ppo-2
+    override:
+      udp: true
+
+proxy-providers:
+
+  # https://github.com/sakha1370/OpenRay
+  regular-openray:
+    <<: [ *pp-defaults, *ppo-1 ]
+    url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/all_valid_proxies.txt
+    path: ./providers/regular-openray.txt
+    filter: DE|NL|FI|FR|PL|SE
+
+  # https://github.com/STR97/STRUGOV
+  regular-strugov:
+    <<: [ *pp-defaults, *ppo-1 ]
+    url: https://raw.githubusercontent.com/STR97/STRUGOV/refs/heads/main/STR.BYPASS
+    path: ./providers/regular-strugov.txt
+    filter: Denmark|Netherlands|Finland|France|Poland|Sweden
+
+  # source: https://github.com/igareck/vpn-configs-for-russia
+  regular-vcfr:
+    <<: [ *pp-defaults, *ppo-1 ]
+    url:  https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS+All_RUS.txt
+    path: ./providers/regular-vcfr.txt 
+
+  # ---
+
+  # source: https://github.com/igareck/vpn-configs-for-russia
+  whitelist-cidr-georu:
+    <<: [ *pp-defaults, *ppo-2 ]
+    url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt
+    path: ./providers/whitelist-cidr-georu.txt
+    filter: Russia
+
+
+proxy-groups-defaults: &pg-defaults
+  url: http://cp.cloudflare.com/generate_204
+  expected-status: 204
+  interval: 30
+  timeout: 5000
+  lazy: true
 
 proxy-groups:
   - name: PROXY
+    <<: [ *pg-defaults ]
     type: select
-    url: http://cp.cloudflare.com/generate_204
-    interval: 30
     proxies:
-      - "PROXY"
-    # use:
-    #  - istanbulsydneyhotel
+      - VLESS
+      - REGULAR-OPENRAY
+      - REGULAR-STRUGOV
+      - REGULAR-VCFR
+      - REJECT
+
+  - name: GATEWAY-PROXY
+    <<: [ *pg-defaults ]
+    type: select
+    proxies:
+      - DIRECT
+      - WHITELIST-CIDR-GEORU
+      - REJECT
+
+  - name: GATEWAY-RU
+    <<: [ *pg-defaults ]
+    type: select
+    proxies:
+      - DIRECT
+      - WHITELIST-CIDR-GEORU
+      - REJECT
+
+  # ---
+
+  # do not apply *pg-defaults to avoid a large amount of pings
+  - name: REGULAR-OPENRAY
+    type: select
+    proxies:
+      - REJECT
+    use:
+      - regular-openray
+
+  # do not apply *pg-defaults to avoid a large amount of pings
+  - name: REGULAR-STRUGOV
+    type: select
+    proxies:
+      - REJECT
+    use:
+      - regular-strugov
+
+  # do not apply *pg-defaults to avoid a large amount of pings
+  - name: REGULAR-VCFR
+    type: select
+    proxies:
+      - REJECT
+    use:
+      - regular-vcfr
   
-  - name: GATEWAY
+  # ---
+
+  # do not apply *pg-defaults to avoid a large amount of pings
+  - name: WHITELIST-CIDR-GEORU
     type: select
-    url: http://cp.cloudflare.com/generate_204
-    interval: 30
     proxies:
-      - "RU-GATEWAY"
-      - "DIRECT"
-  
-  - name: RUNET-OUT
-    type: select
-    url: http://cp.cloudflare.com/generate_204
-    interval: 30
-    proxies:
-      - "RU-GATEWAY"
-      - "DIRECT"
+      - REJECT
+    use:
+      - whitelist-cidr-georu      
 
 #endregion PROXIES
 
 
 #region RULES
 
+ruler-providers-defaults: &rp-defaults
+  type: http
+  interval: 21600
+
 rule-providers:
 
-  # SOURCE: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geoip-private:
-    type: http
-    format: mrs
-    behavior: ipcidr
+    <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
     path: ./rules/geoip-private.mrs
-    interval: 86400
-
-  # SOURCE: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
-  geoip-ru:
-    type: http
     format: mrs
     behavior: ipcidr
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geoip-ru:
+    <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/ru.mrs
     path: ./rules/geoip-ru.mrs
-    interval: 86400
+    format: mrs
+    behavior: ipcidr
 
   # ---
 
-  # SOURCE: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-gov-ru:
-    type: http
-    format: mrs
-    behavior: domain
+    <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-gov-ru.mrs
     path: ./rules/geosite-gov-ru.mrs
-    interval: 86400
-  
-  # SOURCE: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
-  geosite-yandex:
-    type: http
     format: mrs
     behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-yandex:
+    <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/yandex.mrs
     path: ./rules/geosite-yandex.mrs
-    interval: 86400
-  
-  # SOURCE: https://github.com/itdoginfo/allow-domains/
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/itdoginfo/allow-domains/
   geosite-itdoginfo-allow-domains-outside:
-    type: http
-    format: text
-    behavior: classical
+    <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Russia/outside-clashx.lst
     path: ./rules/geosite-itdoginfo-allow-domains-outside.lst
-    interval: 86400
-  
-  # SOURCE: https://gist.github.com/vargalott/6de7a0f2f953f116d56b181195777a59
-  geosite-domain-suffix-russia:
-    type: http
     format: text
     behavior: classical
-    url: https://gist.githubusercontent.com/vargalott/6de7a0f2f953f116d56b181195777a59/raw/b0df1df5be04fb22f6856076011fadab043ad0aa/clash-domain-suffix-russia.lst
+
+  # source: https://github.com/vargalott/configs/blob/main/clash-domain-suffix-russia.lst
+  geosite-domain-suffix-russia:
+    <<: [ *rp-defaults ]
     path: ./rules/geosite-domain-suffix-russia.lst
-    interval: 86400
+    url: https://raw.githubusercontent.com/vargalott/configs/refs/heads/main/clash-domain-suffix-russia.lst
+    format: text
+    behavior: classical
 
 
 rules:
   - RULE-SET,geoip-private,DIRECT,no-resolve
 
-  - RULE-SET,geoip-ru,RUNET-OUT
-  - RULE-SET,geosite-gov-ru,RUNET-OUT
-  - RULE-SET,geosite-yandex,RUNET-OUT
-  - RULE-SET,geosite-itdoginfo-allow-domains-outside,RUNET-OUT
-  - RULE-SET,geosite-domain-suffix-russia,RUNET-OUT
+  - RULE-SET,geoip-ru,GATEWAY-RU
+  - RULE-SET,geosite-gov-ru,GATEWAY-RU
+  - RULE-SET,geosite-yandex,GATEWAY-RU
+  - RULE-SET,geosite-itdoginfo-allow-domains-outside,GATEWAY-RU
+  - RULE-SET,geosite-domain-suffix-russia,GATEWAY-RU
 
   - MATCH,PROXY
 
