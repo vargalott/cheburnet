@@ -1,9 +1,8 @@
-<center>
+<p align="center">
 <img src=".github/cheburnet.png" height="400px">
+</p>
 
 ## cheburnet etc
-</center>
-
 
 ```sh
 bash <(wget -qO- https://raw.githubusercontent.com/vargalott/configs/refs/heads/main/init-ubuntu.sh) "<ssh_key>" "<cert_email>" "<cert_domain>"
