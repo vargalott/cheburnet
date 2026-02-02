@@ -1,4 +1,4 @@
-<img align="right" src=".github/cheburnet.png" height="400px"/>
+<img align="right" src=".github/cheburnet.png" height="350px"/>
 <i>
 Ведь больше нет никого<br>
 Ничего-ничего<br>
