@@ -72,6 +72,11 @@ dns:
 
 proxies:
 
+  - name: BLACKHOLE
+    type: socks5
+    server: 127.0.0.1
+    port: 65535
+
   - name: VLESS
     dialer-proxy: GATEWAY-PROXY
     type: vless
@@ -120,12 +125,12 @@ proxy-providers:
     url: https://raw.githubusercontent.com/STR97/STRUGOV/refs/heads/main/STR.BYPASS
     path: ./providers/regular-strugov.txt
     filter: Denmark|Netherlands|Finland|France|Poland|Sweden
-
-  # source: https://github.com/igareck/vpn-configs-for-russia
-  regular-vcfr:
+  
+  # https://github.com/EtoNeYaProject/etoneyaproject.github.io
+  regular-etoneya:
     <<: [ *pp-defaults, *ppo-1 ]
-    url:  https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS+All_RUS.txt
-    path: ./providers/regular-vcfr.txt 
+    url: https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/youtube
+    path: ./providers/regular-etoneya.txt
 
   # ---
 
@@ -153,7 +158,7 @@ proxy-groups:
       - REGULAR-OPENRAY
       - REGULAR-STRUGOV
       - REGULAR-VCFR
-      - REJECT
+      - BLACKHOLE
 
   - name: GATEWAY-PROXY
     <<: [ *pg-defaults ]
@@ -161,7 +166,7 @@ proxy-groups:
     proxies:
       - DIRECT
       - WHITELIST-CIDR-GEORU
-      - REJECT
+      - BLACKHOLE
 
   - name: GATEWAY-RU
     <<: [ *pg-defaults ]
@@ -169,7 +174,7 @@ proxy-groups:
     proxies:
       - DIRECT
       - WHITELIST-CIDR-GEORU
-      - REJECT
+      - BLACKHOLE
 
   # ---
 
@@ -177,7 +182,7 @@ proxy-groups:
   - name: REGULAR-OPENRAY
     type: select
     proxies:
-      - REJECT
+      - BLACKHOLE
     use:
       - regular-openray
 
@@ -185,17 +190,17 @@ proxy-groups:
   - name: REGULAR-STRUGOV
     type: select
     proxies:
-      - REJECT
+      - BLACKHOLE
     use:
       - regular-strugov
 
   # do not apply *pg-defaults to avoid a large amount of pings
-  - name: REGULAR-VCFR
+  - name: REGULAR-ETONEYA
     type: select
     proxies:
-      - REJECT
+      - BLACKHOLE
     use:
-      - regular-vcfr
+      - regular-etoneya
   
   # ---
 
@@ -203,9 +208,9 @@ proxy-groups:
   - name: WHITELIST-CIDR-GEORU
     type: select
     proxies:
-      - REJECT
+      - BLACKHOLE
     use:
-      - whitelist-cidr-georu      
+      - whitelist-cidr-georu 
 
 #endregion PROXIES
 
@@ -281,3 +286,4 @@ rules:
   - MATCH,PROXY
 
 #endregion RULES
+
