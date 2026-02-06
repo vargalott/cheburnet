@@ -21,11 +21,11 @@ bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/refs/head
 ssh -p <port> user@host -L <local_port>:127.0.0.1:<remote_port>
 
 bash <(wget -qO- ip.check.place) -l en
-bash <(wget -qO- https://raw.githubusercontent.com/vernette/censorcheck/refs/heads/master/censorcheck.sh)
-bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh)
 bash <(wget -qO- check.unlock.media) -E en -R 0
 bash <(wget -qO- bench.sh)
 bash <(wget -qO- nws.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/vernette/censorcheck/refs/heads/master/censorcheck.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh)
 ```
 
 ```sh
