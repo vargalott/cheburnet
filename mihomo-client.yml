@@ -157,7 +157,7 @@ proxy-groups:
       - VLESS
       - REGULAR-OPENRAY
       - REGULAR-STRUGOV
-      - REGULAR-VCFR
+      - REGULAR-ETONEYA
       - BLACKHOLE
 
   - name: GATEWAY-PROXY
@@ -286,4 +286,5 @@ rules:
   - MATCH,PROXY
 
 #endregion RULES
+
 
