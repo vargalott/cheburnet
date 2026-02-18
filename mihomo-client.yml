@@ -54,18 +54,39 @@ dns:
   listen: 0.0.0.0:53
   respect-rules: false
   ipv6: false
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.0/16
 
   default-nameserver:
     - 1.1.1.1
     - 9.9.9.9
   nameserver:
     - https://cloudflare-dns.com/dns-query
-    - https://dns.quad9.net/dns-query
-  fallback:
     - tls://1.1.1.1
+    - https://dns.quad9.net/dns-query
     - tls://dns.quad9.net
+  
+  nameserver-policy:
+    "rule-set:geosite-gov-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside,geosite-domain-suffix-russia": 
+    - https://common.dot.dns.yandex.net/dns-query
+    - tls://77.88.8.8
+    - 77.88.8.8
+
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.0/16
+  fake-ip-filter-mode: rule
+  fake-ip-filter:
+    - DOMAIN,localhost,real-ip
+    - DOMAIN-SUFFIX,local,real-ip
+    - DOMAIN-SUFFIX,lan,real-ip
+    - DOMAIN-SUFFIX,internal,real-ip
+    - DOMAIN-KEYWORD,stun,real-ip
+    - DOMAIN-KEYWORD,turn,real-ip
+
+    - RULE-SET,geosite-gov-ru,real-ip
+    - RULE-SET,geosite-yandex,real-ip
+    - RULE-SET,geosite-itdoginfo-allow-domains-outside,real-ip
+    - RULE-SET,geosite-domain-suffix-russia,real-ip
+
+    - MATCH,fake-ip
 
 
 #region PROXIES
@@ -94,13 +115,13 @@ proxies:
       public-key: 
 
 
-proxy-providers-defaults: &pp-defaults
+x-proxy-providers-defaults: &pp-defaults
   type: http
   interval: 21600
   proxy: DIRECT
   exclude-type: ss|vmess
 
-proxy-providers-override:
+x-proxy-providers-override:
   udp-and-dialer: &ppo-1
     override:
       dialer-proxy: GATEWAY-PROXY
@@ -112,21 +133,13 @@ proxy-providers-override:
 
 proxy-providers:
 
-  # https://github.com/sakha1370/OpenRay
+  # source: https://github.com/sakha1370/OpenRay
   regular-openray:
     <<: [ *pp-defaults, *ppo-1 ]
-    url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/all_valid_proxies.txt
+    url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/kind/trojan.txt
     path: ./providers/regular-openray.txt
-    filter: DE|NL|FI|FR|PL|SE
-
-  # https://github.com/STR97/STRUGOV
-  regular-strugov:
-    <<: [ *pp-defaults, *ppo-1 ]
-    url: https://raw.githubusercontent.com/STR97/STRUGOV/refs/heads/main/STR.BYPASS
-    path: ./providers/regular-strugov.txt
-    filter: Denmark|Netherlands|Finland|France|Poland|Sweden
   
-  # https://github.com/EtoNeYaProject/etoneyaproject.github.io
+  # source: https://etoneyaproject.github.io
   regular-etoneya:
     <<: [ *pp-defaults, *ppo-1 ]
     url: https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/youtube
@@ -142,7 +155,7 @@ proxy-providers:
     filter: Russia
 
 
-proxy-groups-defaults: &pg-defaults
+x-proxy-groups-defaults: &pg-defaults
   url: http://cp.cloudflare.com/generate_204
   expected-status: 204
   interval: 30
@@ -156,9 +169,8 @@ proxy-groups:
     proxies:
       - VLESS
       - REGULAR-OPENRAY
-      - REGULAR-STRUGOV
       - REGULAR-ETONEYA
-      - BLACKHOLE
+      - REJECT
 
   - name: GATEWAY-PROXY
     <<: [ *pg-defaults ]
@@ -185,14 +197,6 @@ proxy-groups:
       - BLACKHOLE
     use:
       - regular-openray
-
-  # do not apply *pg-defaults to avoid a large amount of pings
-  - name: REGULAR-STRUGOV
-    type: select
-    proxies:
-      - BLACKHOLE
-    use:
-      - regular-strugov
 
   # do not apply *pg-defaults to avoid a large amount of pings
   - name: REGULAR-ETONEYA
