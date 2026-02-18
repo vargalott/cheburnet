@@ -50,7 +50,7 @@ sniffer:
 dns:
   enable: true
   cache-algorithm: arc
-  listen: 0.0.0.0:53
+  listen: 127.0.0.1:53
   respect-rules: false
   ipv6: false
 
