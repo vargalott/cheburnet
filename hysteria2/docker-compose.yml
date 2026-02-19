@@ -5,7 +5,11 @@ services:
     image: tobyxdd/hysteria
     container_name: hysteria2
     restart: always
-    network_mode: "host"
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.10
+    ports:
+      - 443:443
     volumes:
       - ./hysteria2.yaml:/etc/hysteria2.yaml
       - /etc/letsencrypt/:/etc/letsencrypt/
@@ -18,3 +22,7 @@ services:
       driver: "local"
       options:
         max-size: "100m"
+
+networks:
+  localnet:
+    external: true

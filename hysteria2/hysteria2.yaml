@@ -33,7 +33,7 @@ auth:
 masquerade:
   type: proxy
   proxy:
-    url: https://DOMAIN:8443
+    url: https://172.20.0.20:8443
     rewriteHost: true 
     insecure: false
   # listenHTTP: :80
