@@ -1,166 +1,176 @@
 {
-    "log": {
-        "disabled": false,
-        "level": "warning",
-        "timestamp": true
-    },
-    "dns": {
-        "servers": [
-            {
-                "tag": "dns-base",
-                "type": "udp",
-                "server": "1.1.1.1"
-            },
-            {
-                "tag": "dns-main",
-                "type": "https",
-                "server": "cloudflare-dns.com",
-                "path": "/dns-query",
-                "domain_resolver": "dns-base"
-            },
-            {
-                "type": "fakeip",
-                "tag": "fakeip",
-                "inet4_range": "198.18.0.0/16"
-            }
-        ],
-        "rules": [
-            {
-                "query_type": [
-                    "A"
-                ],
-                "server": "fakeip"
-            }
-        ],
-        "final": "dns-main",
-        "strategy": "ipv4_only",
-        "disable_cache": false,
-        "disable_expire": false,
-        "independent_cache": false,
-        "cache_capacity": 1024,
-        "reverse_mapping": false
-    },
-    "ntp": {
+  "log": {
+    "disabled": false,
+    "level": "warning",
+    "output": "/etc/sing-box/sing-box.log",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-base",
+        "type": "udp",
+        "server": "1.1.1.1"
+      },
+      {
+        "tag": "dns-main",
+        "type": "https",
+        "server": "cloudflare-dns.com",
+        "path": "/dns-query",
+        "domain_resolver": "dns-base"
+      }
+    ],
+    "final": "dns-main",
+    "strategy": "ipv4_only",
+    "disable_cache": false,
+    "disable_expire": false,
+    "independent_cache": false,
+    "cache_capacity": 1024,
+    "reverse_mapping": false
+  },
+  "ntp": {
+    "enabled": true,
+    "server": "time.cloudflare.com",
+    "server_port": 123,
+    "interval": "30m"
+  },
+  "inbounds": [
+    {
+      "type": "vless",
+      "tag": "vless-in",
+      "listen": "0.0.0.0",
+      "listen_port": 443,
+      "users": [
+        {
+          "name": "USER",
+          "uuid": "UUID",
+          "flow": "xtls-rprx-vision"
+        }
+      ],
+      "tls": {
         "enabled": true,
-        "server": "time.cloudflare.com",
-        "server_port": 123,
-        "interval": "30m"
+        "server_name": "DOMAIN",
+        "min_version": "1.2",
+        "reality": {
+          "enabled": true,
+          "handshake": {
+            "server": "172.20.0.20",
+            "server_port": 8443
+          },
+          "private_key": "PVT",
+          "short_id": [
+            ""
+          ],
+          "max_time_difference": "1m"
+        }
+      }
     },
-    "inbounds": [
+    {
+      "type": "hysteria2",
+      "tag": "hysteria2-in",
+      "listen": "0.0.0.0",
+      "listen_port": 443,
+      "users": [
         {
-            "type": "vless",
-            "tag": "vless-in",
-            "listen": "0.0.0.0",
-            "listen_port": 443,
-            "users": [
-                {
-                    "name": "USER",
-                    "uuid": "UUID",
-                    "flow": "xtls-rprx-vision"
-                }
-            ],
-            "tls": {
-                "enabled": true,
-                "server_name": "DOMAIN",
-                "min_version": "1.2",
-                "reality": {
-                    "enabled": true,
-                    "handshake": {
-                        "server": "172.20.0.20",
-                        "server_port": 8443
-                    },
-                    "private_key": "PVT",
-                    "short_id": [
-                        ""
-                    ],
-                    "max_time_difference": "1m"
-                }
-            }
-        },
-        {
-            "type": "hysteria2",
-            "tag": "hysteria2-in",
-            "listen": "0.0.0.0",
-            "listen_port": 443,
-            "users": [
-                {
-                    "name": "USER",
-                    "password": "PASSWORD"
-                }
-            ],
-            "masquerade": {
-                "type": "proxy",
-                "url": "DOMAIN",
-                "rewrite_host": true
-            },
-            "tls": {
-                "enabled": true,
-                "alpn": [
-                    "h3"
-                ],
-                "certificate_path": "/etc/letsencrypt/live/DOMAIN/fullchain.pem",
-                "key_path": "/etc/letsencrypt/live/DOMAIN/privkey.pem;"
-            }
+          "name": "USER",
+          "password": "PASSWORD"
         }
-    ],
-    "outbounds": [
-        {
-            "type": "direct",
-            "tag": "direct-out"
-        }
-    ],
-    "route": {
-        "default_domain_resolver": "dns-main",
-        "rules": [
-            {
-                "action": "sniff"
-            },
-            {
-                "protocol": "dns",
-                "action": "hijack-dns"
-            },
-            {
-                "protocol": "bittorrent",
-                "action": "reject",
-                "method": "drop"
-            },
-            {
-                "rule_set": [
-                    "set-geoip-ru",
-                    "set-geosite-gov-ru"
-                ],
-                "domain_suffix": [
-                    "ru",
-                    "su",
-                    "ру",
-                    "рус",
-                    "рф"
-                ],
-                "action": "reject",
-                "method": "drop"
-            }
+      ],
+      "masquerade": {
+        "type": "proxy",
+        "url": "172.20.0.20:8443",
+        "rewrite_host": true
+      },
+      "tls": {
+        "enabled": true,
+        "alpn": [
+          "h3"
         ],
-        "rule_set": [
-            {
-                "type": "remote",
-                "format": "binary",
-                "update_interval": "1d",
-                "tag": "set-geoip-ru",
-                "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-ru.srs"
-            },
-            {
-                "type": "remote",
-                "format": "binary",
-                "update_interval": "1d",
-                "tag": "set-geosite-gov-ru",
-                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-gov-ru.srs"
-            }
-        ],
-        "final": "direct-out"
-    },
-    "experimental": {
-        "cache_file": {
-            "enabled": true
-        }
+        "certificate_path": "/etc/letsencrypt/live/DOMAIN/fullchain.pem",
+        "key_path": "/etc/letsencrypt/live/DOMAIN/privkey.pem;"
+      }
     }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct-out"
+    }
+  ],
+  "route": {
+    "default_domain_resolver": "dns-main",
+    "rules": [
+      {
+        "action": "sniff",
+        "sniffer": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "protocol": "bittorrent",
+        "action": "reject",
+        "method": "drop"
+      },
+      {
+        "rule_set": [
+          "set-geoip-ru",
+          "set-geosite-ru",
+          "set-geosite-gov-ru"
+        ],
+        "domain_suffix": [
+          "ru",
+          "su",
+          "ru.com",
+          "ru.net",
+          "xn--p1ag",
+          "xn--p1acf",
+          "xn--p1ai",
+          "xn--80asehdb",
+          "xn--j1aef",
+          "xn--80adxhks",
+          "xn--80aswg",
+          "xn--c1avg",
+          "xn--d1acj3b"
+        ],
+        "action": "reject",
+        "method": "drop"
+      }
+    ],
+    "rule_set": [
+      {
+        "type": "remote",
+        "format": "binary",
+        "update_interval": "1d",
+        "tag": "set-geoip-ru",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-ru.srs"
+      },
+      {
+        "type": "remote",
+        "format": "binary",
+        "update_interval": "1d",
+        "tag": "set-geosite-ru",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ru.srs"
+      },
+      {
+        "type": "remote",
+        "format": "binary",
+        "update_interval": "1d",
+        "tag": "set-geosite-gov-ru",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-gov-ru.srs"
+      }
+    ],
+    "final": "direct-out"
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "/etc/sing-box/cache.db"
+    }
+  }
 }
