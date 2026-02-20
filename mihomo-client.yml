@@ -1,3 +1,6 @@
+#
+# Core settings
+#
 log-level: warning
 ipv6: false
 udp: true
@@ -8,13 +11,14 @@ keep-alive-interval: 30
 keep-alive-idle: 30
 find-process-mode: strict
 tcp-concurrent: true
-
-
 profile:
   store-selected: true
   store-fake-ip: true
 
 
+#
+# TUN settings
+#
 tun:
   stack: gvisor
   auto-route: true
@@ -27,6 +31,9 @@ tun:
     - tcp://any:53
 
 
+#
+# NTP settings
+#
 ntp:
   enable: true
   server: time.cloudflare.com
@@ -34,6 +41,9 @@ ntp:
   interval: 30
 
 
+#
+# SNIFFING settings
+#
 sniffer:
   enable: true
   parse-pure-ip: true
@@ -47,6 +57,10 @@ sniffer:
       ports: [443, 8443]
 
 
+#
+# DNS settings
+# fake-ip + real-ip for RU
+#
 dns:
   enable: true
   cache-algorithm: arc
@@ -74,9 +88,6 @@ dns:
   fake-ip-filter-mode: rule
   fake-ip-filter:
     - DOMAIN,localhost,real-ip
-    - DOMAIN-SUFFIX,local,real-ip
-    - DOMAIN-SUFFIX,lan,real-ip
-    - DOMAIN-SUFFIX,internal,real-ip
     - DOMAIN-KEYWORD,stun,real-ip
     - DOMAIN-KEYWORD,turn,real-ip
 
@@ -90,8 +101,10 @@ dns:
     - MATCH,fake-ip
 
 
-#region PROXIES
-
+#
+# PROXIES settings
+# BLACKHOLE should always point to non-existing destination
+#
 proxies:
 
   - name: BLACKHOLE
@@ -116,6 +129,11 @@ proxies:
       public-key:
 
 
+#
+# PROXY PROVIDERS settings
+# x-proxy-providers-defaults - common fields
+# x-proxy-providers-override - additional common fields
+#
 x-proxy-providers-defaults: &pp-defaults
   type: http
   interval: 86400
@@ -156,6 +174,12 @@ proxy-providers:
     filter: Russia
 
 
+#
+# PROXY GROUPS settings
+# x-proxy-groups-defaults - common fields
+# PROXY selector goes through GATEWAY-PROXY selector
+# GATEWAY-RU selector(default - DIRECT) routes RU
+#
 x-proxy-groups-defaults: &pg-defaults
   url: http://cp.cloudflare.com/generate_204
   expected-status: 204
@@ -164,6 +188,7 @@ x-proxy-groups-defaults: &pg-defaults
   lazy: true
 
 proxy-groups:
+
   - name: PROXY
     <<: [ *pg-defaults ]
     type: select
@@ -217,11 +242,12 @@ proxy-groups:
     use:
       - whitelist-cidr-georu
 
-#endregion PROXIES
 
-
-#region RULES
-
+#
+# RULE PROVIDERS settings
+# x-rule-providers-defaults - common fields
+# rulesets for private ranges and RU
+#
 x-rule-providers-defaults: &rp-defaults
   type: http
   interval: 86400
@@ -249,16 +275,16 @@ rule-providers:
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-category-ru:
     <<: [ *rp-defaults ]
-    path: ./rules/geosite-category-ru.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ru.mrs
+    path: ./rules/geosite-category-ru.mrs
     format: mrs
     behavior: domain
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-tld-ru:
     <<: [ *rp-defaults ]
-    path: ./rules/geosite-tld-ru.mrs
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tld-ru.mrs
+    path: ./rules/geosite-tld-ru.mrs
     format: mrs
     behavior: domain
 
@@ -274,7 +300,7 @@ rule-providers:
   geosite-bank-ru:
     <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-bank-ru.mrs
-    path: ./rules/geosite-gov-ru.mrs
+    path: ./rules/geosite-bank-ru.mrs
     format: mrs
     behavior: domain
 
@@ -295,6 +321,12 @@ rule-providers:
     behavior: classical
 
 
+#
+# RULES settings
+# IPv6 through BLACKHOLE
+# RU through GATEWAY-RU(default - DIRECT)
+# REST through PROXY
+#
 rules:
   - IP-CIDR6,::/0,BLACKHOLE
   - RULE-SET,geoip-private,DIRECT,no-resolve
@@ -308,5 +340,3 @@ rules:
   - RULE-SET,geosite-itdoginfo-allow-domains-outside,GATEWAY-RU
 
   - MATCH,PROXY
-
-#endregion RULES
