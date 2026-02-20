@@ -18,7 +18,7 @@ sniff:
   timeout: 2s
   rewriteDomain: false
   tcpPorts: all
-  udpPorts: all 
+  udpPorts: all
 
 auth:
   type: userpass
@@ -26,7 +26,7 @@ auth:
     user: password
 
 # obfs:
-#   type: salamander 
+#   type: salamander
 #   salamander:
 #     password: password
 
@@ -34,7 +34,7 @@ masquerade:
   type: proxy
   proxy:
     url: https://172.20.0.20:8443
-    rewriteHost: true 
+    rewriteHost: true
     insecure: false
   # listenHTTP: :80
   listenHTTPS: :443
