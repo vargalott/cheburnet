@@ -62,9 +62,9 @@ dns:
     - tls://1.1.1.1
     - https://dns.quad9.net/dns-query
     - tls://dns.quad9.net
-  
+
   nameserver-policy:
-    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside": 
+    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside":
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
     - 77.88.8.8
@@ -103,17 +103,17 @@ proxies:
     dialer-proxy: GATEWAY-PROXY
     type: vless
     network: tcp
-    server: 
+    server:
     port: 443
     udp: true
-    uuid: 
+    uuid:
     flow: xtls-rprx-vision
     packet-encoding: xudp
     tls: true
-    servername: 
+    servername:
     client-fingerprint: chrome
     reality-opts:
-      public-key: 
+      public-key:
 
 
 x-proxy-providers-defaults: &pp-defaults
@@ -139,7 +139,7 @@ proxy-providers:
     <<: [ *pp-defaults, *ppo-1 ]
     url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/kind/trojan.txt
     path: ./providers/regular-openray.txt
-  
+
   # source: https://etoneyaproject.github.io
   regular-etoneya:
     <<: [ *pp-defaults, *ppo-1 ]
@@ -206,7 +206,7 @@ proxy-groups:
       - BLACKHOLE
     use:
       - regular-etoneya
-  
+
   # ---
 
   # do not apply *pg-defaults to avoid a large amount of pings
@@ -215,7 +215,7 @@ proxy-groups:
     proxies:
       - BLACKHOLE
     use:
-      - whitelist-cidr-georu 
+      - whitelist-cidr-georu
 
 #endregion PROXIES
 
