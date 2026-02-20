@@ -64,7 +64,7 @@ dns:
     - tls://dns.quad9.net
   
   nameserver-policy:
-    "rule-set:geosite-gov-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside,geosite-domain-suffix-russia": 
+    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside": 
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
     - 77.88.8.8
@@ -80,10 +80,12 @@ dns:
     - DOMAIN-KEYWORD,stun,real-ip
     - DOMAIN-KEYWORD,turn,real-ip
 
+    - RULE-SET,geosite-category-ru,real-ip
+    - RULE-SET,geosite-tld-ru,real-ip
     - RULE-SET,geosite-gov-ru,real-ip
+    - RULE-SET,geosite-bank-ru,real-ip
     - RULE-SET,geosite-yandex,real-ip
     - RULE-SET,geosite-itdoginfo-allow-domains-outside,real-ip
-    - RULE-SET,geosite-domain-suffix-russia,real-ip
 
     - MATCH,fake-ip
 
@@ -169,7 +171,7 @@ proxy-groups:
       - VLESS
       - REGULAR-OPENRAY
       - REGULAR-ETONEYA
-      - REJECT
+      - BLACKHOLE
 
   - name: GATEWAY-PROXY
     <<: [ *pg-defaults ]
@@ -220,7 +222,7 @@ proxy-groups:
 
 #region RULES
 
-ruler-providers-defaults: &rp-defaults
+x-rule-providers-defaults: &rp-defaults
   type: http
   interval: 86400
 
@@ -245,9 +247,33 @@ rule-providers:
   # ---
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-category-ru:
+    <<: [ *rp-defaults ]
+    path: ./rules/geosite-category-ru.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-tld-ru:
+    <<: [ *rp-defaults ]
+    path: ./rules/geosite-tld-ru.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tld-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-gov-ru:
     <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-gov-ru.mrs
+    path: ./rules/geosite-gov-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-bank-ru:
+    <<: [ *rp-defaults ]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-bank-ru.mrs
     path: ./rules/geosite-gov-ru.mrs
     format: mrs
     behavior: domain
@@ -268,27 +294,19 @@ rule-providers:
     format: text
     behavior: classical
 
-  # source: https://github.com/vargalott/configs/blob/main/clash-domain-suffix-russia.lst
-  geosite-domain-suffix-russia:
-    <<: [ *rp-defaults ]
-    path: ./rules/geosite-domain-suffix-russia.lst
-    url: https://raw.githubusercontent.com/vargalott/configs/refs/heads/main/clash-domain-suffix-russia.lst
-    format: text
-    behavior: classical
-
 
 rules:
-  - IP-CIDR6,::/0,REJECT
+  - IP-CIDR6,::/0,BLACKHOLE
   - RULE-SET,geoip-private,DIRECT,no-resolve
 
   - RULE-SET,geoip-ru,GATEWAY-RU,no-resolve
+  - RULE-SET,geosite-category-ru,GATEWAY-RU
+  - RULE-SET,geosite-tld-ru,GATEWAY-RU
   - RULE-SET,geosite-gov-ru,GATEWAY-RU
+  - RULE-SET,geosite-bank-ru,GATEWAY-RU
   - RULE-SET,geosite-yandex,GATEWAY-RU
   - RULE-SET,geosite-itdoginfo-allow-domains-outside,GATEWAY-RU
-  - RULE-SET,geosite-domain-suffix-russia,GATEWAY-RU
 
   - MATCH,PROXY
 
 #endregion RULES
-
-
