@@ -103,14 +103,8 @@ dns:
 
 #
 # PROXIES settings
-# BLACKHOLE should always point to non-existing destination
 #
 proxies:
-
-  - name: BLACKHOLE
-    type: socks5
-    server: 127.0.0.1
-    port: 65535
 
   - name: VLESS
     dialer-proxy: GATEWAY-PROXY
@@ -185,7 +179,7 @@ x-proxy-groups-defaults: &pg-defaults
   expected-status: 204
   interval: 30
   timeout: 5000
-  lazy: true
+  lazy: false
 
 proxy-groups:
 
@@ -196,7 +190,7 @@ proxy-groups:
       - VLESS
       - REGULAR-OPENRAY
       - REGULAR-ETONEYA
-      - BLACKHOLE
+      - REJECT
 
   - name: GATEWAY-PROXY
     <<: [ *pg-defaults ]
@@ -204,7 +198,7 @@ proxy-groups:
     proxies:
       - DIRECT
       - WHITELIST-CIDR-GEORU
-      - BLACKHOLE
+      - REJECT
 
   - name: GATEWAY-RU
     <<: [ *pg-defaults ]
@@ -212,7 +206,7 @@ proxy-groups:
     proxies:
       - DIRECT
       - WHITELIST-CIDR-GEORU
-      - BLACKHOLE
+      - REJECT
 
   # ---
 
@@ -220,7 +214,7 @@ proxy-groups:
   - name: REGULAR-OPENRAY
     type: select
     proxies:
-      - BLACKHOLE
+      - REJECT
     use:
       - regular-openray
 
@@ -228,7 +222,7 @@ proxy-groups:
   - name: REGULAR-ETONEYA
     type: select
     proxies:
-      - BLACKHOLE
+      - REJECT
     use:
       - regular-etoneya
 
@@ -238,7 +232,7 @@ proxy-groups:
   - name: WHITELIST-CIDR-GEORU
     type: select
     proxies:
-      - BLACKHOLE
+      - REJECT
     use:
       - whitelist-cidr-georu
 
@@ -323,20 +317,20 @@ rule-providers:
 
 #
 # RULES settings
-# IPv6 through BLACKHOLE
+# IPv6 through REJECT
 # RU through GATEWAY-RU(default - DIRECT)
 # REST through PROXY
 #
 rules:
-  - IP-CIDR6,::/0,BLACKHOLE
+  - IP-CIDR6,::/0,REJECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
 
-  - RULE-SET,geoip-ru,GATEWAY-RU,no-resolve
   - RULE-SET,geosite-category-ru,GATEWAY-RU
   - RULE-SET,geosite-tld-ru,GATEWAY-RU
   - RULE-SET,geosite-gov-ru,GATEWAY-RU
   - RULE-SET,geosite-bank-ru,GATEWAY-RU
   - RULE-SET,geosite-yandex,GATEWAY-RU
   - RULE-SET,geosite-itdoginfo-allow-domains-outside,GATEWAY-RU
+  - RULE-SET,geoip-ru,GATEWAY-RU,no-resolve
 
   - MATCH,PROXY
