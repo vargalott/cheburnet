@@ -13,7 +13,7 @@ find-process-mode: strict
 tcp-concurrent: true
 profile:
   store-selected: true
-  store-fake-ip: true
+  store-fake-ip: false
 
 
 #
@@ -78,6 +78,8 @@ dns:
     - tls://dns.quad9.net
 
   nameserver-policy:
+    # "+.lan,+.local,+.:internal":
+    # - 10.1.0.1
     "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside":
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
@@ -88,6 +90,9 @@ dns:
   fake-ip-filter-mode: rule
   fake-ip-filter:
     - DOMAIN,localhost,real-ip
+    - DOMAIN-SUFFIX,local,real-ip
+    - DOMAIN-SUFFIX,lan,real-ip
+    - DOMAIN-SUFFIX,internal,real-ip
     - DOMAIN-KEYWORD,stun,real-ip
     - DOMAIN-KEYWORD,turn,real-ip
 
@@ -177,7 +182,7 @@ proxy-providers:
 x-proxy-groups-defaults: &pg-defaults
   url: http://cp.cloudflare.com/generate_204
   expected-status: 204
-  interval: 30
+  interval: 0
   timeout: 5000
   lazy: false
 
@@ -186,6 +191,7 @@ proxy-groups:
   - name: PROXY
     <<: [ *pg-defaults ]
     type: select
+    interval: 30
     proxies:
       - VLESS
       - REGULAR-OPENRAY
@@ -195,6 +201,7 @@ proxy-groups:
   - name: GATEWAY-PROXY
     <<: [ *pg-defaults ]
     type: select
+    interval: 30
     proxies:
       - DIRECT
       - WHITELIST-CIDR-GEORU
@@ -203,6 +210,7 @@ proxy-groups:
   - name: GATEWAY-RU
     <<: [ *pg-defaults ]
     type: select
+    interval: 30
     proxies:
       - DIRECT
       - WHITELIST-CIDR-GEORU
@@ -210,16 +218,16 @@ proxy-groups:
 
   # ---
 
-  # do not apply *pg-defaults to avoid a large amount of pings
   - name: REGULAR-OPENRAY
+    <<: [ *pg-defaults ]
     type: select
     proxies:
       - REJECT
     use:
       - regular-openray
 
-  # do not apply *pg-defaults to avoid a large amount of pings
   - name: REGULAR-ETONEYA
+    <<: [ *pg-defaults ]
     type: select
     proxies:
       - REJECT
@@ -228,8 +236,8 @@ proxy-groups:
 
   # ---
 
-  # do not apply *pg-defaults to avoid a large amount of pings
   - name: WHITELIST-CIDR-GEORU
+    <<: [ *pg-defaults ]
     type: select
     proxies:
       - REJECT
