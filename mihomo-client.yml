@@ -59,7 +59,9 @@ sniffer:
 
 #
 # DNS settings
-# fake-ip + real-ip for RU
+# fake-ip + real-ip for local, stun-turn, RU
+# fake-ip - upstream proxy DNS
+# real-ip - either Yandex for RU, Cloudflare|Quad9 for non-RU
 #
 dns:
   enable: true
@@ -73,12 +75,12 @@ dns:
     - 9.9.9.9
   nameserver:
     - https://cloudflare-dns.com/dns-query
-    - tls://1.1.1.1
     - https://dns.quad9.net/dns-query
+    - tls://1.1.1.1
     - tls://dns.quad9.net
 
   nameserver-policy:
-    # "+.lan,+.local,+.:internal":
+    # "+.lan,+.local,+.internal":
     # - 10.1.0.1
     "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside":
     - https://common.dot.dns.yandex.net/dns-query
