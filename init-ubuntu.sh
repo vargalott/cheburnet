@@ -75,8 +75,9 @@ EOF
 configure_dns() {
     cat > /etc/systemd/resolved.conf <<'EOF'
 [Resolve]
-DNS=1.1.1.1
-FallbackDNS=9.9.9.9
+DNS=1.1.1.1#cloudflare-dns.com 9.9.9.9#dns.quad9.net
+FallbackDNS=1.0.0.1#cloudflare-dns.com 149.112.112.112#dns.quad9.net
+Domains=~.
 LLMNR=no
 MulticastDNS=no
 DNSSEC=yes
