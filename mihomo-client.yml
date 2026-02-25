@@ -60,8 +60,8 @@ sniffer:
 #
 # DNS settings
 # fake-ip + real-ip for local, stun-turn, RU
-# fake-ip - upstream proxy DNS
-# real-ip - either Yandex for RU, Cloudflare|Quad9 for non-RU
+# fake-ip - Cloudflare
+# real-ip - either Yandex for RU, Cloudflare for non-RU
 #
 dns:
   enable: true
@@ -72,29 +72,27 @@ dns:
 
   default-nameserver:
     - 1.1.1.1
-    - 9.9.9.9
+    - 1.0.0.1
   nameserver:
     - https://cloudflare-dns.com/dns-query
-    - https://dns.quad9.net/dns-query
     - tls://1.1.1.1
-    - tls://dns.quad9.net
-
+    - tls://1.0.0.1
+  
   nameserver-policy:
-    # "+.lan,+.local,+.internal":
+    # "+.lan":
     # - 10.1.0.1
-    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside":
+    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside": 
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
     - 77.88.8.8
+    - 77.88.8.1
 
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.0/16
   fake-ip-filter-mode: rule
   fake-ip-filter:
     - DOMAIN,localhost,real-ip
-    - DOMAIN-SUFFIX,local,real-ip
     - DOMAIN-SUFFIX,lan,real-ip
-    - DOMAIN-SUFFIX,internal,real-ip
     - DOMAIN-KEYWORD,stun,real-ip
     - DOMAIN-KEYWORD,turn,real-ip
 
@@ -327,7 +325,7 @@ rule-providers:
 
 #
 # RULES settings
-# IPv6 through REJECT
+# IPv6 REJECT
 # RU through GATEWAY-RU(default - DIRECT)
 # REST through PROXY
 #
