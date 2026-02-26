@@ -91,19 +91,15 @@
       {
         "type": "field",
         "domain": [
-          "domain:.ru",
-          "domain:.su",
-          "domain:.ru.com",
-          "domain:.ru.net",
-          "domain:.xn--p1ag",
-          "domain:.xn--p1acf",
-          "domain:.xn--p1ai",
-          "domain:.xn--80asehdb",
-          "domain:.xn--j1aef",
-          "domain:.xn--80adxhks",
-          "domain:.xn--80aswg",
-          "domain:.xn--c1avg",
-          "domain:.xn--d1acj3b"
+          "domain:ru",
+          "domain:su",
+          "domain:xn--80adxhks",
+          "domain:xn--80asehdb",
+          "domain:xn--80aswg",
+          "domain:xn--c1avg",
+          "domain:xn--d1acj3b",
+          "domain:xn--p1acf",
+          "domain:xn--p1ai"
         ],
         "outboundTag": "block"
       }
