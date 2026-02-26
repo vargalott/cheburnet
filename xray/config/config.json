@@ -4,11 +4,9 @@
   },
   "dns": {
     "servers": [
-      "1.1.1.1",
-      {
-        "address": "https://cloudflare-dns.com/dns-query",
-        "skipFallback": true
-      }
+      "https://cloudflare-dns.com/dns-query",
+      "tls://1.1.1.1",
+      "1.1.1.1"
     ],
     "queryStrategy": "UseIPv4"
   },
@@ -43,14 +41,6 @@
           ],
           "maxTimeDiff": 60000
         }
-      },
-      "sniffing": {
-        "enabled": true,
-        "destOverride": [
-          "http",
-          "tls",
-          "quic"
-        ]
       }
     }
   ],
@@ -77,6 +67,7 @@
       {
         "type": "field",
         "ip": [
+          "geoip:private",
           "geoip:ru"
         ],
         "outboundTag": "block"
