@@ -78,7 +78,7 @@
       ],
       "masquerade": {
         "type": "proxy",
-        "url": "172.20.0.20:8443",
+        "url": "172.20.0.20:443",
         "rewrite_host": true
       },
       "tls": {
