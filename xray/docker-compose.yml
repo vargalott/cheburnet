@@ -11,8 +11,8 @@ services:
     ports:
       - 443:443
     volumes:
-      - ./config/:/usr/local/etc/xray/
       - /etc/letsencrypt/:/etc/letsencrypt/
+      - ./config/:/usr/local/etc/xray/
     command: run -c /usr/local/etc/xray/config.json
 
     logging:
