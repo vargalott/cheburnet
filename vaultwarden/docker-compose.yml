@@ -1,0 +1,22 @@
+name: vaultwarden
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.40
+    environment:
+      DOMAIN: https://DOMAIN
+      ADMIN_TOKEN: TOKEN
+      SIGNUPS_ALLOWED: false
+      INVITATIONS_ALLOWED: false
+
+    volumes:
+      - ./data/:/data/
+
+networks:
+  localnet:
+    external: true
