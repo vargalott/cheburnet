@@ -9,7 +9,7 @@ services:
       localnet:
         ipv4_address: 172.20.0.40
     environment:
-      DOMAIN: https://DOMAIN
+      DOMAIN: https://DOMAIN/vault
       ADMIN_TOKEN: TOKEN
       SIGNUPS_ALLOWED: false
       INVITATIONS_ALLOWED: false
