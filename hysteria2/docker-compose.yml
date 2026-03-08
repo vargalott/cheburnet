@@ -11,8 +11,8 @@ services:
     ports:
       - 443:443
     volumes:
-      - ./hysteria2.yaml:/etc/hysteria2.yaml
       - /etc/letsencrypt/:/etc/letsencrypt/
+      - ./hysteria2.yaml:/etc/hysteria2.yaml
     command: [ "server", "-c", "/etc/hysteria2.yaml" ]
     environment:
       HYSTERIA_LOG_LEVEL: info
