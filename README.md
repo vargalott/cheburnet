@@ -37,4 +37,6 @@ docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.
 
 certbot certonly --standalone --agree-tos -m EMAIL -d DOMAIN
 certbot renew --dry-run
+
+rsync -avz --delete -e ssh host:/root/vaultwarden/data $HOME/backups/vaultwarden/
 ```
