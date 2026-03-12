@@ -1,0 +1,19 @@
+name: sslh
+
+services:
+  sslh:
+    image: ghcr.io/yrutschle/sslh:latest
+    container_name: sslh
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.2
+    ports:
+      - 443:443
+    volumes:
+      - ./sslh:/etc/sslh
+    command: -F/etc/sslh/sslh.cfg
+
+networks:
+  localnet:
+    external: true
