@@ -3,20 +3,19 @@ set -euo pipefail
 export NEEDRESTART_SUSPEND=1
 
 init_system() {
+    timedatectl set-timezone UTC
     apt-get -y update
     apt-get -y upgrade
     apt-get -y install bc bmon btop curl cron dnsutils htop iftop jq micro nano net-tools util-linux uuid-runtime wget certbot
     curl -fsSL https://get.docker.com | sh
-    timedatectl set-timezone UTC
+    docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
 }
 
 configure_sysctl() {
     cat > /etc/sysctl.conf <<'EOF'
-# Network Performance
 net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr
 
-# IPv4 Security
 net.ipv4.conf.all.rp_filter=1
 net.ipv4.conf.default.rp_filter=1
 net.ipv4.conf.all.log_martians=1
@@ -26,7 +25,6 @@ net.ipv4.conf.all.send_redirects=0
 net.ipv4.tcp_syncookies=1
 net.ipv4.ip_forward=0
 
-# IPv6 Disabling
 net.ipv6.conf.all.disable_ipv6=1
 net.ipv6.conf.default.disable_ipv6=1
 net.ipv6.conf.lo.disable_ipv6=1
@@ -40,6 +38,8 @@ configure_ssh() {
     cat > /etc/ssh/sshd_config <<'EOF'
 # --- Network Configuration ---
 ListenAddress 0.0.0.0
+# ListenAddress 127.0.0.1
+# ListenAddress 172.10.0.1
 Port 8080
 
 # --- Cryptographic Hardening ---
