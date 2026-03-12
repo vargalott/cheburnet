@@ -13,10 +13,12 @@
 
 ## (not only) cheburnet
 
+##### ubuntu server init
 ```sh
 bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/refs/heads/main/init-ubuntu.sh) "<ssh_key>" "<cert_email>" "<cert_domain>"
 ```
 
+##### check tools
 ```sh
 ssh -p <port> user@host -L <local_port>:127.0.0.1:<remote_port>
 
@@ -28,6 +30,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/vernette/censorcheck/refs/hea
 bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh)
 ```
 
+##### misc
 ```sh
 echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
 uuidgen
@@ -39,4 +42,21 @@ certbot certonly --standalone --agree-tos -m EMAIL -d DOMAIN
 certbot renew --dry-run
 
 rsync -avz --delete -e ssh host:/root/vaultwarden/data $HOME/backups/vaultwarden/
+```
+
+##### topology
+<img align="right" src=".github/flowchart.png" height="400px"/>
+
+```sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Docker Network: localnet (bridge)
+Subnet: 172.20.0.0/24 | GW: 172.20.0.1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+172.20.0.1   →  VPS host / SSH server
+172.20.0.2   →  sslh
+172.20.0.10  →  sing-box
+172.20.0.20  →  nginx
+172.20.0.30  →  glance
+172.20.0.40  →  vaultwarden
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
