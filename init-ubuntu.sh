@@ -69,7 +69,7 @@ EOF
     [ -n "$ssh_key" ] && echo "$ssh_key" > ~/.ssh/authorized_keys || touch ~/.ssh/authorized_keys
     chmod 600 ~/.ssh/authorized_keys
 
-    systemctl restart ssh
+    systemctl daemon-reload && systemctl enable --now ssh.socket
 }
 
 configure_dns() {
@@ -91,7 +91,7 @@ StaleRetentionSec=0
 EOF
 
     ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-    systemctl enable --now systemd-resolved
+    systemctl daemon-reload && systemctl enable --now systemd-resolved
 }
 
 configure_cron() {
