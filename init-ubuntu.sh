@@ -6,7 +6,7 @@ init_system() {
     timedatectl set-timezone UTC
     apt-get -y update
     apt-get -y upgrade
-    apt-get -y install bc bmon btop curl cron dnsutils htop iftop jq micro nano net-tools util-linux uuid-runtime wget certbot
+    apt-get -y install bc bmon btop curl cron dnsutils htop iftop vnstat jq micro nano net-tools util-linux uuid-runtime wget certbot
     curl -fsSL https://get.docker.com | sh
     docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
 }
