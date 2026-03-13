@@ -1,8 +1,7 @@
 {
   "log": {
-    "disabled": true,
+    "disabled": false,
     "level": "warning",
-    "output": "/etc/sing-box/sing-box.log",
     "timestamp": true
   },
   "dns": {
