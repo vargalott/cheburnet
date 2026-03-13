@@ -13,9 +13,13 @@ services:
       ADMIN_TOKEN: TOKEN
       SIGNUPS_ALLOWED: false
       INVITATIONS_ALLOWED: false
-
     volumes:
       - ./data/:/data/
+
+    logging:
+      driver: "local"
+      options:
+        max-size: "100m"
 
 networks:
   localnet:
