@@ -14,6 +14,11 @@ services:
       - ./sslh:/etc/sslh
     command: -F/etc/sslh/sslh.cfg
 
+    logging:
+      driver: "local"
+      options:
+        max-size: "100m"
+
 networks:
   localnet:
     external: true
