@@ -77,11 +77,11 @@ dns:
     - https://cloudflare-dns.com/dns-query
     - tls://1.1.1.1
     - tls://1.0.0.1
-  
+
   nameserver-policy:
     # "+.lan":
     # - 10.1.0.1
-    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-itdoginfo-allow-domains-outside": 
+    "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-ru-available-only-inside":
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
     - 77.88.8.8
@@ -101,7 +101,7 @@ dns:
     - RULE-SET,geosite-gov-ru,real-ip
     - RULE-SET,geosite-bank-ru,real-ip
     - RULE-SET,geosite-yandex,real-ip
-    - RULE-SET,geosite-itdoginfo-allow-domains-outside,real-ip
+    - RULE-SET,geosite-ru-available-only-inside,real-ip
 
     - MATCH,fake-ip
 
@@ -253,6 +253,7 @@ proxy-groups:
 x-rule-providers-defaults: &rp-defaults
   type: http
   interval: 86400
+  proxy: PROXY
 
 rule-providers:
 
@@ -315,10 +316,10 @@ rule-providers:
     behavior: domain
 
   # source: https://github.com/itdoginfo/allow-domains/
-  geosite-itdoginfo-allow-domains-outside:
+  geosite-ru-available-only-inside:
     <<: [ *rp-defaults ]
     url: https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Russia/outside-clashx.lst
-    path: ./rules/geosite-itdoginfo-allow-domains-outside.lst
+    path: ./rules/geosite-ru-available-only-inside.lst
     format: text
     behavior: classical
 
@@ -334,11 +335,11 @@ rules:
   - RULE-SET,geoip-private,DIRECT,no-resolve
 
   - RULE-SET,geosite-category-ru,GATEWAY-RU
-  - RULE-SET,geosite-tld-ru,GATEWAY-RU
   - RULE-SET,geosite-gov-ru,GATEWAY-RU
   - RULE-SET,geosite-bank-ru,GATEWAY-RU
   - RULE-SET,geosite-yandex,GATEWAY-RU
-  - RULE-SET,geosite-itdoginfo-allow-domains-outside,GATEWAY-RU
+  - RULE-SET,geosite-ru-available-only-inside,GATEWAY-RU
+  - RULE-SET,geosite-tld-ru,GATEWAY-RU
   - RULE-SET,geoip-ru,GATEWAY-RU,no-resolve
 
   - MATCH,PROXY
