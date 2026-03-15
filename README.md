@@ -45,15 +45,14 @@ rsync -avz --delete -e ssh host:/root/vaultwarden/data $HOME/backups/vaultwarden
 ```
 
 ##### topology
-<img align="right" src=".github/flowchart.png" height="400px"/>
+<!-- <img align="right" src=".github/flowchart.png" height="400px"/> -->
 
 ```sh
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Docker Network: localnet (bridge)
-Subnet: 172.20.0.0/24 | GW: 172.20.0.1
+Subnet: 172.20.0.0/24
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-172.20.0.1   →  VPS host / SSH server
-172.20.0.2   →  sslh
+# 172.20.0.2   →  sslh
 172.20.0.10  →  sing-box
 172.20.0.20  →  nginx
 172.20.0.30  →  glance
