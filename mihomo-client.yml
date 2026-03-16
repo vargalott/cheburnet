@@ -15,7 +15,6 @@ profile:
   store-selected: true
   store-fake-ip: false
 
-
 #
 # TUN settings
 #
@@ -30,7 +29,6 @@ tun:
     - any:53
     - tcp://any:53
 
-
 #
 # NTP settings
 #
@@ -39,7 +37,6 @@ ntp:
   server: time.cloudflare.com
   port: 123
   interval: 30
-
 
 #
 # SNIFFING settings
@@ -55,7 +52,6 @@ sniffer:
       ports: [443, 8443]
     QUIC:
       ports: [443, 8443]
-
 
 #
 # DNS settings
@@ -105,7 +101,6 @@ dns:
 
     - MATCH,fake-ip
 
-
 #
 # PROXIES settings
 #
@@ -126,7 +121,6 @@ proxies:
     client-fingerprint: chrome
     reality-opts:
       public-key:
-
 
 #
 # PROXY PROVIDERS settings
@@ -172,7 +166,6 @@ proxy-providers:
     path: ./providers/whitelist-cidr-georu.txt
     filter: Russia
 
-
 #
 # PROXY GROUPS settings
 # x-proxy-groups-defaults - common fields
@@ -180,7 +173,7 @@ proxy-providers:
 # GATEWAY-RU selector(default - DIRECT) routes RU
 #
 x-proxy-groups-defaults: &pg-defaults
-  url: http://cp.cloudflare.com/generate_204
+  url: https://cp.cloudflare.com/generate_204
   expected-status: 204
   interval: 0
   timeout: 5000
@@ -243,7 +236,6 @@ proxy-groups:
       - REJECT
     use:
       - whitelist-cidr-georu
-
 
 #
 # RULE PROVIDERS settings
@@ -318,11 +310,10 @@ rule-providers:
   # source: https://github.com/itdoginfo/allow-domains/
   geosite-ru-available-only-inside:
     <<: [ *rp-defaults ]
-    url: https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Russia/outside-clashx.lst
-    path: ./rules/geosite-ru-available-only-inside.lst
+    url: https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Russia/outside-raw.lst
+    path: ./rules/geosite-itdoginfo-allow-domains-outside.lst
     format: text
-    behavior: classical
-
+    behavior: domain
 
 #
 # RULES settings
