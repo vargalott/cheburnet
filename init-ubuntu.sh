@@ -65,9 +65,11 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 EOF
 
-    mkdir -p ~/.ssh && chmod 700 ~/.ssh
-    [ -n "$ssh_key" ] && echo "$ssh_key" > ~/.ssh/authorized_keys || touch ~/.ssh/authorized_keys
-    chmod 600 ~/.ssh/authorized_keys
+    if [ -n "$ssh_key" ]; then
+        mkdir -p ~/.ssh && chmod 700 ~/.ssh
+        touch ~/.ssh/authorized_keys && echo "$ssh_key" > ~/.ssh/authorized_keys
+        chmod 600 ~/.ssh/authorized_keys
+    fi
 
     systemctl daemon-reload && systemctl enable --now ssh.socket
 }
