@@ -7,7 +7,8 @@ services:
     volumes:
       - ./data:/app/data
     networks:
-      - localnet
+      localnet:
+        ipv4_address: 172.20.0.50
     restart: unless-stopped
     environment:
       - TZ=UTC
