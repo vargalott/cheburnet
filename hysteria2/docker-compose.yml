@@ -9,7 +9,7 @@ services:
       localnet:
         ipv4_address: 172.20.0.10
     ports:
-      - 443:443
+      - 443:443/udp
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/
       - ./hysteria2.yaml:/etc/hysteria2.yaml
