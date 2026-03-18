@@ -129,8 +129,8 @@ proxies:
 #
 x-proxy-providers-defaults: &pp-defaults
   type: http
-  interval: 86400
-  proxy: DIRECT
+  interval: 0
+  proxy: PROXY
   exclude-type: ss|vmess
 
 x-proxy-providers-override:
