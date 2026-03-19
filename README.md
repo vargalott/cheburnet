@@ -11,6 +11,8 @@
 </i>
 <br clear="right"/>
 
+![video](.github/doomer.mov)
+
 ## (not only) cheburnet
 
 ##### ubuntu server init
