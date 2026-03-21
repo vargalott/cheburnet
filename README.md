@@ -11,7 +11,7 @@
 </i>
 <br clear="right"/>
 
-<video src="https://github.com/user-attachments/assets/193315b6-0143-4289-bbbd-fdb28540fec4"></video>****
+<video src="https://github.com/user-attachments/assets/193315b6-0143-4289-bbbd-fdb28540fec4"></video>
 
 ## (not only) cheburnet
 
