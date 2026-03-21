@@ -11,6 +11,8 @@
 </i>
 <br clear="right"/>
 
+<video src="https://github.com/user-attachments/assets/193315b6-0143-4289-bbbd-fdb28540fec4"></video>****
+
 ## (not only) cheburnet
 
 ##### ubuntu server init
@@ -43,9 +45,3 @@ certbot renew --dry-run
 
 rsync -avz --delete -e ssh host:/root/vaultwarden/data $HOME/backups/vaultwarden/
 ```
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<video src="https://github.com/user-attachments/assets/193315b6-0143-4289-bbbd-fdb28540fec4"></video>
