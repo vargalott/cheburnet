@@ -122,6 +122,20 @@ proxies:
     reality-opts:
       public-key:
 
+- name: HYSTERIA
+  dialer-proxy: GATEWAY-PROXY
+  type: hysteria2
+  server: 
+  # up: "100 Mbps"
+  # down: "100 Mbps"
+  port: 443
+  udp: true
+  password:
+  # obfs: salamander
+  # obfs-password: ""
+  sni:
+  skip-cert-verify: false
+
 #
 # PROXY PROVIDERS settings
 # x-proxy-providers-defaults - common fields
@@ -187,6 +201,7 @@ proxy-groups:
     interval: 30
     proxies:
       - VLESS
+      - HYSTERIA
       - REGULAR-OPENRAY
       - REGULAR-ETONEYA
       - REJECT
