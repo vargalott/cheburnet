@@ -105,7 +105,6 @@ dns:
 # PROXIES settings
 #
 proxies:
-
   - name: VLESS
     dialer-proxy: GATEWAY-PROXY
     type: vless
@@ -122,19 +121,19 @@ proxies:
     reality-opts:
       public-key:
 
-- name: HYSTERIA
-  dialer-proxy: GATEWAY-PROXY
-  type: hysteria2
-  server: 
-  # up: "100 Mbps"
-  # down: "100 Mbps"
-  port: 443
-  udp: true
-  password:
-  # obfs: salamander
-  # obfs-password: ""
-  sni:
-  skip-cert-verify: false
+  - name: HYSTERIA
+    dialer-proxy: GATEWAY-PROXY
+    type: hysteria2
+    server:
+    # up: "100 Mbps"
+    # down: "100 Mbps"
+    port: 443
+    udp: true
+    password:
+    # obfs: salamander
+    # obfs-password: ""
+    sni:
+    skip-cert-verify: false
 
 #
 # PROXY PROVIDERS settings
@@ -158,16 +157,15 @@ x-proxy-providers-override:
       udp: true
 
 proxy-providers:
-
   # source: https://github.com/sakha1370/OpenRay
   regular-openray:
-    <<: [ *pp-defaults, *ppo-1 ]
+    <<: [*pp-defaults, *ppo-1]
     url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/kind/trojan.txt
     path: ./providers/regular-openray.txt
 
   # source: https://etoneyaproject.github.io
   regular-etoneya:
-    <<: [ *pp-defaults, *ppo-1 ]
+    <<: [*pp-defaults, *ppo-1]
     url: https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/youtube
     path: ./providers/regular-etoneya.txt
 
@@ -175,7 +173,7 @@ proxy-providers:
 
   # source: https://github.com/igareck/vpn-configs-for-russia
   whitelist-cidr-georu:
-    <<: [ *pp-defaults, *ppo-2 ]
+    <<: [*pp-defaults, *ppo-2]
     url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt
     path: ./providers/whitelist-cidr-georu.txt
     filter: Russia
@@ -194,9 +192,8 @@ x-proxy-groups-defaults: &pg-defaults
   lazy: false
 
 proxy-groups:
-
   - name: PROXY
-    <<: [ *pg-defaults ]
+    <<: [*pg-defaults]
     type: select
     interval: 30
     proxies:
@@ -207,7 +204,7 @@ proxy-groups:
       - REJECT
 
   - name: GATEWAY-PROXY
-    <<: [ *pg-defaults ]
+    <<: [*pg-defaults]
     type: select
     interval: 30
     proxies:
@@ -216,7 +213,7 @@ proxy-groups:
       - REJECT
 
   - name: GATEWAY-RU
-    <<: [ *pg-defaults ]
+    <<: [*pg-defaults]
     type: select
     interval: 30
     proxies:
@@ -227,7 +224,7 @@ proxy-groups:
   # ---
 
   - name: REGULAR-OPENRAY
-    <<: [ *pg-defaults ]
+    <<: [*pg-defaults]
     type: select
     proxies:
       - REJECT
@@ -235,7 +232,7 @@ proxy-groups:
       - regular-openray
 
   - name: REGULAR-ETONEYA
-    <<: [ *pg-defaults ]
+    <<: [*pg-defaults]
     type: select
     proxies:
       - REJECT
@@ -245,7 +242,7 @@ proxy-groups:
   # ---
 
   - name: WHITELIST-CIDR-GEORU
-    <<: [ *pg-defaults ]
+    <<: [*pg-defaults]
     type: select
     proxies:
       - REJECT
@@ -263,10 +260,9 @@ x-rule-providers-defaults: &rp-defaults
   proxy: PROXY
 
 rule-providers:
-
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geoip-private:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
     path: ./rules/geoip-private.mrs
     format: mrs
@@ -274,7 +270,7 @@ rule-providers:
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geoip-ru:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/ru.mrs
     path: ./rules/geoip-ru.mrs
     format: mrs
@@ -284,7 +280,7 @@ rule-providers:
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-category-ru:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ru.mrs
     path: ./rules/geosite-category-ru.mrs
     format: mrs
@@ -292,7 +288,7 @@ rule-providers:
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-tld-ru:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tld-ru.mrs
     path: ./rules/geosite-tld-ru.mrs
     format: mrs
@@ -300,7 +296,7 @@ rule-providers:
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-gov-ru:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-gov-ru.mrs
     path: ./rules/geosite-gov-ru.mrs
     format: mrs
@@ -308,7 +304,7 @@ rule-providers:
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-bank-ru:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-bank-ru.mrs
     path: ./rules/geosite-bank-ru.mrs
     format: mrs
@@ -316,7 +312,7 @@ rule-providers:
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-yandex:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/yandex.mrs
     path: ./rules/geosite-yandex.mrs
     format: mrs
@@ -324,7 +320,7 @@ rule-providers:
 
   # source: https://github.com/itdoginfo/allow-domains/
   geosite-ru-available-only-inside:
-    <<: [ *rp-defaults ]
+    <<: [*rp-defaults]
     url: https://raw.githubusercontent.com/itdoginfo/allow-domains/main/Russia/outside-raw.lst
     path: ./rules/geosite-itdoginfo-allow-domains-outside.lst
     format: text
