@@ -32,13 +32,13 @@ auth:
 
 masquerade:
   type: proxy
+  # listenHTTP: :80
+  # listenHTTPS: :443
+  # forceHTTPS: true
   proxy:
     url: https://172.20.0.20:443
     rewriteHost: true
     insecure: false
-  # listenHTTP: :80
-  listenHTTPS: :443
-  forceHTTPS: true
 
 # ignoreClientBandwidth: false
 # bandwidth:
