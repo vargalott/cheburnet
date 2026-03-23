@@ -36,7 +36,7 @@ masquerade:
   # listenHTTPS: :443
   # forceHTTPS: true
   proxy:
-    url: https://172.20.0.20:443
+    url: https://172.20.0.10:443
     rewriteHost: true
     insecure: false
 
