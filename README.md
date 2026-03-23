@@ -46,3 +46,40 @@ certbot renew --dry-run
 
 rsync -avz --delete -e ssh host:/root/vaultwarden/data $HOME/backups/vaultwarden/
 ```
+
+##### flowchat
+
+```mermaid
+flowchart TD
+    classDef wide padding:100px
+
+    %% Blocks
+    CLIENT[Client Device\nScanners\nCensor]:::wide
+
+    TCP443["VLESS-REALITY\n172.20.0.10\nTCP:443"]:::wide
+    UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
+
+    NGINX["Nginx Reverse Proxy\n172.20.0.20"]:::wide
+    MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
+    CONFIG["Proxy client config\n(mihomo)"]:::wide
+    VAULT["Vaultwarden\n172.20.0.40"]:::wide
+
+    TUNNEL["Proxy tunnel"]:::wide
+    INTERNET["Internet"]:::wide
+
+    %% Flows
+    CLIENT -->|:443/tcp| TCP443
+    CLIENT -->|:443/udp| UDP443
+
+    TCP443 -->|auth successful\nvalid shortid/uuid| TUNNEL
+    UDP443 -->|auth successful\nvalid userpass| TUNNEL
+
+    TCP443 -->|reality destination\nfailed auth| NGINX
+    UDP443 -->|hysteria masquerade\nfailed auth| TCP443
+
+    NGINX -->|https://website/| MASQ
+    NGINX -->|https://website/secretpath/config.yaml| CONFIG
+    NGINX -->|https://website/vault| VAULT
+
+    TUNNEL --> INTERNET
+```
