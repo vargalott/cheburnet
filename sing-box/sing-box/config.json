@@ -54,7 +54,7 @@
           "enabled": true,
           "handshake": {
             "server": "172.20.0.20",
-            "server_port": 8443
+            "server_port": 443
           },
           "private_key": "PVT",
           "short_id": [
