@@ -58,7 +58,7 @@
           },
           "private_key": "PVT",
           "short_id": [
-            ""
+            "ID"
           ],
           "max_time_difference": "1m"
         }
