@@ -17,7 +17,7 @@
 
 ##### ubuntu server init
 ```sh
-bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/refs/heads/main/init-ubuntu.sh) "<ssh_key>" "<cert_email>" "<cert_domain>"
+IU_SSH_KEY="key" IU_CERT_EMAIL="email" IU_CERT_DOMAIN="domain" bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/refs/heads/main/init-ubuntu.sh)
 ```
 
 ##### check tools
