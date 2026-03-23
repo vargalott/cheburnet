@@ -1,10 +1,12 @@
 #
 # Core settings
 #
+# see more: https://wiki.metacubex.one/en/config/general/
+#
 log-level: warning
 ipv6: false
 udp: true
-mixed-port: 2080
+mixed-port: 7890
 unified-delay: true
 disable-keep-alive: false
 keep-alive-interval: 30
@@ -17,6 +19,8 @@ profile:
 
 #
 # TUN settings
+#
+# see more: https://wiki.metacubex.one/en/config/inbound/tun/
 #
 tun:
   stack: gvisor
@@ -32,6 +36,8 @@ tun:
 #
 # NTP settings
 #
+# see more: https://wiki.metacubex.one/en/config/ntp/
+#
 ntp:
   enable: true
   server: time.cloudflare.com
@@ -40,6 +46,8 @@ ntp:
 
 #
 # SNIFFING settings
+#
+# see more: https://wiki.metacubex.one/en/config/sniff/
 #
 sniffer:
   enable: true
@@ -55,9 +63,13 @@ sniffer:
 
 #
 # DNS settings
-# fake-ip + real-ip for local, stun-turn, RU
-# fake-ip - Cloudflare
-# real-ip - either Yandex for RU, Cloudflare for non-RU
+# fake-ip     all traffic by default (198.18.0.0/16 pool), upstream DNS resolver
+# real-ip     .lan through local network resolver
+#             STUN/TURN through Cloudflare DNS
+#             all RU rule-sets through Yandex DNS
+#
+# see more: https://wiki.metacubex.one/en/config/dns/
+#           https://wiki.metacubex.one/en/config/dns/diagram/
 #
 dns:
   enable: true
@@ -75,8 +87,8 @@ dns:
     - tls://1.0.0.1
 
   nameserver-policy:
-    # "+.lan":
-    # - 10.1.0.1
+    "+.lan":
+    - 10.1.0.1
     "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-ru-available-only-inside":
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
@@ -87,7 +99,7 @@ dns:
   fake-ip-range: 198.18.0.0/16
   fake-ip-filter-mode: rule
   fake-ip-filter:
-    - DOMAIN,localhost,real-ip
+    - DOMAIN,localhost,real-ip # 127.0.0.1
     - DOMAIN-SUFFIX,lan,real-ip
     - DOMAIN-KEYWORD,stun,real-ip
     - DOMAIN-KEYWORD,turn,real-ip
@@ -104,41 +116,49 @@ dns:
 #
 # PROXIES settings
 #
+# see more: https://wiki.metacubex.one/en/config/proxies/
+#
 proxies:
   - name: VLESS
     dialer-proxy: GATEWAY-PROXY
     type: vless
     network: tcp
-    server:
+    server: SERVER
     port: 443
     udp: true
-    uuid:
+    uuid: UUID
     flow: xtls-rprx-vision
     packet-encoding: xudp
     tls: true
-    servername:
+    servername: SERVER
     client-fingerprint: chrome
     reality-opts:
-      public-key:
+      public-key: PBK
+      short-id: SID
 
   - name: HYSTERIA
     dialer-proxy: GATEWAY-PROXY
     type: hysteria2
-    server:
+    server: SERVER
     # up: "100 Mbps"
     # down: "100 Mbps"
     port: 443
     udp: true
-    password:
+    password: "USER:PASSWORD"
     # obfs: salamander
     # obfs-password: ""
-    sni:
+    sni: SERVER
     skip-cert-verify: false
 
 #
 # PROXY PROVIDERS settings
 # x-proxy-providers-defaults - common fields
 # x-proxy-providers-override - additional common fields
+#
+# regular-openray, whitelist-cidr-georu as a providers examples
+#
+# see more: https://wiki.metacubex.one/en/config/proxy-providers/
+#           https://wiki.metacubex.one/en/config/proxy-providers/content/
 #
 x-proxy-providers-defaults: &pp-defaults
   type: http
@@ -163,12 +183,6 @@ proxy-providers:
     url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/kind/trojan.txt
     path: ./providers/regular-openray.txt
 
-  # source: https://etoneyaproject.github.io
-  regular-etoneya:
-    <<: [*pp-defaults, *ppo-1]
-    url: https://raw.githubusercontent.com/EtoNeYaProject/etoneyaproject.github.io/refs/heads/main/youtube
-    path: ./providers/regular-etoneya.txt
-
   # ---
 
   # source: https://github.com/igareck/vpn-configs-for-russia
@@ -176,13 +190,19 @@ proxy-providers:
     <<: [*pp-defaults, *ppo-2]
     url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt
     path: ./providers/whitelist-cidr-georu.txt
-    filter: Russia
 
 #
 # PROXY GROUPS settings
 # x-proxy-groups-defaults - common fields
-# PROXY selector goes through GATEWAY-PROXY selector
-# GATEWAY-RU selector(default - DIRECT) routes RU
+#
+# PROXY                   main proxies selector
+# GATEWAY-PROXY           controls how proxied(PROXY selector) traffic exits
+# GATEWAY-RU              controls how RU(based on rules) traffic exits
+# REGULAR-OPENRAY         provider-backed selector for openray proxies
+# WHITELIST-CIDR-GEORU    provider-backed selector for GeoRU CIDR whitelist
+# note: REJECT serves as a kill-switch
+#
+# see more: https://wiki.metacubex.one/en/config/proxy-groups/
 #
 x-proxy-groups-defaults: &pg-defaults
   url: https://cp.cloudflare.com/generate_204
@@ -200,7 +220,6 @@ proxy-groups:
       - VLESS
       - HYSTERIA
       - REGULAR-OPENRAY
-      - REGULAR-ETONEYA
       - REJECT
 
   - name: GATEWAY-PROXY
@@ -231,14 +250,6 @@ proxy-groups:
     use:
       - regular-openray
 
-  - name: REGULAR-ETONEYA
-    <<: [*pg-defaults]
-    type: select
-    proxies:
-      - REJECT
-    use:
-      - regular-etoneya
-
   # ---
 
   - name: WHITELIST-CIDR-GEORU
@@ -252,7 +263,8 @@ proxy-groups:
 #
 # RULE PROVIDERS settings
 # x-rule-providers-defaults - common fields
-# rulesets for private ranges and RU
+#
+# see more: https://wiki.metacubex.one/en/config/rule-providers/
 #
 x-rule-providers-defaults: &rp-defaults
   type: http
@@ -276,7 +288,23 @@ rule-providers:
     format: mrs
     behavior: ipcidr
 
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geoip-telegram:
+    <<: [*rp-defaults]
+    url: https://core.telegram.org/resources/cidr.txt
+    path: ./rules/geoip-telegram.txt
+    format: text
+    behavior: ipcidr
+
   # ---
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-telegram:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/telegram.mrs
+    path: ./rules/geosite-telegram.mrs
+    format: mrs
+    behavior: domain
 
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-category-ru:
@@ -328,19 +356,21 @@ rule-providers:
 
 #
 # RULES settings
-# IPv6 REJECT
-# RU through GATEWAY-RU(default - DIRECT)
-# REST through PROXY
+#
+# see more: https://wiki.metacubex.one/en/config/rules/
 #
 rules:
   - IP-CIDR6,::/0,REJECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
 
-  - RULE-SET,geosite-category-ru,GATEWAY-RU
-  - RULE-SET,geosite-gov-ru,GATEWAY-RU
-  - RULE-SET,geosite-bank-ru,GATEWAY-RU
+  - RULE-SET,geosite-telegram,PROXY
+  - RULE-SET,geoip-telegram,PROXY,no-resolve
+
   - RULE-SET,geosite-yandex,GATEWAY-RU
+  - RULE-SET,geosite-bank-ru,GATEWAY-RU
   - RULE-SET,geosite-ru-available-only-inside,GATEWAY-RU
+  - RULE-SET,geosite-gov-ru,GATEWAY-RU
+  - RULE-SET,geosite-category-ru,GATEWAY-RU
   - RULE-SET,geosite-tld-ru,GATEWAY-RU
   - RULE-SET,geoip-ru,GATEWAY-RU,no-resolve
 
