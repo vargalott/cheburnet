@@ -37,6 +37,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/
 echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
 uuidgen
 docker run ghcr.io/sagernet/sing-box:latest generate reality-keypair
+openssl rand -hex 8
 
 docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
 
