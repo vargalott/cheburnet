@@ -6,7 +6,7 @@ init_system() {
     timedatectl set-timezone UTC
     apt-get -y update
     apt-get -y upgrade
-    apt-get -y install bc bmon btop curl cron dnsutils htop iftop vnstat jq micro nano net-tools util-linux uuid-runtime wget certbot
+    apt-get -y install bc bmon btop certbot cron curl dnsutils htop iftop jq micro nano net-tools util-linux uuid-runtime vnstat wget
     curl -fsSL https://get.docker.com | sh
     docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
 }
@@ -35,7 +35,8 @@ EOF
 configure_ssh() {
     local ssh_key="$1"
 
-    cat > /etc/ssh/sshd_config <<'EOF'
+    if [[ -n "$ssh_key" ]]; then
+        cat > /etc/ssh/sshd_config <<'EOF'
 # --- Network Configuration ---
 ListenAddress 0.0.0.0
 # ListenAddress 127.0.0.1
@@ -64,14 +65,12 @@ AcceptEnv LANG LC_*
 # --- SFTP Subsystem ---
 Subsystem sftp /usr/lib/openssh/sftp-server
 EOF
-
-    if [ -n "$ssh_key" ]; then
         mkdir -p ~/.ssh && chmod 700 ~/.ssh
         touch ~/.ssh/authorized_keys && echo "$ssh_key" > ~/.ssh/authorized_keys
         chmod 600 ~/.ssh/authorized_keys
-    fi
 
-    systemctl daemon-reload && systemctl enable --now ssh.socket
+        systemctl daemon-reload && systemctl enable --now ssh.socket
+    fi
 }
 
 configure_dns() {
@@ -104,9 +103,7 @@ configure_ssl() {
     local cert_email="$1"
     local cert_domain="$2"
 
-    if [ -n "$cert_email" ] && [ -n "$cert_domain" ]; then
-        certbot certonly --standalone --agree-tos -m "$cert_email" -d "$cert_domain" --non-interactive
-    fi
+    [[ -n "$cert_email" ]] && [[ -n "$cert_domain" ]] && certbot certonly --standalone --agree-tos -m "$cert_email" -d "$cert_domain" --non-interactive
 }
 
 configure_shell() {
@@ -116,7 +113,7 @@ configure_shell() {
 # ===============================
 # 1. Interactive check
 # ===============================
-[ -z "$PS1" ] && return
+[[ -z "$PS1" ]] && return
 
 # ===============================
 # 2. History
@@ -132,18 +129,18 @@ shopt -s cmdhist histreedit histverify
 # 3. Prompt
 # ===============================
 shopt -s checkwinsize
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+[[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
+if [[ -x /usr/bin/tput ]] && tput setaf 1 >/dev/null 2>&1; then
     base_PS1="\[\033[35m\]\$(/bin/date '+%Y-%m-%d %H:%M:%S') \[\033[1;31m\]\u@\h \[\033[1;34m\]\$(pwd)\[\033[0m\] "
 else
     base_PS1="\$(/bin/date '+%Y-%m-%d %H:%M:%S') \u@\h \$(pwd) "
 fi
-PROMPT_COMMAND='ret=$?; PS1="$base_PS1$( [ $ret -ne 0 ] && printf "\[\033[0;31m\](%d)\[\033[0m\] " $ret)-> "'
+PROMPT_COMMAND='ret=$?; PS1="$base_PS1$( [[ $ret -ne 0 ]] && printf "\001\033[0;31m\002(%d)\001\033[0m\002 " $ret)-> "'
 
 # ===============================
 # 4. Colors
 # ===============================
-if [ -x /usr/bin/dircolors ]; then
+if [[ -x /usr/bin/dircolors ]]; then
     eval "$(dircolors -b ~/.dircolors 2>/dev/null || dircolors -b)"
     alias ls='ls --color=auto'
     alias grep='grep --color=auto'
@@ -160,6 +157,8 @@ alias ....='cd ../../..'
 alias ll='ls -alF --group-directories-first'
 alias ducks='du -hs * | sort -hr'
 alias reload='source ~/.bashrc'
+alias dcr='docker compose down && docker compose up -d'
+alias dcl='docker compose logs -f'
 
 # ===============================
 # 6. Variables
@@ -182,17 +181,21 @@ EOF
 
 # all root
 main() {
-    local ssh_key="${1:-${SSH_KEY:-}}"
-    local cert_email="${2:-${CERT_EMAIL:-}}"
-    local cert_domain="${3:-${CERT_DOMAIN:-}}"
+    local ssh_key="${IU_SSH_KEY:-}"
+    local cert_email="${IU_CERT_EMAIL:-}"
+    local cert_domain="${IU_CERT_DOMAIN:-}"
 
-    init_system && sleep 1
-    configure_sysctl && sleep 1
-    configure_ssh "$ssh_key" && sleep 1
-    configure_dns && sleep 1
-    configure_cron && sleep 1
-    configure_ssl "$cert_email" "$cert_domain" && sleep 1
-    configure_shell && sleep 1
+    echo "SSH key: $ssh_key"
+    echo "Email for domain certification: $cert_email"
+    echo "Certified domain: $cert_domain"
+
+    sleep 1 && init_system
+    sleep 1 && configure_sysctl
+    sleep 1 && configure_ssh "$ssh_key"
+    sleep 1 && configure_dns
+    sleep 1 && configure_cron
+    sleep 1 && configure_ssl "$cert_email" "$cert_domain"
+    sleep 1 && configure_shell
 }
 
 main "$@"
