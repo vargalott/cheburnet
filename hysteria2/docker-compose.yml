@@ -7,7 +7,7 @@ services:
     restart: always
     networks:
       localnet:
-        ipv4_address: 172.20.0.10
+        ipv4_address: 172.20.0.15
     ports:
       - 443:443/udp
     volumes:
