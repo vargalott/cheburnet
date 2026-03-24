@@ -361,6 +361,7 @@ rule-providers:
 #
 rules:
   - IP-CIDR6,::/0,REJECT
+  - AND,((NETWORK,udp),(DST-PORT,443)),REJECT
   - RULE-SET,geoip-private,DIRECT,no-resolve
 
   - RULE-SET,geosite-telegram,PROXY
