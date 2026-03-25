@@ -18,8 +18,8 @@
       "settings": {
         "clients": [
           {
-            "email": "",
-            "id": "",
+            "email": "USER",
+            "id": "UUID",
             "flow": "xtls-rprx-vision"
           }
         ],
@@ -37,7 +37,7 @@
           ],
           "privateKey": "PVK",
           "shortIds": [
-            ""
+            "ID"
           ],
           "maxTimeDiff": 60000
         }
