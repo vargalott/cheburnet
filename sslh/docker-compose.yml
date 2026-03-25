@@ -1,5 +1,9 @@
 name: sslh
 
+networks:
+  localnet:
+    external: true
+
 services:
   sslh:
     image: ghcr.io/yrutschle/sslh:latest
@@ -18,7 +22,3 @@ services:
       driver: "local"
       options:
         max-size: "100m"
-
-networks:
-  localnet:
-    external: true

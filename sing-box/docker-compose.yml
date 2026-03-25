@@ -1,5 +1,9 @@
 name: sing-box
 
+networks:
+  localnet:
+    external: true
+
 services:
   sing-box:
     image: ghcr.io/sagernet/sing-box:latest
@@ -19,7 +23,3 @@ services:
       driver: "local"
       options:
         max-size: "100m"
-
-networks:
-  localnet:
-    external: true

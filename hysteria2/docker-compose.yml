@@ -1,5 +1,9 @@
 name: hysteria2
 
+networks:
+  localnet:
+    external: true
+
 services:
   hysteria2:
     image: tobyxdd/hysteria
@@ -22,7 +26,3 @@ services:
       driver: "local"
       options:
         max-size: "100m"
-
-networks:
-  localnet:
-    external: true

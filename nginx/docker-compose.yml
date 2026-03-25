@@ -1,5 +1,9 @@
 name: nginx
 
+networks:
+  localnet:
+    external: true
+
 services:
   nginx:
     image: nginx:latest
@@ -17,7 +21,3 @@ services:
       driver: "local"
       options:
         max-size: "100m"
-
-networks:
-  localnet:
-    external: true
