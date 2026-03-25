@@ -25,12 +25,22 @@
         ],
         "decryption": "none"
       },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
       "streamSettings": {
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
           "show": false,
           "dest": "172.20.0.20:443",
+          "fingerprint": "chrome",
           "xver": 2,
           "serverNames": [
             "SERVER"
@@ -38,8 +48,7 @@
           "privateKey": "PVK",
           "shortIds": [
             "ID"
-          ],
-          "maxTimeDiff": 60000
+          ]
         }
       }
     }
@@ -86,16 +95,16 @@
           "domain:su",
           "domain:ru.com",
           "domain:ru.net",
-          "domain:xn--p1ag",
-          "domain:xn--p1acf",
-          "domain:xn--80aswg",
-          "domain:xn--p1ai",
-          "domain:xn--80asehdb",
-          "domain:xn--j1aef",
-          "domain:xn--80adxhks",
-          "domain:xn--80aswg",
           "domain:xn--c1avg",
-          "domain:xn--d1acj3b"
+          "domain:xn--d1acj3b",
+          "domain:xn--e1afmapc",
+          "domain:xn--j1aef",
+          "domain:xn--p1acf",
+          "domain:xn--p1ai",
+          "domain:xn--80aswg",
+          "domain:xn--80asehdb",
+          "domain:xn--80adxhks",
+          "domain:xn--90ais"
         ],
         "outboundTag": "block"
       }
