@@ -10,9 +10,11 @@ services:
         ipv4_address: 172.20.0.40
     environment:
       DOMAIN: https://DOMAIN/vault
-      ADMIN_TOKEN: TOKEN
       SIGNUPS_ALLOWED: false
       INVITATIONS_ALLOWED: false
+      EXTENDED_LOGGING: true
+      SHOW_PASSWORD_HINT: false
+      LOG_LEVEL: warn
     volumes:
       - ./data/:/data/
 
