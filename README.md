@@ -22,8 +22,6 @@ IU_SSH_KEY="key" IU_CERT_EMAIL="email" IU_CERT_DOMAIN="domain" bash <(wget -qO- 
 
 ##### check tools
 ```sh
-ssh -p <port> user@host -L <local_port>:127.0.0.1:<remote_port>
-
 bash <(wget -qO- ip.check.place) -l en
 bash <(wget -qO- check.unlock.media) -E en -R 0
 bash <(wget -qO- bench.sh)
@@ -34,17 +32,22 @@ bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/
 
 ##### misc
 ```sh
-echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
-uuidgen
-docker run ghcr.io/sagernet/sing-box:latest generate reality-keypair
+# uuid, PVT+PBK
+docker run --rm ghcr.io/xtls/xray-core uuid
+docker run --rm ghcr.io/xtls/xray-core x25519
+# OR
+docker run --rm ghcr.io/sagernet/sing-box:latest generate uuid
+docker run --rm ghcr.io/sagernet/sing-box:latest generate reality-keypair
+
+# shortid
 openssl rand -hex 8
 
-docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
-
+# certificates
 certbot certonly --standalone --agree-tos -m EMAIL -d DOMAIN
 certbot renew --dry-run
 
-rsync -avz --delete -e ssh host:/root/vaultwarden/data $HOME/backups/vaultwarden/
+rsync -avz --delete -e ssh "server:/root/vaultwarden/data/db_[0-9]*_[0-9]*.sqlite3" $HOME/backups/vaultwarden/
+echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
 ```
 
 ##### flowchat
