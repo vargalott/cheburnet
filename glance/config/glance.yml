@@ -2,7 +2,7 @@ server:
   port: 4001
   assets-path: /app/assets
   proxied: true
-  base-url: /
+  base-url: /glance
 
 auth:
   secret-key: KEY
