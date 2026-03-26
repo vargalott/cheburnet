@@ -46,6 +46,7 @@ openssl rand -hex 8
 certbot certonly --standalone --agree-tos -m EMAIL -d DOMAIN
 certbot renew --dry-run
 
+tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64; echo
 rsync -avz --delete -e ssh "server:/root/vaultwarden/data/db_[0-9]*_[0-9]*.sqlite3" $HOME/backups/vaultwarden/
 echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </dev/urandom | head -c13)-$( ( [ $((RANDOM%2)) -eq 0 ] && printf '%02d' $((RANDOM%90+10)) ) || echo $(tr -dc a-z </dev/urandom | head -c1)$((RANDOM%9+1)) )"
 ```
