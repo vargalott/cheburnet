@@ -1,4 +1,6 @@
-<img align="right" src=".github/cheburnet.png" height="350px"/>
+<a href="https://github.com/user-attachments/assets/193315b6-0143-4289-bbbd-fdb28540fec4">
+  <img align="right" src=".github/cheburnet.png" height="350px"/>
+<a>
 <i>
 Ведь больше нет никого<br>
 Ничего-ничего<br>
@@ -10,8 +12,6 @@
 Лишь только снег кружит<br>
 </i>
 <br clear="right"/>
-
-<video src="https://github.com/user-attachments/assets/193315b6-0143-4289-bbbd-fdb28540fec4"></video>
 
 ## (not only) cheburnet
 
