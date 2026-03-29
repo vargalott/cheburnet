@@ -1,5 +1,9 @@
 name: filebrowser
 
+networks:
+  localnet:
+    external: true
+
 services:
   filebrowser:
     image: filebrowser/filebrowser:s6
@@ -13,6 +17,3 @@ services:
       - ./data/db:/database
       - ./data/config:/config
 
-networks:
-  localnet:
-    external: true
