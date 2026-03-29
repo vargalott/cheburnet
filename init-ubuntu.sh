@@ -159,7 +159,8 @@ alias ducks='du -hs * | sort -hr'
 alias reload='source ~/.bashrc'
 alias dcu='docker compose up'
 alias dcd='docker compose down'
-alias dcr='docker compose down && docker compose up -d'
+alias dcr='docker compose restart'
+alias dcdu='docker compose down && docker compose up -d'
 alias dcl='docker compose logs -f'
 
 # ===============================
