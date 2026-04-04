@@ -63,31 +63,6 @@
           "max_time_difference": "1m"
         }
       }
-    },
-    {
-      "type": "hysteria2",
-      "tag": "hysteria2-in",
-      "listen": "0.0.0.0",
-      "listen_port": 443,
-      "users": [
-        {
-          "name": "USER",
-          "password": "PASSWORD"
-        }
-      ],
-      "masquerade": {
-        "type": "proxy",
-        "url": "172.20.0.20:443",
-        "rewrite_host": true
-      },
-      "tls": {
-        "enabled": true,
-        "alpn": [
-          "h3"
-        ],
-        "certificate_path": "/etc/letsencrypt/live/DOMAIN/fullchain.pem",
-        "key_path": "/etc/letsencrypt/live/DOMAIN/privkey.pem;"
-      }
     }
   ],
   "outbounds": [

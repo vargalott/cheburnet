@@ -16,7 +16,10 @@ services:
       - 443:443
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/
-      - ./sing-box:/etc/sing-box/
+      - type: bind
+        source: ./config.json
+        target: /etc/sing-box/config.json
+
     command: -D /var/lib/sing-box -C /etc/sing-box/ run
 
     logging:
