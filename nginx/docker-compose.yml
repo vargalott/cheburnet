@@ -14,8 +14,10 @@ services:
         ipv4_address: 172.20.0.20
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/
-      - ./nginx/:/etc/nginx/
       - ./data/:/data/
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
 
     logging:
       driver: "local"
