@@ -4,11 +4,21 @@ export NEEDRESTART_SUSPEND=1
 
 init_system() {
     timedatectl set-timezone UTC
-    apt-get -y update
-    apt-get -y upgrade
+
+    # core utils
+    apt-get -y update && apt-get -y upgrade
     apt-get -y install bc bmon btop certbot cron curl dnsutils htop iftop jq micro nano net-tools util-linux uuid-runtime vnstat wget
+
+    # docker
     curl -fsSL https://get.docker.com | sh
     docker network create --driver bridge --subnet=172.20.0.0/24 --gateway=172.20.0.1 localnet
+
+    # disable unattended upgrades
+    cat > /etc/apt/apt.conf.d/20auto-upgrades <<'EOF'
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Unattended-Upgrade "0";
+EOF
+    systemctl disable --now unattended-upgrades
 }
 
 configure_sysctl() {
@@ -37,17 +47,12 @@ configure_ssh() {
 
     if [[ -n "$ssh_key" ]]; then
         cat > /etc/ssh/sshd_config <<'EOF'
-# --- Network Configuration ---
 ListenAddress 0.0.0.0
-# ListenAddress 127.0.0.1
-# ListenAddress 172.10.0.1
 Port 8080
 
-# --- Cryptographic Hardening ---
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
 KexAlgorithms sntrup761x25519-sha512@openssh.com
 
-# --- Authentication Settings ---
 PermitRootLogin prohibit-password
 PubkeyAuthentication yes
 PasswordAuthentication no
@@ -55,14 +60,10 @@ PermitEmptyPasswords no
 KbdInteractiveAuthentication no
 UsePAM no
 
-# --- SSH Session Behavior ---
 X11Forwarding yes
 PrintMotd no
 
-# --- Environment Configuration ---
 AcceptEnv LANG LC_*
-
-# --- SFTP Subsystem ---
 Subsystem sftp /usr/lib/openssh/sftp-server
 EOF
         mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -110,14 +111,10 @@ configure_shell() {
     cat > ~/.bashrc <<'EOF'
 # ~/.bashrc
 
-# ===============================
 # 1. Interactive check
-# ===============================
 [[ -z "$PS1" ]] && return
 
-# ===============================
 # 2. History
-# ===============================
 HISTCONTROL=ignoredups:ignorespace
 shopt -s histappend
 HISTSIZE=5000
@@ -125,9 +122,7 @@ HISTFILESIZE=10000
 HISTTIMEFORMAT="%F %T "
 shopt -s cmdhist histreedit histverify
 
-# ===============================
 # 3. Prompt
-# ===============================
 shopt -s checkwinsize
 [[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
 if [[ -x /usr/bin/tput ]] && tput setaf 1 >/dev/null 2>&1; then
@@ -137,9 +132,7 @@ else
 fi
 PROMPT_COMMAND='ret=$?; PS1="$base_PS1$( [[ $ret -ne 0 ]] && printf "\001\033[0;31m\002(%d)\001\033[0m\002 " $ret)-> "'
 
-# ===============================
 # 4. Colors
-# ===============================
 if [[ -x /usr/bin/dircolors ]]; then
     eval "$(dircolors -b ~/.dircolors 2>/dev/null || dircolors -b)"
     alias ls='ls --color=auto'
@@ -148,9 +141,7 @@ if [[ -x /usr/bin/dircolors ]]; then
     alias egrep='egrep --color=auto'
 fi
 
-# ===============================
 # 5. Aliases
-# ===============================
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -163,21 +154,15 @@ alias dcr='docker compose restart'
 alias dcdu='docker compose down && docker compose up -d'
 alias dcl='docker compose logs -f'
 
-# ===============================
 # 6. Variables
-# ===============================
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LESS='-R'
 
-# ===============================
 # 7. Completion
-# ===============================
 [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion
 
-# ===============================
-# 8. Extra settings
-# ===============================
+# 8. Extra
 shopt -s dotglob globstar
 EOF
 }
