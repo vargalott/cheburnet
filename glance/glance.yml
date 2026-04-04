@@ -1,0 +1,122 @@
+server:
+  port: 4001
+  proxied: true
+  base-url: /glance
+
+auth:
+  secret-key: KEY
+  users:
+    admin:
+      password-hash: HASH
+
+theme:
+  background-color: 0 0 16
+  primary-color: 43 59 81
+  positive-color: 61 66 44
+  negative-color: 6 96 59
+
+branding:
+  custom-footer: <p>glance</p>
+
+pages:
+  - name: Home
+
+    hide-desktop-navigation: false
+    # center-vertically: true
+
+    columns:
+    # Column 1
+    - size: small
+      widgets:
+      - type: clock
+        hour-format: 24h
+
+      - type: server-stats
+        servers:
+        - type: local
+          name: SERVER NAME
+          hide-mountpoints-by-default: true
+          mountpoints:
+            "/":
+              name: Root
+              hide: false
+
+      - type: docker-containers
+        title: Local Containers
+        hide-by-default: false
+        containers:
+          glance:
+            name: Glance
+            description: Dashboard
+            icon: si:square
+          hysteria2:
+            name: Hysteria
+            description: Proxy
+            icon: si:lightning
+          sing-box:
+            name: sing-box
+            description: Proxy
+            icon: si:hackthebox
+          xray:
+            name: xray
+            description: Proxy
+            icon: si:xstate
+          nginx:
+            name: NGINX
+            description: Reverse Proxy
+            icon: si:nginx
+          vaultwarden:
+            name: Vaultwarden
+            description: Password Manager
+            icon: si:vaultwarden
+            url: /vault/
+          sslh:
+            name: sslh
+            description: Protocol Multiplexer
+            icon: si:openrouter
+          uptime-kuma:
+            name: Uptime Kuma
+            description: Monitoring Dashboard
+            icon: si:uptimekuma
+
+    # Column 2
+    - size: small
+      widgets:
+      - type: weather
+        location: LOCATION
+        units: metric
+        hour-format: 24h
+        hide-location: false
+
+      - type: markets
+        title: Markets
+        markets:
+        - symbol: BZ=F
+        - symbol: NVDA
+        - symbol: AMD
+
+    # Column 3
+    - size: full
+      widgets:
+      - type: group
+        widgets:
+        - type: reddit
+          subreddit: selfhosted
+          show-thumbnails: true
+          show-flairs: true
+          collapse-after: 10
+          limit: 30
+
+        - type: reddit
+          subreddit: technology
+          show-thumbnails: true
+          show-flairs: true
+          collapse-after: 10
+          limit: 30
+
+        - type: reddit
+          subreddit: gamingnews
+          show-thumbnails: true
+          show-flairs: true
+          collapse-after: 10
+          limit: 30

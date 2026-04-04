@@ -13,9 +13,10 @@ services:
       localnet:
         ipv4_address: 172.20.0.30
     volumes:
-      - ./config:/app/config
-      - ./assets:/app/assets
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - type: bind
+        source: ./glance.yml
+        target: /app/config/glance.yml
 
     logging:
       driver: "local"
