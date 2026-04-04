@@ -17,7 +17,7 @@
 
 ##### ubuntu server init
 ```sh
-IU_SSH_KEY="key" IU_CERT_EMAIL="email" IU_CERT_DOMAIN="domain" bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/refs/heads/main/init-ubuntu.sh)
+IU_SSH_KEY="key" IU_CERT_EMAIL="email" IU_CERT_DOMAIN="domain" bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/main/.ubuntu/init.sh)
 ```
 
 ##### check tools
@@ -26,8 +26,8 @@ bash <(wget -qO- ip.check.place) -l en
 bash <(wget -qO- check.unlock.media) -E en -R 0
 bash <(wget -qO- bench.sh)
 bash <(wget -qO- nws.sh)
-bash <(wget -qO- https://raw.githubusercontent.com/vernette/censorcheck/refs/heads/master/censorcheck.sh)
-bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/refs/heads/master/ipregion.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/vernette/censorcheck/master/censorcheck.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/master/ipregion.sh)
 ```
 
 ##### misc
