@@ -16,7 +16,9 @@ services:
       - 443:443/udp
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/
-      - ./hysteria2.yml:/etc/hysteria2.yml
+      - type: bind
+        source: ./hysteria2.yml
+        target: /etc/hysteria2.yml
     command: [ "server", "-c", "/etc/hysteria2.yml" ]
     environment:
       HYSTERIA_LOG_LEVEL: info
