@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euxo pipefail
 export NEEDRESTART_SUSPEND=1
 
 init_system() {
