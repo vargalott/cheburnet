@@ -180,7 +180,7 @@ proxy-providers:
   # source: https://github.com/sakha1370/OpenRay
   regular-openray:
     <<: [*pp-defaults, *ppo-1]
-    url: https://raw.githubusercontent.com/sakha1370/OpenRay/refs/heads/main/output/kind/trojan.txt
+    url: https://raw.githubusercontent.com/sakha1370/OpenRay/main/output/kind/trojan.txt
     path: ./providers/regular-openray.txt
 
   # ---
@@ -188,7 +188,7 @@ proxy-providers:
   # source: https://github.com/igareck/vpn-configs-for-russia
   whitelist-cidr-georu:
     <<: [*pp-defaults, *ppo-2]
-    url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt
+    url: https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/WHITE-CIDR-RU-all.txt
     path: ./providers/whitelist-cidr-georu.txt
 
 #
@@ -301,7 +301,7 @@ rule-providers:
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-telegram:
     <<: [*rp-defaults]
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/telegram.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs
     path: ./rules/geosite-telegram.mrs
     format: mrs
     behavior: domain
@@ -309,7 +309,7 @@ rule-providers:
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-category-ru:
     <<: [*rp-defaults]
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ru.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ru.mrs
     path: ./rules/geosite-category-ru.mrs
     format: mrs
     behavior: domain
@@ -317,7 +317,7 @@ rule-providers:
   # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
   geosite-tld-ru:
     <<: [*rp-defaults]
-    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tld-ru.mrs
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tld-ru.mrs
     path: ./rules/geosite-tld-ru.mrs
     format: mrs
     behavior: domain
