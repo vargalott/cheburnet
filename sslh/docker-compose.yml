@@ -15,7 +15,10 @@ services:
     ports:
       - 443:443
     volumes:
-      - ./sslh:/etc/sslh
+      - type: bind
+        source: ./sslh.cfg
+        target: /etc/sslh/sslh.cfg
+
     command: -F/etc/sslh/sslh.cfg
 
     logging:
