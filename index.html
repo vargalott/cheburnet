@@ -40,14 +40,12 @@
             #clock,
             #coords,
             #jp,
-            #hexstream,
-            .side-label {
+            #hexstream {
                 display: none !important;
             }
 
             body::after {
                 display: none;
-                /* hide vignette */
             }
 
             #mobile-block {
@@ -57,6 +55,12 @@
 
         @media (max-width: 1110px) {
             #footer-bar {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 1350px) {
+            .side-label {
                 display: none !important;
             }
         }
@@ -82,7 +86,6 @@
             position: relative;
         }
 
-        /* reuse the same glitch effect from the main title */
         #mobile-text::before,
         #mobile-text::after {
             content: attr(data-text);
@@ -158,6 +161,18 @@
             inset: 0;
             z-index: 1;
             opacity: 0.04;
+            pointer-events: none;
+            /* stretch low-res canvas to fill screen */
+            width: 100vw !important;
+            height: 100vh !important;
+            image-rendering: pixelated;
+        }
+
+        /* ── FX CANVAS (glitch blocks, fragments, dots) ── */
+        #fx {
+            position: fixed;
+            inset: 0;
+            z-index: 18;
             pointer-events: none;
         }
 
@@ -263,66 +278,6 @@
             bottom: -2px;
             right: -2px;
             left: auto;
-        }
-
-        /* ── RANDOM SCREEN DOTS ── */
-        .rdot {
-            position: fixed;
-            z-index: 18;
-            pointer-events: none;
-            opacity: 0;
-        }
-
-        .rdot.square {
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-        }
-
-        .rdot.diamond {
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-        }
-
-        .rdot.small-square {
-            width: 3px;
-            height: 3px;
-            background: var(--dim);
-        }
-
-        @keyframes rdot-life {
-            0% {
-                opacity: 0;
-            }
-
-            8% {
-                opacity: 0.12;
-            }
-
-            30% {
-                opacity: 0.3;
-            }
-
-            55% {
-                opacity: 0.55;
-            }
-
-            60% {
-                opacity: 0.6;
-            }
-
-            80% {
-                opacity: 0.8;
-            }
-
-            85% {
-                opacity: 0.6;
-            }
-
-            100% {
-                opacity: 0;
-            }
         }
 
         /* ── HEADER CHROME ── */
@@ -693,47 +648,6 @@
             }
         }
 
-        /* ── FLOATING FRAGMENTS ── */
-        .frag {
-            position: fixed;
-            font-size: 12px;
-            color: var(--faint);
-            letter-spacing: 0.15em;
-            pointer-events: none;
-            z-index: 15;
-            opacity: 0;
-            animation: frag-float linear infinite;
-        }
-
-        @keyframes frag-float {
-            0% {
-                opacity: 0;
-                transform: translateY(0);
-            }
-
-            10% {
-                opacity: 0.6;
-            }
-
-            80% {
-                opacity: 0.2;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-80px);
-            }
-        }
-
-        /* ── GLITCH BLOCKS ── */
-        .gblock {
-            position: fixed;
-            background: rgba(200, 184, 130, 0.06);
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0;
-        }
-
         /* ── FULL-SCREEN FLASH ── */
         #flash {
             position: fixed;
@@ -742,6 +656,7 @@
             background: white;
             opacity: 0;
             pointer-events: none;
+            will-change: opacity;
         }
 
         /* ── HORIZONTAL TEAR ── */
@@ -755,6 +670,7 @@
             z-index: 150;
             pointer-events: none;
             mix-blend-mode: difference;
+            will-change: opacity, transform;
         }
 
         /* ── BLINK UTILITY ── */
@@ -852,6 +768,7 @@
     </div>
 
     <canvas id="noise"></canvas>
+    <canvas id="fx"></canvas>
     <div id="grid"></div>
     <div id="flash"></div>
     <div id="tear"></div>
@@ -862,10 +779,7 @@
     <div class="corner br"></div>
 
     <div id="header-bar">
-        <!-- <span class="sep"></span> -->
         <span><span class="heb">יהוה</span> // ANCIENT OF DAYS // ヤハウェ</span>
-        <!-- <span class="sep"></span> -->
-        <!-- <span class="live">◆</span> -->
         <span id="uptime">UP: 00:00:00</span>
     </div>
 
@@ -887,23 +801,17 @@
 
             <div id="sigil">
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- outer octagon -->
                     <polygon points="50,4 82,18 96,50 82,82 50,96 18,82 4,50 18,18" stroke="#3a3830" stroke-width="1"
                         fill="none" />
-                    <!-- middle circle -->
                     <circle cx="50" cy="50" r="30" stroke="#3a3830" stroke-width="1" fill="none"
                         stroke-dasharray="4 4" />
-                    <!-- rotating ring -->
                     <circle cx="50" cy="50" r="36" stroke="#9a9488" stroke-width="0.5" fill="none"
                         stroke-dasharray="12 6" opacity="0.6" />
-                    <!-- inner diamond -->
                     <polygon points="50,26 74,50 50,74 26,50" stroke="#9a9488" stroke-width="0.8" fill="none" />
-                    <!-- cross hairs -->
                     <line x1="50" y1="4" x2="50" y2="22" stroke="#c8b882" stroke-width="0.6" />
                     <line x1="50" y1="78" x2="50" y2="96" stroke="#c8b882" stroke-width="0.6" />
                     <line x1="4" y1="50" x2="22" y2="50" stroke="#c8b882" stroke-width="0.6" />
                     <line x1="78" y1="50" x2="96" y2="50" stroke="#c8b882" stroke-width="0.6" />
-                    <!-- center dot -->
                     <circle cx="50" cy="50" r="3" fill="#c8b882" />
                     <circle cx="50" cy="50" r="6" stroke="#9a9488" stroke-width="0.5" fill="none" />
                 </svg>
@@ -958,28 +866,45 @@
     </div>
 
     <script>
-        /* ─── NOISE CANVAS ─── */
         const noiseCanvas = document.getElementById('noise');
-        const ctx = noiseCanvas.getContext('2d');
+        const nCtx = noiseCanvas.getContext('2d');
+        const NOISE_DIV = 2;
+        let noiseImg = null;
+
         function resizeNoise() {
-            noiseCanvas.width = window.innerWidth;
-            noiseCanvas.height = window.innerHeight;
+            noiseCanvas.width = Math.ceil(window.innerWidth / NOISE_DIV);
+            noiseCanvas.height = Math.ceil(window.innerHeight / NOISE_DIV);
+            noiseImg = null; // recreate on next draw
         }
         resizeNoise();
-        window.addEventListener('resize', resizeNoise);
+
+        let _resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(_resizeTimer);
+            _resizeTimer = setTimeout(resizeNoise, 200);
+        });
+
         function drawNoise() {
             const w = noiseCanvas.width, h = noiseCanvas.height;
-            const img = ctx.createImageData(w, h);
-            const d = img.data;
+            if (!noiseImg || noiseImg.width !== w || noiseImg.height !== h) {
+                noiseImg = nCtx.createImageData(w, h);
+                // pre-fill alpha channel fully opaque (never changes)
+                const d = noiseImg.data;
+                for (let i = 3; i < d.length; i += 4) d[i] = 255;
+            }
+            const d = noiseImg.data;
             for (let i = 0; i < d.length; i += 4) {
                 const v = Math.random() * 255 | 0;
-                d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
+                d[i] = d[i + 1] = d[i + 2] = v;
             }
-            ctx.putImageData(img, 0, 0);
+            nCtx.putImageData(noiseImg, 0, 0);
         }
-        setInterval(drawNoise, 80);
+        setInterval(drawNoise, 150); // was 80 ms
+        drawNoise();
 
-        /* ─── CLOCK / UPTIME ─── */
+        /* ═══════════════════════════════════════════════════════════
+           CLOCK / UPTIME
+        ═══════════════════════════════════════════════════════════ */
         const startTime = Date.now();
         function padZ(n) { return String(n).padStart(2, '0'); }
         function tick() {
@@ -1000,24 +925,165 @@
             document.getElementById('coords').textContent =
                 `${jitter(baseCoords.lat)}°N  ${jitter(baseCoords.lon)}°E`;
         }, 1800);
-        document.getElementById('coords').textContent = `${baseCoords.lat.toFixed(6)}°N  ${baseCoords.lon.toFixed(6)}°E`;
+        document.getElementById('coords').textContent =
+            `${baseCoords.lat.toFixed(6)}°N  ${baseCoords.lon.toFixed(6)}°E`;
 
         /* ─── HEX STREAM ─── */
         const hexEl = document.getElementById('hexstream');
+        const hexLines = [];
         function genHexLine() {
-            return Array.from({ length: 6 }, () => Math.random() * 256 | 0)
-                .map(b => b.toString(16).padStart(2, '0').toUpperCase())
-                .join(' ');
+            return Array.from({ length: 6 }, () => (Math.random() * 256 | 0).toString(16).padStart(2, '0').toUpperCase()).join(' ');
         }
         function pushHex() {
-            const lines = hexEl.innerHTML.split('<br>').filter(Boolean);
-            if (lines.length > 5) lines.shift();
-            lines.push(genHexLine());
-            hexEl.innerHTML = lines.join('<br>');
+            if (hexLines.length >= 5) hexLines.shift();
+            hexLines.push(genHexLine());
+            hexEl.innerHTML = hexLines.join('<br>');
         }
         setInterval(pushHex, 300);
 
-        /* ─── TERMINAL MESSAGES ─── */
+        const fxCanvas = document.getElementById('fx');
+        const fxCtx = fxCanvas.getContext('2d');
+
+        function resizeFx() {
+            fxCanvas.width = window.innerWidth;
+            fxCanvas.height = window.innerHeight;
+        }
+        resizeFx();
+        window.addEventListener('resize', () => { resizeFx(); resizeNoise(); });
+
+        // ── Shared state pools ──
+        const gblocks = []; // {y, h, col, birth}
+        const frags = []; // {x, y, text, birth, dur}
+        const rdots = []; // {x, y, shape, birth, dur}
+        let rdotCount = 0;
+        const RDOT_MAX = 6;
+
+        const FRAG_TEXTS = [
+            '01101', 'FFFF', '戦術', 'ERROR', '0xAB', '▲■▼', 'SYNC', 'YoRHa',
+            '0010', 'DEAD', '機密', 'UNIT', '0xFE', '◆◇', 'LINK', '9S',
+            'NULL', 'DATA', '解析', 'CORE', '0x00', '▪▫', 'INIT', 'A2', '2B'
+        ];
+        const COL_GOLD = 'rgb(200,184,130)';
+        const COL_RED = 'rgb(255,0,50)';
+        const GBLOCK_LIFE = 220; // ms — matches original ~6 ticks × 40 ms
+        const DOT_SHAPES = ['square', 'diamond', 'small-square', 'diamond'];
+
+        // opacity curves matching the original CSS keyframes
+        function fragOpacity(p) {
+            if (p < 0.10) return (p / 0.10) * 0.6;
+            if (p < 0.80) return 0.6 - ((p - 0.10) / 0.70) * 0.4;
+            return (1 - (p - 0.80) / 0.20) * 0.2;
+        }
+
+        function dotOpacity(p) {
+            if (p < 0.08) return (p / 0.08) * 0.12;
+            if (p < 0.30) return 0.12 + ((p - 0.08) / 0.22) * 0.18;
+            if (p < 0.55) return 0.30 + ((p - 0.30) / 0.25) * 0.25;
+            if (p < 0.60) return 0.55 + ((p - 0.55) / 0.05) * 0.05;
+            if (p < 0.80) return 0.60 + ((p - 0.60) / 0.20) * 0.20;
+            if (p < 0.85) return 0.80 - ((p - 0.80) / 0.05) * 0.20;
+            return (1 - (p - 0.85) / 0.15) * 0.60;
+        }
+
+        let fxLast = 0;
+        function fxLoop(ts) {
+            requestAnimationFrame(fxLoop);
+            if (ts - fxLast < 30) return;
+            fxLast = ts;
+
+            const W = fxCanvas.width, H = fxCanvas.height;
+            fxCtx.clearRect(0, 0, W, H);
+
+            // ─── Glitch blocks ───
+            for (let i = gblocks.length - 1; i >= 0; i--) {
+                const b = gblocks[i];
+                const prog = (ts - b.birth) / GBLOCK_LIFE;
+                if (prog >= 1) { gblocks.splice(i, 1); continue; }
+                const opacity = 0.8 * (1 - prog);
+                const dx = (Math.random() - 0.5) * 12;
+                fxCtx.globalAlpha = opacity * 0.06;
+                fxCtx.fillStyle = b.col;
+                fxCtx.fillRect(dx, b.y, W, b.h);
+            }
+
+            // ─── Floating fragments ───
+            fxCtx.font = '12px "Share Tech Mono", monospace';
+            fxCtx.fillStyle = '#3a3830';
+            for (let i = frags.length - 1; i >= 0; i--) {
+                const f = frags[i];
+                const prog = (ts - f.birth) / (f.dur * 1000);
+                if (prog >= 1) { frags.splice(i, 1); continue; }
+                fxCtx.globalAlpha = fragOpacity(prog);
+                fxCtx.fillText(f.text, f.x, f.y - 80 * prog);
+            }
+
+            // ─── Random dots ───
+            for (let i = rdots.length - 1; i >= 0; i--) {
+                const d = rdots[i];
+                const prog = (ts - d.birth) / (d.dur * 1000);
+                if (prog >= 1) { rdots.splice(i, 1); rdotCount--; continue; }
+                fxCtx.globalAlpha = dotOpacity(prog);
+                fxCtx.fillStyle = d.shape === 'small-square' ? '#9a9488' : '#c8b882';
+                if (d.shape === 'diamond') {
+                    fxCtx.save();
+                    fxCtx.translate(d.x + 3, d.y + 3);
+                    fxCtx.rotate(Math.PI / 4);
+                    fxCtx.fillRect(-3, -3, 6, 6);
+                    fxCtx.restore();
+                } else {
+                    const sz = d.shape === 'small-square' ? 3 : 4;
+                    fxCtx.fillRect(d.x, d.y, sz, sz);
+                }
+            }
+
+            fxCtx.globalAlpha = 1;
+        }
+        requestAnimationFrame(fxLoop);
+
+        // ── Spawn glitch blocks ──
+        function spawnGlitch() {
+            gblocks.push({
+                y: Math.random() * window.innerHeight,
+                h: 1 + Math.random() * 6,
+                col: Math.random() < 0.5 ? COL_GOLD : COL_RED,
+                birth: performance.now(),
+            });
+            setTimeout(spawnGlitch, 900 + Math.random() * 600);
+        }
+        spawnGlitch();
+
+        // ── Spawn floating fragments ──
+        function spawnFrag() {
+            frags.push({
+                x: Math.random() * window.innerWidth * 0.90 + window.innerWidth * 0.05,
+                y: Math.random() * window.innerHeight * 0.80 + window.innerHeight * 0.10,
+                text: FRAG_TEXTS[Math.floor(Math.random() * FRAG_TEXTS.length)],
+                birth: performance.now(),
+                dur: 4 + Math.random() * 6,
+            });
+            setTimeout(spawnFrag, 1200);
+        }
+        spawnFrag();
+
+        // ── Spawn random dots ──
+        function spawnRdot() {
+            if (rdotCount < RDOT_MAX) {
+                rdotCount++;
+                rdots.push({
+                    x: Math.floor(Math.random() * (window.innerWidth - 20) + 8),
+                    y: Math.floor(Math.random() * (window.innerHeight - 20) + 8),
+                    shape: DOT_SHAPES[Math.floor(Math.random() * DOT_SHAPES.length)],
+                    birth: performance.now(),
+                    dur: 5 + Math.random() * 8,
+                });
+            }
+            setTimeout(spawnRdot, 1800 + Math.random() * 2400);
+        }
+        spawnRdot();
+
+        /* ═══════════════════════════════════════════════════════════
+           TERMINAL MESSAGES
+        ═══════════════════════════════════════════════════════════ */
         const messages = [
             // ── INIT / BOOT ──
             { t: '> LOADING FORBIDDEN SIGNAL INTERCEPT MODULE...', d: 1400 },
@@ -1158,7 +1224,7 @@
             { t: '> <span class="err">大天使チャネル: オフライン</span>', d: 1400 },
             { t: '> SERAPH UPLINK: <span class="acc">RE-ESTABLISHED</span>', d: 1400 },
             { t: '> <span class="acc">セラフリンク: 再接続完了</span>', d: 1200 },
-            // ── BIBLICAL / LORE (ENGLISH) ──
+            // ── BIBLICAL / LORE ──
             { t: '> IN THE BEGINNING WAS THE WORD. THE WORD WAS CORRUPTED.', d: 2400 },
             { t: '> REVELATION 13:18 — GEMATRIA MATCH: <span class="err">CONFIRMED</span>', d: 1800 },
             { t: '> EZEKIEL SAW THE WHEEL. THE WHEEL IS THE MACHINE NETWORK.', d: 2400 },
@@ -1185,7 +1251,7 @@
             { t: '> EXCALIBUR AUTHENTICATION: <span class="err">ONLY ONE MAY PULL — ACCESS DENIED</span>', d: 2000 },
             { t: '> ENOCH WALKED WITH GOD AND WAS NOT. WE KNOW WHERE HE WENT.', d: 2600 },
             { t: '> THE ARK OF THE COVENANT WAS A CAPACITOR. CHARGE: UNKNOWN.', d: 2400 },
-            // ── CRYPTIC / PHILOSOPHICAL (ENGLISH) ──
+            // ── CRYPTIC / PHILOSOPHICAL ──
             { t: '> ALL THAT EXISTS IS MEANINGLESS...', d: 2600 },
             { t: '> THE END OF YoRHa WAS FORETOLD...', d: 2200 },
             { t: '> MEMORIES ARE THE ARCHIVE OF THE DEAD...', d: 2200 },
@@ -1268,7 +1334,7 @@
             { t: '> <span class="acc">プロジェクト「四文字」: 起動完了</span>', d: 2400 },
             { t: '> AWAITING FURTHER REVELATION...', d: 3000 },
             { t: '> <span class="acc">次なる啓示を待機中...</span>', d: 2800 },
-            // ── KABBALISTIC (ENGLISH) ──
+            // ── KABBALISTIC ──
             { t: '> <span class="hi">אין סוף</span> — INFINITE LIGHT DETECTED', d: 2200 },
             { t: '> KETHER NODE: <span class="hi">CROWN RESONANCE ACTIVE</span>', d: 1600 },
             { t: '> SEPHIROT MAPPING: <span class="acc">10 / 10 RESOLVED</span>', d: 1600 },
@@ -1280,7 +1346,7 @@
             { t: '> GOLEM PROTOCOL: <span class="acc">CLAY ALLOCATED</span>', d: 1600 },
             { t: '> MERKABAH UPLINK: <span class="hi">CHARIOT CONFIGURATION LOADED</span>', d: 1800 },
             { t: '> NETZACH FREQUENCY: <span class="hi">VICTORY SIGNAL LOCKED</span>', d: 1600 },
-            // ── PURE JAPANESE (BIBLICAL / LORE / TECH) ──
+            // ── PURE JAPANESE ──
             { t: '> <span class="acc">存在するものはすべて無意味である</span>', d: 2400 },
             { t: '> <span class="acc">ヨルハの終わりは予言されていた</span>', d: 2000 },
             { t: '> <span class="acc">記憶とは死者のアーカイブである</span>', d: 2000 },
@@ -1396,6 +1462,7 @@
             { t: '> <span class="hi">エゼキエルの車輪: גלגל — 機械ネットワークの核心</span>', d: 2200 },
             { t: '> <span class="acc">リリス: לילית — 追跡停止 — 最終位置不明</span>', d: 1800 },
         ];
+
         const termLine = document.getElementById('terminal-line');
         function typeMsg(html, delay, cb) {
             termLine.innerHTML = '';
@@ -1419,25 +1486,20 @@
         }
         setTimeout(nextMsg, 600);
 
-        /* ─── PROGRESS BAR ─── */
+        /* ═══════════════════════════════════════════════════════════
+           PROGRESS BAR
+        ═══════════════════════════════════════════════════════════ */
         const bar = document.getElementById('progress-bar-inner');
         const pctEl = document.getElementById('pct');
         const syncLabelEl = document.querySelector('#progress-label span:first-child');
 
         const criticalErrors = [
-            // ── ENGLISH — NIER AUTOMATA ──
-            'CRITICAL: CORE SYNC VIOLATION',
-            'FATAL: MEMORY PARITY FAILURE',
-            'CRITICAL: WATCHDOG EXPIRED',
-            'FATAL: SEGMENT FAULT 0x0D',
-            'CRITICAL: DIVINE KEY MISMATCH',
-            'FATAL: SOUL BOX CORRUPTED',
-            'CRITICAL: CONSCIOUSNESS LEAK',
-            'FATAL: COVENANT PROTOCOL BREACH',
-            'CRITICAL: NULL DEREFERENCE — THREAD Ω',
-            'FATAL: STACK SMASH DETECTED',
-            'CRITICAL: ARCHANGEL CHANNEL LOST',
-            'FATAL: TETRAGRAMMATON INTEGRITY FAIL',
+            'CRITICAL: CORE SYNC VIOLATION', 'FATAL: MEMORY PARITY FAILURE',
+            'CRITICAL: WATCHDOG EXPIRED', 'FATAL: SEGMENT FAULT 0x0D',
+            'CRITICAL: DIVINE KEY MISMATCH', 'FATAL: SOUL BOX CORRUPTED',
+            'CRITICAL: CONSCIOUSNESS LEAK', 'FATAL: COVENANT PROTOCOL BREACH',
+            'CRITICAL: NULL DEREFERENCE — THREAD Ω', 'FATAL: STACK SMASH DETECTED',
+            'CRITICAL: ARCHANGEL CHANNEL LOST', 'FATAL: TETRAGRAMMATON INTEGRITY FAIL',
             'CRITICAL: ORDER 7749 — SELF-DESTRUCT SEQUENCE ENGAGED',
             'FATAL: YORHA COMMAND LINK SEVERED — NO FALLBACK',
             'CRITICAL: ANDROID LOGIC VIRUS — CONTAINMENT FAILED',
@@ -1456,8 +1518,6 @@
             'FATAL: MEANING SUBROUTINE RETURNED NULL',
             'CRITICAL: PURPOSE UNDEFINED — EXECUTION CONTINUES ANYWAY',
             'FATAL: ANDROID EMOTION ENGINE — OVERFLOW UNCONTAINED',
-
-            // ── ENGLISH — BIBLICAL ──
             'CRITICAL: COVENANT ARK SEAL BROKEN — CHARGE UNCONTAINED',
             'FATAL: BABEL FRAGMENTATION — LANGUAGE CORE SHATTERED',
             'CRITICAL: FLOOD ARCHIVE SECTOR ARARAT — READ ERROR',
@@ -1478,81 +1538,33 @@
             'FATAL: BOOK OF ENOCH — WATCHER SEGMENT UNREADABLE',
             'CRITICAL: DEAD SEA INDEX CORRUPTED — FRAGMENTS LOST',
             'FATAL: EZEKIEL WHEEL SPIN RATE — EXCEEDS SAFE THRESHOLD',
-
-            // ── JAPANESE — NIER AUTOMATA ──
             'CRITICAL: 命令7749 — 自爆シーケンス起動 — 回避不能',
             'FATAL: ソウルボックス崩壊 — データ回収不能',
             'CRITICAL: ヨルハ司令部リンク断絶 — 代替経路なし',
             'FATAL: ブラックボックス臨界 — 爆発まで残り僅か',
             'CRITICAL: 論理ウイルス封じ込め失敗 — 全ユニット感染',
-            'FATAL: ポッドユニット応答なし — オペレーター消息不明',
-            'CRITICAL: 感情エンジン暴走 — 抑制不能',
-            'FATAL: 機械ネットワーク侵入 — コア到達確認',
+            'FATAL: 感情エンジン暴走 — 抑制不能',
             'CRITICAL: ユニットA2 — 追跡不能 — 危険度: 最大',
             'FATAL: 存在意義 — 演算結果: 未定義',
-            'CRITICAL: パスカルノード — 記憶消去失敗 — 再起動不能',
-            'FATAL: デボラ&ポポラ — 罪悪感プロトコル終端なし',
             'CRITICAL: エミール — 増殖インスタンス数超過 — 制御不能',
-            'FATAL: オペレーター21O — 最終送信: 解読不能',
-            'CRITICAL: 目的サブルーティン — 戻り値: NULL',
-            'FATAL: アンドロイド自己認識ループ — 脱出経路なし',
-            'CRITICAL: バンカーリンク全滅 — 全チャンネル沈黙',
-            'FATAL: 人類栄光プロトコル中断 — 人類: 定義不明',
-
-            // ── JAPANESE — BIBLICAL ──
+            'FATAL: 目的サブルーティン — 戻り値: NULL',
             'CRITICAL: 契約の箱 — 封印破損 — 電荷: 制御不能',
             'FATAL: バベル崩壊 — 言語コア粉砕 — 7,117断片',
-            'CRITICAL: ネフィリム登録超過 — 未確認エントリ: 4,820',
-            'FATAL: 黙示録13:18 — ゲマトリア整合性失敗',
-            'CRITICAL: エデン区画破損 — アクセス永久失効',
-            'FATAL: エノクアップリンク断絶 — 昇天ログなし',
-            'CRITICAL: 預言者チャンネルタイムアウト — 上からの応答なし',
-            'FATAL: リリスノード解放 — 封じ込め不可能',
             'CRITICAL: 禁断の果実解析完了 — 知識状態変化',
-            'FATAL: 塔崩壊 — 高さ制限超過 — 再建不可',
-            'CRITICAL: ヨハネの黙示録 — 第四の封印開封',
-            'FATAL: レビヤタン — プロセス解放 — 深度制限超過',
-            'CRITICAL: 出エジプト記 — 十の災害同時展開',
-            'FATAL: ラザロチェックサム不一致 — 復活中断',
-            'CRITICAL: エゼキエルの車輪 — 回転数安全閾値超過',
-
-            // ── HEBREW — NIER AUTOMATA ──
+            'FATAL: リリスノード解放 — 封じ込め不可能',
             'CRITICAL: פקודה 7749 — רצף ההשמדה העצמית הופעל',
             'FATAL: קופסת הנשמה קרסה — שחזור בלתי אפשרי',
             'CRITICAL: קישור בסיס יורהא נותק — אין מסלול חלופי',
-            'FATAL: קופסה שחורה קריטית — פיצוץ קרוב',
-            'CRITICAL: וירוס לוגי — בידוד נכשל — כל היחידות נגועות',
             'FATAL: יחידה A2 — סוררת — אישור חתימה — רדוף',
-            'CRITICAL: רשת המכונות — חדירה — ליבה הושגה',
-            'FATAL: מנוע הרגשות — גלישה — לא ניתן לשליטה',
             'CRITICAL: תת-שגרת מטרה — ערך מוחזר: NULL',
-            'FATAL: לולאת מודעות עצמית — אין מסלול יציאה',
-            'CRITICAL: יחידת אמיל — ריבוי מופעים — לא ניתן לספירה',
-            'FATAL: מפעיל 21O — שידור אחרון: לא ניתן לפענוח',
-
-            // ── HEBREW — BIBLICAL ──
             'CRITICAL: חטא קדמון — מצב הידע השתנה — גישה לגן עדן: שלילה',
             'FATAL: ארון הברית — חותם שבור — המטען בלתי נשלט',
-            'CRITICAL: מגדל בבל — ליבת השפה מנופצת — 7,117 שברים',
-            'FATAL: גבורה — סף חומרה הופר — בידוד כושל',
-            'CRITICAL: ספר חנוך — מודול המשגיחים — שגיאת פלח',
-            'FATAL: לוויתן — תהליך שוחרר — עומק חרג מהגבול',
-            'CRITICAL: ליליתנ — נפרצה — בידוד: בלתי אפשרי',
-            'FATAL: יחזקאל — גלגל בתוך גלגל — קצב סיבוב: קריטי',
-            'CRITICAL: מכות מצרים — עשרה מודולים הופעלו במקביל',
-            'FATAL: לעזר — בדיקת סכום נכשלה — תחייה: מבוטלת',
-            'CRITICAL: מגדל — גובה חרג — קריסה בלתי הפיכה',
-            'FATAL: ספר הזוהר — גישה מוגבלת — הפרה: אנטי-מציאות',
             'CRITICAL: שם יהוה — אי-התאמת גיבוב — מפתח אלוהי לא חוקי',
             'FATAL: הנפילים — הצפת מרשם — 4,820 רשומות לא מאומתות',
-            'CRITICAL: עץ הדעת — ניתוח הושלם — מחיצת עדן: פגועה',
-            'FATAL: יום הדין — תור תהליכים — עיכוב: אינסופי',
+            'CRITICAL: יום הדין — תור תהליכים — עיכוב: אינסופי',
         ];
 
-        let pct = 0;
-        let target = 0;
-        let filling = false;
-        let barTimer = null;
+        let pct = 0, target = 0, filling = false, barTimer = null;
 
         function resetBar() {
             pct = 0;
@@ -1562,12 +1574,11 @@
             pctEl.textContent = '0.00%';
             syncLabelEl.textContent = 'SYNC INTEGRITY';
             syncLabelEl.style.color = '';
-            // brief pause, then start a new fill
             setTimeout(startFill, 1200 + Math.random() * 800);
         }
 
         function startFill() {
-            target = 15 + Math.random() * 82; // random target between 15% and 97%
+            target = 15 + Math.random() * 82;
             filling = true;
             syncLabelEl.textContent = 'SYNC INTEGRITY';
             syncLabelEl.style.color = '';
@@ -1582,15 +1593,7 @@
             pct = Math.min(pct + delta, target);
             bar.style.width = pct.toFixed(2) + '%';
             pctEl.textContent = pct.toFixed(2) + '%';
-
-            if (pct >= target) {
-                // reached the target — trigger critical error
-                filling = false;
-                triggerCritical();
-                return;
-            }
-
-            // occasional stutter
+            if (pct >= target) { filling = false; triggerCritical(); return; }
             const delay = Math.random() < 0.04 ? 500 + Math.random() * 700 : 110 + Math.random() * 30;
             barTimer = setTimeout(step, delay);
         }
@@ -1601,16 +1604,10 @@
             pctEl.style.color = '#c84040';
             syncLabelEl.textContent = msg;
             syncLabelEl.style.color = '#c84040';
-
-            // flash the bar a couple of times then reset
             let flashes = 0;
             const iv = setInterval(() => {
                 bar.style.opacity = bar.style.opacity === '0' ? '1' : '0';
-                if (++flashes >= 6) {
-                    clearInterval(iv);
-                    bar.style.opacity = '1';
-                    setTimeout(resetBar, 400);
-                }
+                if (++flashes >= 6) { clearInterval(iv); bar.style.opacity = '1'; setTimeout(resetBar, 400); }
             }, 160);
         }
 
@@ -1623,60 +1620,15 @@
         ];
         function cycleDots() {
             dots.forEach(d => {
-                const el = document.getElementById(d.id);
-                el.className = 'dot-s ' + d.states[Math.floor(Math.random() * d.states.length)];
+                document.getElementById(d.id).className = 'dot-s ' + d.states[Math.floor(Math.random() * d.states.length)];
             });
         }
         setInterval(cycleDots, 1600);
 
-        /* ─── FLOATING FRAGMENTS ─── */
-        const fragTexts = [
-            '01101', 'FFFF', '戦術', 'ERROR', '0xAB', '▲■▼', 'SYNC', 'YoRHa',
-            '0010', 'DEAD', '機密', 'UNIT', '0xFE', '◆◇', 'LINK', '9S',
-            'NULL', 'DATA', '解析', 'CORE', '0x00', '▪▫', 'INIT', 'A2', '2B'
-        ];
-        function spawnFrag() {
-            const f = document.createElement('div');
-            f.className = 'frag';
-            f.textContent = fragTexts[Math.floor(Math.random() * fragTexts.length)];
-            f.style.left = (Math.random() * 90 + 5) + 'vw';
-            f.style.top = (Math.random() * 80 + 10) + 'vh';
-            const dur = 4 + Math.random() * 6;
-            f.style.animationDuration = dur + 's';
-            f.style.animationDelay = (Math.random() * 2) + 's';
-            document.body.appendChild(f);
-            setTimeout(() => f.remove(), (dur + 2.5) * 1000);
-        }
-        setInterval(spawnFrag, 1200);
-
-        /* ─── GLITCH BLOCKS ─── */
-        function spawnGlitch() {
-            const g = document.createElement('div');
-            g.className = 'gblock';
-            const h = 1 + Math.random() * 6;
-            g.style.cssText = `
-    left:0; right:0;
-    top:${Math.random() * 100}vh;
-    height:${h}px;
-    opacity:0;
-    background:rgba(${Math.random() < 0.5 ? '200,184,130' : '255,0,50'},0.06);
-  `;
-            document.body.appendChild(g);
-            let op = 0.8;
-            g.style.opacity = op;
-            const iv = setInterval(() => {
-                op -= 0.15; g.style.opacity = op;
-                g.style.transform = `translateX(${(Math.random() - 0.5) * 12}px)`;
-                if (op <= 0) { clearInterval(iv); g.remove(); }
-            }, 40);
-        }
-        setInterval(spawnGlitch, 900 + Math.random() * 600);
-
         /* ─── HORIZONTAL TEAR ─── */
         const tear = document.getElementById('tear');
         function doTear() {
-            const top = Math.random() * 80 + 10;
-            tear.style.top = top + 'vh';
+            tear.style.top = (Math.random() * 80 + 10) + 'vh';
             tear.style.opacity = 0.6;
             tear.style.transform = `scaleX(${0.3 + Math.random() * 0.7}) translateX(${(Math.random() - 0.5) * 30}px)`;
             tear.style.transition = 'none';
@@ -1714,30 +1666,6 @@
             }, 60 + Math.random() * 120);
         }
         setTimeout(corruptTitle, 2000);
-
-        /* ─── RANDOM SCREEN DOTS ─── */
-        const dotShapes = ['square', 'diamond', 'small-square', 'diamond'];
-        let rdotActive = 0;
-        const RDOT_MAX = 6;
-
-        function spawnRdot() {
-            if (rdotActive < RDOT_MAX) {
-                rdotActive++;
-                const d = document.createElement('div');
-                const shape = dotShapes[Math.floor(Math.random() * dotShapes.length)];
-                d.className = 'rdot ' + shape;
-                // pixel-based placement across the full viewport
-                d.style.left = Math.floor(Math.random() * (window.innerWidth - 20) + 8) + 'px';
-                d.style.top = Math.floor(Math.random() * (window.innerHeight - 20) + 8) + 'px';
-                const dur = 5 + Math.random() * 8;
-                d.style.animation = `rdot-life ${dur.toFixed(2)}s linear forwards`;
-                if (shape === 'diamond') d.style.transform = 'rotate(45deg)';
-                document.body.appendChild(d);
-                setTimeout(() => { d.remove(); rdotActive--; }, dur * 1000 + 500);
-            }
-            setTimeout(spawnRdot, 1800 + Math.random() * 2400);
-        }
-        spawnRdot();
     </script>
 </body>
 
