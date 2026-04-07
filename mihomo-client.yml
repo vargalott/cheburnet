@@ -7,6 +7,8 @@ log-level: warning
 ipv6: false
 udp: true
 mixed-port: 7890
+authentication:
+- "USER:PASSWORD"
 unified-delay: true
 disable-keep-alive: false
 keep-alive-interval: 30
