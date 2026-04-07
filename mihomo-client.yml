@@ -116,38 +116,6 @@ dns:
     - MATCH,fake-ip
 
 #
-# LISTENERS settings
-#
-# see more: https://wiki.metacubex.one/en/config/inbound/listeners/
-#
-# listeners:
-# - name: mixed-in
-#   type: mixed
-#   port: 7890
-#   listen: 127.0.0.1
-#   udp: true
-#   users:
-#     - username: "USER"
-#       password: "PASSWORD"
-#     
-# - name: socks-in
-#   type: socks
-#   port: 7891
-#   listen: 127.0.0.1
-#   udp: true
-#   users:
-#     - username: "USER"
-#       password: "PASSWORD"
-# 
-# - name: http-in
-#   type: http
-#   port: 7892
-#   listen: 127.0.0.1
-#   users:
-#     - username: "USER"
-#       password: "PASSWORD"
-
-#
 # PROXIES settings
 #
 # see more: https://wiki.metacubex.one/en/config/proxies/
