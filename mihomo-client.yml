@@ -98,7 +98,7 @@ dns:
     - 77.88.8.1
 
   enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.0/16
+  fake-ip-range: 198.18.0.0/15
   fake-ip-filter-mode: rule
   fake-ip-filter:
     - DOMAIN,localhost,real-ip # 127.0.0.1
