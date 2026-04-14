@@ -7,8 +7,7 @@ log-level: warning
 ipv6: false
 udp: true
 mixed-port: 7890
-authentication:
-- "USER:PASSWORD"
+authentication: ["USER:PASSWORD"]
 unified-delay: true
 disable-keep-alive: false
 keep-alive-interval: 30
@@ -31,9 +30,7 @@ tun:
   auto-detect-interface: true
   strict-route: true
   mtu: 1500
-  dns-hijack:
-    - any:53
-    - tcp://any:53
+  dns-hijack: [any:53, tcp://any:53]
 
 #
 # NTP settings
@@ -80,17 +77,11 @@ dns:
   respect-rules: false
   ipv6: false
 
-  default-nameserver:
-    - 1.1.1.1
-    - 1.0.0.1
-  nameserver:
-    - https://cloudflare-dns.com/dns-query
-    - tls://1.1.1.1
-    - tls://1.0.0.1
+  default-nameserver: [1.1.1.1, 1.0.0.1]
+  nameserver: [https://cloudflare-dns.com/dns-query, tls://1.1.1.1, tls://1.0.0.1]
 
   nameserver-policy:
-    "+.lan":
-    - 10.1.0.1
+    # "+.lan": [10.1.0.1]
     "rule-set:geosite-category-ru,geosite-tld-ru,geosite-gov-ru,geosite-bank-ru,geosite-yandex,geosite-ru-available-only-inside":
     - https://common.dot.dns.yandex.net/dns-query
     - tls://77.88.8.8
