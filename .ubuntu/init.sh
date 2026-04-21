@@ -37,6 +37,10 @@ configure_ssh() {
     touch ~/.ssh/authorized_keys && echo "$ssh_key" > ~/.ssh/authorized_keys
     chmod 600 ~/.ssh/authorized_keys
 
+    rm /etc/update-motd.d/*
+    wget -qO /etc/update-motd.d/99-custom https://raw.githubusercontent.com/vargalott/cheburnet/main/.ubuntu/motd.99-custom
+    chmod +x /etc/update-motd.d/99-custom
+
     systemctl daemon-reload && systemctl enable --now ssh.socket
 }
 
