@@ -11,7 +11,7 @@ PubkeyAuthentication yes
 PasswordAuthentication no
 PermitEmptyPasswords no
 KbdInteractiveAuthentication no
-UsePAM no
+UsePAM yes
 
 X11Forwarding yes
 PrintMotd no
