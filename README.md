@@ -55,35 +55,35 @@ echo "$(tr -dc a-z </dev/urandom | head -c2)$((RANDOM%9+1))--$(tr -dc a-z0-9 </d
 
 ```mermaid
 flowchart TD
-    classDef wide padding:100px
+  classDef wide padding:100px
 
-    %% Blocks
-    CLIENT[Client Device\nScanners\nCensor]:::wide
+  %% Blocks
+  CLIENT[Client Device\nScanners\nCensor]:::wide
 
-    TCP443["VLESS-REALITY\n172.20.0.10\nTCP:443"]:::wide
-    UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
+  TCP443["VLESS-REALITY\n172.20.0.10\nTCP:443"]:::wide
+  UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
 
-    NGINX["Nginx Reverse Proxy\n172.20.0.20"]:::wide
-    MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
-    CONFIG["Proxy client config\n(mihomo)"]:::wide
-    VAULT["Vaultwarden\n172.20.0.40"]:::wide
+  NGINX["Nginx Reverse Proxy\n172.20.0.20"]:::wide
+  MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
+  CONFIG["Proxy client config\n(mihomo)"]:::wide
+  VAULT["Vaultwarden\n172.20.0.40"]:::wide
 
-    TUNNEL["Proxy tunnel"]:::wide
-    INTERNET["Internet"]:::wide
+  TUNNEL["Proxy tunnel"]:::wide
+  INTERNET["Internet"]:::wide
 
-    %% Flows
-    CLIENT -->|:443/tcp| TCP443
-    CLIENT -->|:443/udp| UDP443
+  %% Flows
+  CLIENT -->|:443/tcp| TCP443
+  CLIENT -->|:443/udp| UDP443
 
-    TCP443 -->|auth successful\nvalid shortid/uuid| TUNNEL
-    UDP443 -->|auth successful\nvalid userpass| TUNNEL
+  TCP443 -->|auth successful\nvalid shortid/uuid| TUNNEL
+  UDP443 -->|auth successful\nvalid userpass| TUNNEL
 
-    TCP443 -->|reality destination\nfailed auth| NGINX
-    UDP443 -->|hysteria masquerade\nfailed auth| TCP443
+  TCP443 -->|reality destination\nfailed auth| NGINX
+  UDP443 -->|hysteria masquerade\nfailed auth| TCP443
 
-    NGINX -->|https://website/| MASQ
-    NGINX -->|https://website/secretpath/config.yaml| CONFIG
-    NGINX -->|https://website/vault| VAULT
+  NGINX -->|https://website/| MASQ
+  NGINX -->|https://website/secretpath/config.yaml| CONFIG
+  NGINX -->|https://website/vault| VAULT
 
-    TUNNEL --> INTERNET
+  TUNNEL --> INTERNET
 ```
