@@ -13,6 +13,8 @@
 </i>
 <br clear="right"/>
 
+---
+
 ## (not only) cheburnet
 
 ##### ubuntu server init
@@ -58,7 +60,7 @@ flowchart TD
   classDef wide padding:100px
 
   %% Blocks
-  CLIENT[Client Device\nScanners\nCensor]:::wide
+  CLIENT["Client Device\nScanners\nCensor"]:::wide
 
   TCP443["VLESS-REALITY\n172.20.0.10\nTCP:443"]:::wide
   UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
