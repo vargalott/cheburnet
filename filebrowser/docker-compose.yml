@@ -16,4 +16,3 @@ services:
       - ./data/files:/srv
       - ./data/db:/database
       - ./data/config:/config
-

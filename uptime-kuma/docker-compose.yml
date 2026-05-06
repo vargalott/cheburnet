@@ -21,4 +21,3 @@ services:
       driver: "local"
       options:
         max-size: "100m"
-

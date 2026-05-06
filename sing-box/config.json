@@ -57,9 +57,7 @@
             "server_port": 443
           },
           "private_key": "PVT",
-          "short_id": [
-            "ID"
-          ],
+          "short_id": ["ID"],
           "max_time_difference": "1m"
         }
       }
@@ -76,11 +74,7 @@
     "rules": [
       {
         "action": "sniff",
-        "sniffer": [
-          "http",
-          "tls",
-          "quic"
-        ]
+        "sniffer": ["http", "tls", "quic"]
       },
       {
         "protocol": "dns",
@@ -92,11 +86,7 @@
         "method": "drop"
       },
       {
-        "rule_set": [
-          "set-geoip-ru",
-          "set-geosite-ru",
-          "set-geosite-gov-ru"
-        ],
+        "rule_set": ["set-geoip-ru", "set-geosite-ru", "set-geosite-gov-ru"],
         "domain_suffix": [
           "ru",
           "su",

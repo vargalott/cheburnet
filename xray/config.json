@@ -28,11 +28,7 @@
       "sniffing": {
         "enabled": true,
         "routeOnly": true,
-        "destOverride": [
-          "http",
-          "tls",
-          "quic"
-        ]
+        "destOverride": ["http", "tls", "quic"]
       },
       "streamSettings": {
         "network": "tcp",
@@ -42,13 +38,9 @@
           "dest": "172.20.0.20:443",
           "fingerprint": "chrome",
           "xver": 2,
-          "serverNames": [
-            "SERVER"
-          ],
+          "serverNames": ["SERVER"],
           "privateKey": "PVK",
-          "shortIds": [
-            "ID"
-          ]
+          "shortIds": ["ID"]
         }
       }
     }
@@ -68,24 +60,17 @@
     "rules": [
       {
         "type": "field",
-        "protocol": [
-          "bittorrent"
-        ],
+        "protocol": ["bittorrent"],
         "outboundTag": "block"
       },
       {
         "type": "field",
-        "ip": [
-          "geoip:private",
-          "geoip:ru"
-        ],
+        "ip": ["geoip:private", "geoip:ru"],
         "outboundTag": "block"
       },
       {
         "type": "field",
-        "domain": [
-          "geosite:category-gov-ru"
-        ],
+        "domain": ["geosite:category-gov-ru"],
         "outboundTag": "block"
       },
       {
