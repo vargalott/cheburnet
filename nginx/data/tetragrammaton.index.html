@@ -1,1672 +1,2863 @@
 <!-- fully vibecoded with Claude -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>テトラグラマトン</title>
-    <link rel="icon" type="image/x-icon"
-        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQUlEQVQ4T2NUV1evZWBgqGZkZGQH0kSD/////wQqbmUEGvCDVM0wW0CGMGpoaPwn2losCuEGiIsKMFTmhzEwMuI37j/Qus7Jaxiev3wHVgg3QFNVlmFWXy5YcsuuUwwTW9MYRIT5GW7efsJgba7F4B5Wy+DhZMxQXRjOkFk6leHKjYf4Ddi4qJbhyvWHDD9//SbdgCfPXjNMbs9kaOheymBtqkWaAd1T1zF4OhkxMDEzgZ1aUxhBmgEvXr1nAIVjVsV0hlevPzDUFkcwOFrrMSxatY9BVUmSwc5SF38Y3LjzhKGqdSHD6zcfwYEkISbIICkuBGabGaoxxIQ6EheI2CKTqFjYse8sw6Vr97EmBh0NeQYvF1PsLgA5ta4kkuH46RsMoHDABkCJzcpMk6G1fyXD0+dvUdMBucmZ8sxEaXYGABbSvWN7bOHWAAAAEGRlQkc1MDI1RjU2NEUyNDMwMkRBGw0pugAAAABJRU5ErkJggg==">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            --white: #e8e4d8;
-            --dim: #9a9488;
-            --faint: #3a3830;
-            --bg: #080806;
-            --accent: #c8b882;
-            --red: #8b3030;
-            --glitch1: #00ffff22;
-            --glitch2: #ff003322;
-        }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        @media (max-width: 524px) {
-
-            #app,
-            #header-bar,
-            #footer-bar,
-            #clock,
-            #coords,
-            #jp,
-            #hexstream {
-                display: none !important;
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>テトラグラマトン</title>
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQUlEQVQ4T2NUV1evZWBgqGZkZGQH0kSD/////wQqbmUEGvCDVM0wW0CGMGpoaPwn2losCuEGiIsKMFTmhzEwMuI37j/Qus7Jaxiev3wHVgg3QFNVlmFWXy5YcsuuUwwTW9MYRIT5GW7efsJgba7F4B5Wy+DhZMxQXRjOkFk6leHKjYf4Ddi4qJbhyvWHDD9//SbdgCfPXjNMbs9kaOheymBtqkWaAd1T1zF4OhkxMDEzgZ1aUxhBmgEvXr1nAIVjVsV0hlevPzDUFkcwOFrrMSxatY9BVUmSwc5SF38Y3LjzhKGqdSHD6zcfwYEkISbIICkuBGabGaoxxIQ6EheI2CKTqFjYse8sw6Vr97EmBh0NeQYvF1PsLgA5ta4kkuH46RsMoHDABkCJzcpMk6G1fyXD0+dvUdMBucmZ8sxEaXYGABbSvWN7bOHWAAAAEGRlQkc1MDI1RjU2NEUyNDMwMkRBGw0pugAAAABJRU5ErkJggg=="
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --white: #e8e4d8;
+                --dim: #9a9488;
+                --faint: #3a3830;
+                --bg: #080806;
+                --accent: #c8b882;
+                --red: #8b3030;
+                --glitch1: #00ffff22;
+                --glitch2: #ff003322;
             }
 
-            body::after {
-                display: none;
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            @media (max-width: 524px) {
+                #app,
+                #header-bar,
+                #footer-bar,
+                #clock,
+                #coords,
+                #jp,
+                #hexstream {
+                    display: none !important;
+                }
+
+                body::after {
+                    display: none;
+                }
+
+                #mobile-block {
+                    display: flex !important;
+                }
+            }
+
+            @media (max-width: 1110px) {
+                #footer-bar {
+                    display: none !important;
+                }
+            }
+
+            @media (max-width: 1350px) {
+                .side-label {
+                    display: none !important;
+                }
             }
 
             #mobile-block {
-                display: flex !important;
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 300;
+                align-items: center;
+                justify-content: center;
+                background: var(--bg);
             }
-        }
 
-        @media (max-width: 1110px) {
-            #footer-bar {
-                display: none !important;
+            #mobile-text {
+                font-family: "Rajdhani", sans-serif;
+                font-size: clamp(18px, 6vw, 28px);
+                font-weight: 600;
+                letter-spacing: 0.3em;
+                color: var(--dim);
+                text-transform: uppercase;
+                text-align: center;
+                position: relative;
             }
-        }
 
-        @media (max-width: 1350px) {
-            .side-label {
-                display: none !important;
+            #mobile-text::before,
+            #mobile-text::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
             }
-        }
 
-        #mobile-block {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 300;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg);
-        }
+            #mobile-text::before {
+                color: var(--glitch1);
+                animation: glitch-a 4.2s infinite steps(1);
+                clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+            }
 
-        #mobile-text {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(18px, 6vw, 28px);
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            color: var(--dim);
-            text-transform: uppercase;
-            text-align: center;
-            position: relative;
-        }
+            #mobile-text::after {
+                color: var(--glitch2);
+                animation: glitch-b 4.2s infinite steps(1);
+                clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+            }
 
-        #mobile-text::before,
-        #mobile-text::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                background: var(--bg);
+                color: var(--white);
+                font-family: "Share Tech Mono", monospace;
+                overflow: hidden;
+                cursor: crosshair;
+            }
 
-        #mobile-text::before {
-            color: var(--glitch1);
-            animation: glitch-a 4.2s infinite steps(1);
-            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-        }
-
-        #mobile-text::after {
-            color: var(--glitch2);
-            animation: glitch-b 4.2s infinite steps(1);
-            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            color: var(--white);
-            font-family: 'Share Tech Mono', monospace;
-            overflow: hidden;
-            cursor: crosshair;
-        }
-
-        /* ── SCANLINES ── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: repeating-linear-gradient(0deg,
+            /* ── SCANLINES ── */
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: 100;
+                background: repeating-linear-gradient(
+                    0deg,
                     transparent,
                     transparent 2px,
                     rgba(0, 0, 0, 0.18) 2px,
-                    rgba(0, 0, 0, 0.18) 4px);
-            pointer-events: none;
-            animation: scanshift 12s linear infinite;
-        }
-
-        @keyframes scanshift {
-            from {
-                background-position: 0 0;
+                    rgba(0, 0, 0, 0.18) 4px
+                );
+                pointer-events: none;
+                animation: scanshift 12s linear infinite;
             }
 
-            to {
-                background-position: 0 800px;
+            @keyframes scanshift {
+                from {
+                    background-position: 0 0;
+                }
+
+                to {
+                    background-position: 0 800px;
+                }
             }
-        }
 
-        /* ── VIGNETTE ── */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 99;
-            background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.72) 100%);
-            pointer-events: none;
-        }
-
-        /* ── NOISE CANVAS ── */
-        #noise {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            opacity: 0.04;
-            pointer-events: none;
-            /* stretch low-res canvas to fill screen */
-            width: 100vw !important;
-            height: 100vh !important;
-            image-rendering: pixelated;
-        }
-
-        /* ── FX CANVAS (glitch blocks, fragments, dots) ── */
-        #fx {
-            position: fixed;
-            inset: 0;
-            z-index: 18;
-            pointer-events: none;
-        }
-
-        /* ── GRID ── */
-        #grid {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            background-image:
-                linear-gradient(0deg, var(--faint) 1px, transparent 1px),
-                linear-gradient(90deg, var(--faint) 1px, transparent 1px);
-            background-size: 4px 4px;
-            opacity: 0.25;
-            pointer-events: none;
-        }
-
-        /* ── MAIN LAYOUT ── */
-        #app {
-            position: relative;
-            z-index: 10;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-
-        /* ── CORNER DECO ── */
-        .corner {
-            position: fixed;
-            width: 90px;
-            height: 90px;
-            z-index: 20;
-            pointer-events: none;
-        }
-
-        .corner::before,
-        .corner::after {
-            content: '';
-            position: absolute;
-            background: var(--dim);
-        }
-
-        .corner::before {
-            width: 100%;
-            height: 1px;
-            top: 0;
-        }
-
-        .corner::after {
-            width: 1px;
-            height: 100%;
-            left: 0;
-        }
-
-        .corner.tl {
-            top: 20px;
-            left: 20px;
-        }
-
-        .corner.tr {
-            top: 20px;
-            right: 20px;
-            transform: scaleX(-1);
-        }
-
-        .corner.bl {
-            bottom: 20px;
-            left: 20px;
-            transform: scaleY(-1);
-        }
-
-        .corner.br {
-            bottom: 20px;
-            right: 20px;
-            transform: scale(-1);
-        }
-
-        .corner .dot {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            top: -2px;
-            left: -2px;
-            animation: blink 2.8s step-end infinite;
-        }
-
-        .corner.tr .dot {
-            left: auto;
-            right: -2px;
-        }
-
-        .corner.bl .dot {
-            top: auto;
-            bottom: -2px;
-        }
-
-        .corner.br .dot {
-            top: auto;
-            bottom: -2px;
-            right: -2px;
-            left: auto;
-        }
-
-        /* ── HEADER CHROME ── */
-        #header-bar {
-            position: fixed;
-            top: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-direction: column;
-            font-size: 14px;
-            letter-spacing: 0.22em;
-            color: var(--dim);
-            white-space: nowrap;
-        }
-
-        #header-bar .sep {
-            width: 40px;
-            height: 1px;
-            background: var(--faint);
-        }
-
-        #header-bar .live {
-            color: var(--accent);
-            animation: blink 1.6s step-end infinite;
-        }
-
-        #header-bar .heb {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        #footer-bar {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            font-size: 14px;
-            letter-spacing: 0.25em;
-            color: var(--faint);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        /* ── CENTRAL BLOCK ── */
-        #center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-            user-select: none;
-        }
-
-        /* ── SIGIL ── */
-        #sigil {
-            width: 130px;
-            height: 130px;
-            position: relative;
-            margin-bottom: 28px;
-            animation: sigil-spin 40s linear infinite;
-        }
-
-        @keyframes sigil-spin {
-            to {
-                transform: rotate(360deg);
+            /* ── VIGNETTE ── */
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: 99;
+                background: radial-gradient(
+                    ellipse at center,
+                    transparent 40%,
+                    rgba(0, 0, 0, 0.72) 100%
+                );
+                pointer-events: none;
             }
-        }
 
-        #sigil svg {
-            width: 100%;
-            height: 100%;
-        }
+            /* ── NOISE CANVAS ── */
+            #noise {
+                position: fixed;
+                inset: 0;
+                z-index: 1;
+                opacity: 0.04;
+                pointer-events: none;
+                /* stretch low-res canvas to fill screen */
+                width: 100vw !important;
+                height: 100vh !important;
+                image-rendering: pixelated;
+            }
 
-        /* ── TITLE GLITCH ── */
-        #title-wrap {
-            position: relative;
-            margin-bottom: 6px;
-            line-height: 1;
-            text-align: center;
-        }
+            /* ── FX CANVAS (glitch blocks, fragments, dots) ── */
+            #fx {
+                position: fixed;
+                inset: 0;
+                z-index: 18;
+                pointer-events: none;
+            }
 
-        #title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(42px, 6.5vw, 80px);
-            font-weight: 600;
-            letter-spacing: 0.32em;
-            color: var(--white);
-            text-transform: uppercase;
-            position: relative;
-            display: block;
-        }
+            /* ── GRID ── */
+            #grid {
+                position: fixed;
+                inset: 0;
+                z-index: 2;
+                background-image:
+                    linear-gradient(0deg, var(--faint) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--faint) 1px, transparent 1px);
+                background-size: 4px 4px;
+                opacity: 0.25;
+                pointer-events: none;
+            }
 
-        #title::before,
-        #title::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+            /* ── MAIN LAYOUT ── */
+            #app {
+                position: relative;
+                z-index: 10;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+            }
 
-        #title::before {
-            color: var(--glitch1);
-            animation: glitch-a 4.2s infinite steps(1);
-            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-        }
+            /* ── CORNER DECO ── */
+            .corner {
+                position: fixed;
+                width: 90px;
+                height: 90px;
+                z-index: 20;
+                pointer-events: none;
+            }
 
-        #title::after {
-            color: var(--glitch2);
-            animation: glitch-b 4.2s infinite steps(1);
-            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
-        }
+            .corner::before,
+            .corner::after {
+                content: "";
+                position: absolute;
+                background: var(--dim);
+            }
 
-        @keyframes glitch-a {
+            .corner::before {
+                width: 100%;
+                height: 1px;
+                top: 0;
+            }
 
-            0%,
-            100% {
-                transform: none;
+            .corner::after {
+                width: 1px;
+                height: 100%;
+                left: 0;
+            }
+
+            .corner.tl {
+                top: 20px;
+                left: 20px;
+            }
+
+            .corner.tr {
+                top: 20px;
+                right: 20px;
+                transform: scaleX(-1);
+            }
+
+            .corner.bl {
+                bottom: 20px;
+                left: 20px;
+                transform: scaleY(-1);
+            }
+
+            .corner.br {
+                bottom: 20px;
+                right: 20px;
+                transform: scale(-1);
+            }
+
+            .corner .dot {
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: var(--accent);
+                top: -2px;
+                left: -2px;
+                animation: blink 2.8s step-end infinite;
+            }
+
+            .corner.tr .dot {
+                left: auto;
+                right: -2px;
+            }
+
+            .corner.bl .dot {
+                top: auto;
+                bottom: -2px;
+            }
+
+            .corner.br .dot {
+                top: auto;
+                bottom: -2px;
+                right: -2px;
+                left: auto;
+            }
+
+            /* ── HEADER CHROME ── */
+            #header-bar {
+                position: fixed;
+                top: 60px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                flex-direction: column;
+                font-size: 14px;
+                letter-spacing: 0.22em;
+                color: var(--dim);
+                white-space: nowrap;
+            }
+
+            #header-bar .sep {
+                width: 40px;
+                height: 1px;
+                background: var(--faint);
+            }
+
+            #header-bar .live {
+                color: var(--accent);
+                animation: blink 1.6s step-end infinite;
+            }
+
+            #header-bar .heb {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            #footer-bar {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+                font-size: 14px;
+                letter-spacing: 0.25em;
+                color: var(--faint);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            /* ── CENTRAL BLOCK ── */
+            #center {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+                user-select: none;
+            }
+
+            /* ── SIGIL ── */
+            #sigil {
+                width: 130px;
+                height: 130px;
+                position: relative;
+                margin-bottom: 28px;
+                animation: sigil-spin 40s linear infinite;
+            }
+
+            @keyframes sigil-spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            #sigil svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            /* ── TITLE GLITCH ── */
+            #title-wrap {
+                position: relative;
+                margin-bottom: 6px;
+                line-height: 1;
+                text-align: center;
+            }
+
+            #title {
+                font-family: "Rajdhani", sans-serif;
+                font-size: clamp(42px, 6.5vw, 80px);
+                font-weight: 600;
+                letter-spacing: 0.32em;
+                color: var(--white);
+                text-transform: uppercase;
+                position: relative;
+                display: block;
+            }
+
+            #title::before,
+            #title::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            #title::before {
+                color: var(--glitch1);
+                animation: glitch-a 4.2s infinite steps(1);
+                clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+            }
+
+            #title::after {
+                color: var(--glitch2);
+                animation: glitch-b 4.2s infinite steps(1);
+                clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+            }
+
+            @keyframes glitch-a {
+                0%,
+                100% {
+                    transform: none;
+                    opacity: 0;
+                }
+
+                8% {
+                    transform: translate(-3px, -1px);
+                    opacity: 1;
+                }
+
+                9% {
+                    transform: none;
+                    opacity: 0;
+                }
+
+                58% {
+                    transform: translate(2px, 1px);
+                    opacity: 1;
+                }
+
+                59% {
+                    opacity: 0;
+                }
+
+                72% {
+                    transform: translate(-4px, 0);
+                    opacity: 1;
+                }
+
+                73% {
+                    opacity: 0;
+                }
+            }
+
+            @keyframes glitch-b {
+                0%,
+                100% {
+                    transform: none;
+                    opacity: 0;
+                }
+
+                8% {
+                    transform: translate(3px, 1px);
+                    opacity: 1;
+                }
+
+                9% {
+                    opacity: 0;
+                }
+
+                58% {
+                    transform: translate(-2px, -1px);
+                    opacity: 1;
+                }
+
+                59% {
+                    opacity: 0;
+                }
+
+                72% {
+                    transform: translate(4px, 0);
+                    opacity: 1;
+                }
+
+                73% {
+                    opacity: 0;
+                }
+            }
+
+            #subtitle {
+                font-size: 12px;
+                letter-spacing: 0.5em;
+                color: var(--dim);
+                text-transform: uppercase;
+                text-align: center;
+                margin-bottom: 40px;
+            }
+
+            /* ── DIVIDER ── */
+            .divider {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 320px;
+                margin-bottom: 32px;
+            }
+
+            .divider .line {
+                flex: 1;
+                height: 1px;
+                background: var(--faint);
+            }
+
+            .divider .diamond {
+                width: 6px;
+                height: 6px;
+                background: var(--dim);
+                transform: rotate(45deg);
+            }
+
+            /* ── TERMINAL FEED ── */
+            #terminal {
+                width: min(640px, 80vw);
+                border: 1px solid var(--faint);
+                padding: 16px 28px;
+                position: relative;
+                background: rgba(14, 14, 14, 0.5);
+                margin-bottom: 28px;
+            }
+
+            #terminal::before {
+                content: "[ SYSTEM LOG ]";
+                position: absolute;
+                top: -15px;
+                left: 0px;
+                font-size: 8px;
+                letter-spacing: 0.3em;
+                color: var(--dim);
+            }
+
+            #terminal-line {
+                font-size: 14px;
+                color: var(--dim);
+                letter-spacing: 0.08em;
+                line-height: 1.6;
+                min-height: 24px;
+            }
+
+            #terminal-line .cursor {
+                display: inline-block;
+                width: 7px;
+                height: 12px;
+                background: var(--dim);
+                vertical-align: middle;
+                margin-left: 2px;
+                animation: blink 0.9s step-end infinite;
+            }
+
+            #terminal-line .hi {
+                color: var(--white);
+            }
+
+            #terminal-line .acc {
+                color: var(--accent);
+            }
+
+            #terminal-line .err {
+                color: var(--red);
+            }
+
+            /* ── PROGRESS BAR ── */
+            #progress-wrap {
+                width: min(640px, 80vw);
+            }
+
+            #progress-label {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                letter-spacing: 0.25em;
+                color: var(--faint);
+                margin-bottom: 6px;
+                text-transform: uppercase;
+            }
+
+            #progress-bar-outer {
+                width: 100%;
+                height: 2px;
+                background: var(--faint);
+                position: relative;
+                overflow: hidden;
+            }
+
+            #progress-bar-inner {
+                height: 100%;
+                background: var(--dim);
+                width: 0%;
+                transition: width 0.4s ease;
+            }
+
+            #progress-bar-outer::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -40%;
+                width: 40%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--accent),
+                    transparent
+                );
+                animation: sweep 3s linear infinite;
+            }
+
+            @keyframes sweep {
+                to {
+                    left: 140%;
+                }
+            }
+
+            /* ── STATUS ROW ── */
+            #status-row {
+                display: flex;
+                gap: 28px;
+                margin-top: 28px;
+                font-size: 12px;
+                letter-spacing: 0.2em;
+                color: var(--faint);
+                text-transform: uppercase;
+            }
+
+            #status-row .item {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+            }
+
+            #status-row .dot-s {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--dim);
+                animation: pulse-s 2s ease-in-out infinite;
+            }
+
+            #status-row .dot-s.ok {
+                background: #4a7a4a;
+            }
+
+            #status-row .dot-s.warn {
+                background: var(--accent);
+            }
+
+            #status-row .dot-s.err {
+                background: var(--red);
+            }
+
+            @keyframes pulse-s {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.3;
+                }
+            }
+
+            /* ── FULL-SCREEN FLASH ── */
+            #flash {
+                position: fixed;
+                inset: 0;
+                z-index: 200;
+                background: white;
                 opacity: 0;
+                pointer-events: none;
+                will-change: opacity;
             }
 
-            8% {
-                transform: translate(-3px, -1px);
-                opacity: 1;
-            }
-
-            9% {
-                transform: none;
+            /* ── HORIZONTAL TEAR ── */
+            #tear {
+                position: fixed;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: var(--accent);
                 opacity: 0;
+                z-index: 150;
+                pointer-events: none;
+                mix-blend-mode: difference;
+                will-change: opacity, transform;
             }
 
-            58% {
-                transform: translate(2px, 1px);
-                opacity: 1;
+            /* ── BLINK UTILITY ── */
+            @keyframes blink {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0;
+                }
             }
 
-            59% {
-                opacity: 0;
+            /* ── SIDE LABELS ── */
+            .side-label {
+                position: fixed;
+                font-size: 12px;
+                letter-spacing: 0.4em;
+                color: var(--faint);
+                text-transform: uppercase;
+                z-index: 0;
+                pointer-events: none;
             }
 
-            72% {
-                transform: translate(-4px, 0);
-                opacity: 1;
+            .side-label.left {
+                left: 22px;
+                top: 50%;
+                transform: translateY(-50%) rotate(-90deg);
+                transform-origin: center;
             }
 
-            73% {
-                opacity: 0;
-            }
-        }
-
-        @keyframes glitch-b {
-
-            0%,
-            100% {
-                transform: none;
-                opacity: 0;
+            .side-label.right {
+                right: 22px;
+                top: 50%;
+                transform: translateY(-50%) rotate(90deg);
+                transform-origin: center;
             }
 
-            8% {
-                transform: translate(3px, 1px);
-                opacity: 1;
+            /* ── CLOCK ── */
+            #clock {
+                position: fixed;
+                top: 35px;
+                right: 35px;
+                font-size: 12px;
+                letter-spacing: 0.2em;
+                color: var(--accent);
+                z-index: 20;
             }
 
-            9% {
-                opacity: 0;
+            /* ── JP TEXT ── */
+            #jp {
+                position: fixed;
+                bottom: 44px;
+                right: 44px;
+                font-size: 16px;
+                letter-spacing: 0.15em;
+                color: var(--faint);
+                z-index: 20;
+                writing-mode: vertical-rl;
+                line-height: 1.8;
+                opacity: 0.5;
             }
 
-            58% {
-                transform: translate(-2px, -1px);
-                opacity: 1;
+            /* ── COORD LINE ── */
+            #coords {
+                position: fixed;
+                top: 35px;
+                left: 35px;
+                font-size: 12px;
+                letter-spacing: 0.15em;
+                color: var(--accent);
+                z-index: 20;
             }
 
-            59% {
-                opacity: 0;
+            /* ── HEX STREAM ── */
+            #hexstream {
+                position: fixed;
+                bottom: 40px;
+                left: 40px;
+                font-size: 16px;
+                color: var(--faint);
+                z-index: 20;
+                overflow: hidden;
+                opacity: 0.5;
             }
+        </style>
+    </head>
 
-            72% {
-                transform: translate(4px, 0);
-                opacity: 1;
-            }
-
-            73% {
-                opacity: 0;
-            }
-        }
-
-        #subtitle {
-            font-size: 12px;
-            letter-spacing: 0.5em;
-            color: var(--dim);
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        /* ── DIVIDER ── */
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 320px;
-            margin-bottom: 32px;
-        }
-
-        .divider .line {
-            flex: 1;
-            height: 1px;
-            background: var(--faint);
-        }
-
-        .divider .diamond {
-            width: 6px;
-            height: 6px;
-            background: var(--dim);
-            transform: rotate(45deg);
-        }
-
-        /* ── TERMINAL FEED ── */
-        #terminal {
-            width: min(640px, 80vw);
-            border: 1px solid var(--faint);
-            padding: 16px 28px;
-            position: relative;
-            background: rgba(14, 14, 14, 0.5);
-            margin-bottom: 28px;
-        }
-
-        #terminal::before {
-            content: '[ SYSTEM LOG ]';
-            position: absolute;
-            top: -15px;
-            left: 0px;
-            font-size: 8px;
-            letter-spacing: 0.3em;
-            color: var(--dim);
-        }
-
-        #terminal-line {
-            font-size: 14px;
-            color: var(--dim);
-            letter-spacing: 0.08em;
-            line-height: 1.6;
-            min-height: 24px;
-        }
-
-        #terminal-line .cursor {
-            display: inline-block;
-            width: 7px;
-            height: 12px;
-            background: var(--dim);
-            vertical-align: middle;
-            margin-left: 2px;
-            animation: blink 0.9s step-end infinite;
-        }
-
-        #terminal-line .hi {
-            color: var(--white);
-        }
-
-        #terminal-line .acc {
-            color: var(--accent);
-        }
-
-        #terminal-line .err {
-            color: var(--red);
-        }
-
-        /* ── PROGRESS BAR ── */
-        #progress-wrap {
-            width: min(640px, 80vw);
-        }
-
-        #progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            letter-spacing: 0.25em;
-            color: var(--faint);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        #progress-bar-outer {
-            width: 100%;
-            height: 2px;
-            background: var(--faint);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #progress-bar-inner {
-            height: 100%;
-            background: var(--dim);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        #progress-bar-outer::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -40%;
-            width: 40%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: sweep 3s linear infinite;
-        }
-
-        @keyframes sweep {
-            to {
-                left: 140%;
-            }
-        }
-
-        /* ── STATUS ROW ── */
-        #status-row {
-            display: flex;
-            gap: 28px;
-            margin-top: 28px;
-            font-size: 12px;
-            letter-spacing: 0.2em;
-            color: var(--faint);
-            text-transform: uppercase;
-        }
-
-        #status-row .item {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        #status-row .dot-s {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--dim);
-            animation: pulse-s 2s ease-in-out infinite;
-        }
-
-        #status-row .dot-s.ok {
-            background: #4a7a4a;
-        }
-
-        #status-row .dot-s.warn {
-            background: var(--accent);
-        }
-
-        #status-row .dot-s.err {
-            background: var(--red);
-        }
-
-        @keyframes pulse-s {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        /* ── FULL-SCREEN FLASH ── */
-        #flash {
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            background: white;
-            opacity: 0;
-            pointer-events: none;
-            will-change: opacity;
-        }
-
-        /* ── HORIZONTAL TEAR ── */
-        #tear {
-            position: fixed;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--accent);
-            opacity: 0;
-            z-index: 150;
-            pointer-events: none;
-            mix-blend-mode: difference;
-            will-change: opacity, transform;
-        }
-
-        /* ── BLINK UTILITY ── */
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-        }
-
-        /* ── SIDE LABELS ── */
-        .side-label {
-            position: fixed;
-            font-size: 12px;
-            letter-spacing: 0.4em;
-            color: var(--faint);
-            text-transform: uppercase;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .side-label.left {
-            left: 22px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: center;
-        }
-
-        .side-label.right {
-            right: 22px;
-            top: 50%;
-            transform: translateY(-50%) rotate(90deg);
-            transform-origin: center;
-        }
-
-        /* ── CLOCK ── */
-        #clock {
-            position: fixed;
-            top: 35px;
-            right: 35px;
-            font-size: 12px;
-            letter-spacing: 0.2em;
-            color: var(--accent);
-            z-index: 20;
-        }
-
-        /* ── JP TEXT ── */
-        #jp {
-            position: fixed;
-            bottom: 44px;
-            right: 44px;
-            font-size: 16px;
-            letter-spacing: 0.15em;
-            color: var(--faint);
-            z-index: 20;
-            writing-mode: vertical-rl;
-            line-height: 1.8;
-            opacity: 0.5;
-        }
-
-        /* ── COORD LINE ── */
-        #coords {
-            position: fixed;
-            top: 35px;
-            left: 35px;
-            font-size: 12px;
-            letter-spacing: 0.15em;
-            color: var(--accent);
-            z-index: 20;
-        }
-
-        /* ── HEX STREAM ── */
-        #hexstream {
-            position: fixed;
-            bottom: 40px;
-            left: 40px;
-            font-size: 16px;
-            color: var(--faint);
-            z-index: 20;
-            overflow: hidden;
-            opacity: 0.5;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div id="mobile-block">
-        <span id="mobile-text" data-text="APERTURE INSUFFICIENT">APERTURE INSUFFICIENT</span>
-    </div>
-
-    <canvas id="noise"></canvas>
-    <canvas id="fx"></canvas>
-    <div id="grid"></div>
-    <div id="flash"></div>
-    <div id="tear"></div>
-
-    <div class="corner tl"></div>
-    <div class="corner tr"></div>
-    <div class="corner bl"></div>
-    <div class="corner br"></div>
-
-    <div id="header-bar">
-        <span><span class="heb">יהוה</span> // ANCIENT OF DAYS // ヤハウェ</span>
-        <span id="uptime">UP: 00:00:00</span>
-    </div>
-
-    <div class="side-label left">AUTHORIZED SECTOR — CLASS S</div>
-    <div class="side-label right">MACHINE NETWORK UPLINK ACTIVE</div>
-    <div id="clock"></div>
-    <div id="coords"></div>
-
-    <div id="jp">
-        戦術支援端末<br>
-        接続確認中<br>
-        データ解析中
-    </div>
-
-    <div id="hexstream"></div>
-
-    <div id="app">
-        <div id="center">
-
-            <div id="sigil">
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="50,4 82,18 96,50 82,82 50,96 18,82 4,50 18,18" stroke="#3a3830" stroke-width="1"
-                        fill="none" />
-                    <circle cx="50" cy="50" r="30" stroke="#3a3830" stroke-width="1" fill="none"
-                        stroke-dasharray="4 4" />
-                    <circle cx="50" cy="50" r="36" stroke="#9a9488" stroke-width="0.5" fill="none"
-                        stroke-dasharray="12 6" opacity="0.6" />
-                    <polygon points="50,26 74,50 50,74 26,50" stroke="#9a9488" stroke-width="0.8" fill="none" />
-                    <line x1="50" y1="4" x2="50" y2="22" stroke="#c8b882" stroke-width="0.6" />
-                    <line x1="50" y1="78" x2="50" y2="96" stroke="#c8b882" stroke-width="0.6" />
-                    <line x1="4" y1="50" x2="22" y2="50" stroke="#c8b882" stroke-width="0.6" />
-                    <line x1="78" y1="50" x2="96" y2="50" stroke="#c8b882" stroke-width="0.6" />
-                    <circle cx="50" cy="50" r="3" fill="#c8b882" />
-                    <circle cx="50" cy="50" r="6" stroke="#9a9488" stroke-width="0.5" fill="none" />
-                </svg>
-            </div>
-
-            <div id="title-wrap">
-                <span id="title" data-text="PROJECT TETRAGRAMMATON">PROJECT TETRAGRAMMATON</span>
-            </div>
-            <div id="subtitle">データ集約システム // DATA AGGREGATION SYSTEM // rev.A2B.9S</div>
-
-            <div class="divider">
-                <div class="line"></div>
-                <div class="diamond"></div>
-                <div class="line"></div>
-            </div>
-
-            <div id="terminal">
-                <div id="terminal-line"><span class="cursor"></span></div>
-            </div>
-
-            <div id="progress-wrap">
-                <div id="progress-label">
-                    <span>SYNC INTEGRITY</span>
-                    <span id="pct">0.00%</span>
-                </div>
-                <div id="progress-bar-outer">
-                    <div id="progress-bar-inner"></div>
-                </div>
-            </div>
-
-            <div id="status-row">
-                <div class="item">
-                    <div class="dot-s ok"></div><span>BLACKBOX</span>
-                </div>
-                <div class="item">
-                    <div class="dot-s warn" id="s2"></div><span>UPLINK</span>
-                </div>
-                <div class="item">
-                    <div class="dot-s err" id="s3"></div><span>CORE MEM</span>
-                </div>
-            </div>
-
+    <body>
+        <div id="mobile-block">
+            <span id="mobile-text" data-text="APERTURE INSUFFICIENT"
+                >APERTURE INSUFFICIENT</span
+            >
         </div>
-    </div>
 
-    <div id="footer-bar">
-        <span>YORHA CLASSIFIED</span>
-        <span>◆</span>
-        <span>GLORY TO MANKIND</span>
-        <span>◆</span>
-        <span id="seq">SEQ:000000</span>
-    </div>
+        <canvas id="noise"></canvas>
+        <canvas id="fx"></canvas>
+        <div id="grid"></div>
+        <div id="flash"></div>
+        <div id="tear"></div>
 
-    <script>
-        const noiseCanvas = document.getElementById('noise');
-        const nCtx = noiseCanvas.getContext('2d');
-        const NOISE_DIV = 2;
-        let noiseImg = null;
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
 
-        function resizeNoise() {
-            noiseCanvas.width = Math.ceil(window.innerWidth / NOISE_DIV);
-            noiseCanvas.height = Math.ceil(window.innerHeight / NOISE_DIV);
-            noiseImg = null; // recreate on next draw
-        }
-        resizeNoise();
+        <div id="header-bar">
+            <span
+                ><span class="heb">יהוה</span> // ANCIENT OF DAYS //
+                ヤハウェ</span
+            >
+            <span id="uptime">UP: 00:00:00</span>
+        </div>
 
-        let _resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(_resizeTimer);
-            _resizeTimer = setTimeout(resizeNoise, 200);
-        });
+        <div class="side-label left">AUTHORIZED SECTOR — CLASS S</div>
+        <div class="side-label right">MACHINE NETWORK UPLINK ACTIVE</div>
+        <div id="clock"></div>
+        <div id="coords"></div>
 
-        function drawNoise() {
-            const w = noiseCanvas.width, h = noiseCanvas.height;
-            if (!noiseImg || noiseImg.width !== w || noiseImg.height !== h) {
-                noiseImg = nCtx.createImageData(w, h);
-                // pre-fill alpha channel fully opaque (never changes)
+        <div id="jp">
+            戦術支援端末<br />
+            接続確認中<br />
+            データ解析中
+        </div>
+
+        <div id="hexstream"></div>
+
+        <div id="app">
+            <div id="center">
+                <div id="sigil">
+                    <svg
+                        viewBox="0 0 100 100"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <polygon
+                            points="50,4 82,18 96,50 82,82 50,96 18,82 4,50 18,18"
+                            stroke="#3a3830"
+                            stroke-width="1"
+                            fill="none"
+                        />
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="30"
+                            stroke="#3a3830"
+                            stroke-width="1"
+                            fill="none"
+                            stroke-dasharray="4 4"
+                        />
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="36"
+                            stroke="#9a9488"
+                            stroke-width="0.5"
+                            fill="none"
+                            stroke-dasharray="12 6"
+                            opacity="0.6"
+                        />
+                        <polygon
+                            points="50,26 74,50 50,74 26,50"
+                            stroke="#9a9488"
+                            stroke-width="0.8"
+                            fill="none"
+                        />
+                        <line
+                            x1="50"
+                            y1="4"
+                            x2="50"
+                            y2="22"
+                            stroke="#c8b882"
+                            stroke-width="0.6"
+                        />
+                        <line
+                            x1="50"
+                            y1="78"
+                            x2="50"
+                            y2="96"
+                            stroke="#c8b882"
+                            stroke-width="0.6"
+                        />
+                        <line
+                            x1="4"
+                            y1="50"
+                            x2="22"
+                            y2="50"
+                            stroke="#c8b882"
+                            stroke-width="0.6"
+                        />
+                        <line
+                            x1="78"
+                            y1="50"
+                            x2="96"
+                            y2="50"
+                            stroke="#c8b882"
+                            stroke-width="0.6"
+                        />
+                        <circle cx="50" cy="50" r="3" fill="#c8b882" />
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="6"
+                            stroke="#9a9488"
+                            stroke-width="0.5"
+                            fill="none"
+                        />
+                    </svg>
+                </div>
+
+                <div id="title-wrap">
+                    <span id="title" data-text="PROJECT TETRAGRAMMATON"
+                        >PROJECT TETRAGRAMMATON</span
+                    >
+                </div>
+                <div id="subtitle">
+                    データ集約システム // DATA AGGREGATION SYSTEM // rev.A2B.9S
+                </div>
+
+                <div class="divider">
+                    <div class="line"></div>
+                    <div class="diamond"></div>
+                    <div class="line"></div>
+                </div>
+
+                <div id="terminal">
+                    <div id="terminal-line"><span class="cursor"></span></div>
+                </div>
+
+                <div id="progress-wrap">
+                    <div id="progress-label">
+                        <span>SYNC INTEGRITY</span>
+                        <span id="pct">0.00%</span>
+                    </div>
+                    <div id="progress-bar-outer">
+                        <div id="progress-bar-inner"></div>
+                    </div>
+                </div>
+
+                <div id="status-row">
+                    <div class="item">
+                        <div class="dot-s ok"></div>
+                        <span>BLACKBOX</span>
+                    </div>
+                    <div class="item">
+                        <div class="dot-s warn" id="s2"></div>
+                        <span>UPLINK</span>
+                    </div>
+                    <div class="item">
+                        <div class="dot-s err" id="s3"></div>
+                        <span>CORE MEM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer-bar">
+            <span>YORHA CLASSIFIED</span>
+            <span>◆</span>
+            <span>GLORY TO MANKIND</span>
+            <span>◆</span>
+            <span id="seq">SEQ:000000</span>
+        </div>
+
+        <script>
+            const noiseCanvas = document.getElementById("noise");
+            const nCtx = noiseCanvas.getContext("2d");
+            const NOISE_DIV = 2;
+            let noiseImg = null;
+
+            function resizeNoise() {
+                noiseCanvas.width = Math.ceil(window.innerWidth / NOISE_DIV);
+                noiseCanvas.height = Math.ceil(window.innerHeight / NOISE_DIV);
+                noiseImg = null; // recreate on next draw
+            }
+            resizeNoise();
+
+            let _resizeTimer;
+            window.addEventListener("resize", () => {
+                clearTimeout(_resizeTimer);
+                _resizeTimer = setTimeout(resizeNoise, 200);
+            });
+
+            function drawNoise() {
+                const w = noiseCanvas.width,
+                    h = noiseCanvas.height;
+                if (
+                    !noiseImg ||
+                    noiseImg.width !== w ||
+                    noiseImg.height !== h
+                ) {
+                    noiseImg = nCtx.createImageData(w, h);
+                    // pre-fill alpha channel fully opaque (never changes)
+                    const d = noiseImg.data;
+                    for (let i = 3; i < d.length; i += 4) d[i] = 255;
+                }
                 const d = noiseImg.data;
-                for (let i = 3; i < d.length; i += 4) d[i] = 255;
+                for (let i = 0; i < d.length; i += 4) {
+                    const v = (Math.random() * 255) | 0;
+                    d[i] = d[i + 1] = d[i + 2] = v;
+                }
+                nCtx.putImageData(noiseImg, 0, 0);
             }
-            const d = noiseImg.data;
-            for (let i = 0; i < d.length; i += 4) {
-                const v = Math.random() * 255 | 0;
-                d[i] = d[i + 1] = d[i + 2] = v;
-            }
-            nCtx.putImageData(noiseImg, 0, 0);
-        }
-        setInterval(drawNoise, 150); // was 80 ms
-        drawNoise();
+            setInterval(drawNoise, 150); // was 80 ms
+            drawNoise();
 
-        /* ═══════════════════════════════════════════════════════════
+            /* ═══════════════════════════════════════════════════════════
            CLOCK / UPTIME
         ═══════════════════════════════════════════════════════════ */
-        const startTime = Date.now();
-        function padZ(n) { return String(n).padStart(2, '0'); }
-        function tick() {
-            const now = new Date();
-            document.getElementById('clock').textContent =
-                `${padZ(now.getHours())}:${padZ(now.getMinutes())}:${padZ(now.getSeconds())}`;
-            const el = (Date.now() - startTime) / 1000 | 0;
-            const h = el / 3600 | 0, m = (el % 3600) / 60 | 0, s = el % 60;
-            document.getElementById('uptime').textContent = `UP: ${padZ(h)}:${padZ(m)}:${padZ(s)}`;
-            document.getElementById('seq').textContent = `SEQ:${String(el).padStart(6, '0')}`;
-        }
-        setInterval(tick, 1000); tick();
+            const startTime = Date.now();
+            function padZ(n) {
+                return String(n).padStart(2, "0");
+            }
+            function tick() {
+                const now = new Date();
+                document.getElementById("clock").textContent =
+                    `${padZ(now.getHours())}:${padZ(now.getMinutes())}:${padZ(now.getSeconds())}`;
+                const el = ((Date.now() - startTime) / 1000) | 0;
+                const h = (el / 3600) | 0,
+                    m = ((el % 3600) / 60) | 0,
+                    s = el % 60;
+                document.getElementById("uptime").textContent =
+                    `UP: ${padZ(h)}:${padZ(m)}:${padZ(s)}`;
+                document.getElementById("seq").textContent =
+                    `SEQ:${String(el).padStart(6, "0")}`;
+            }
+            setInterval(tick, 1000);
+            tick();
 
-        /* ─── FAKE COORDS ─── */
-        const baseCoords = { lat: 34.7056 + (Math.random() - 0.5) * 0.002, lon: 135.4895 + (Math.random() - 0.5) * 0.002 };
-        function jitter(v) { return (v + (Math.random() - 0.5) * 0.0001).toFixed(6); }
-        setInterval(() => {
-            document.getElementById('coords').textContent =
-                `${jitter(baseCoords.lat)}°N  ${jitter(baseCoords.lon)}°E`;
-        }, 1800);
-        document.getElementById('coords').textContent =
-            `${baseCoords.lat.toFixed(6)}°N  ${baseCoords.lon.toFixed(6)}°E`;
+            /* ─── FAKE COORDS ─── */
+            const baseCoords = {
+                lat: 34.7056 + (Math.random() - 0.5) * 0.002,
+                lon: 135.4895 + (Math.random() - 0.5) * 0.002,
+            };
+            function jitter(v) {
+                return (v + (Math.random() - 0.5) * 0.0001).toFixed(6);
+            }
+            setInterval(() => {
+                document.getElementById("coords").textContent =
+                    `${jitter(baseCoords.lat)}°N  ${jitter(baseCoords.lon)}°E`;
+            }, 1800);
+            document.getElementById("coords").textContent =
+                `${baseCoords.lat.toFixed(6)}°N  ${baseCoords.lon.toFixed(6)}°E`;
 
-        /* ─── HEX STREAM ─── */
-        const hexEl = document.getElementById('hexstream');
-        const hexLines = [];
-        function genHexLine() {
-            return Array.from({ length: 6 }, () => (Math.random() * 256 | 0).toString(16).padStart(2, '0').toUpperCase()).join(' ');
-        }
-        function pushHex() {
-            if (hexLines.length >= 5) hexLines.shift();
-            hexLines.push(genHexLine());
-            hexEl.innerHTML = hexLines.join('<br>');
-        }
-        setInterval(pushHex, 300);
+            /* ─── HEX STREAM ─── */
+            const hexEl = document.getElementById("hexstream");
+            const hexLines = [];
+            function genHexLine() {
+                return Array.from({ length: 6 }, () =>
+                    ((Math.random() * 256) | 0)
+                        .toString(16)
+                        .padStart(2, "0")
+                        .toUpperCase(),
+                ).join(" ");
+            }
+            function pushHex() {
+                if (hexLines.length >= 5) hexLines.shift();
+                hexLines.push(genHexLine());
+                hexEl.innerHTML = hexLines.join("<br>");
+            }
+            setInterval(pushHex, 300);
 
-        const fxCanvas = document.getElementById('fx');
-        const fxCtx = fxCanvas.getContext('2d');
+            const fxCanvas = document.getElementById("fx");
+            const fxCtx = fxCanvas.getContext("2d");
 
-        function resizeFx() {
-            fxCanvas.width = window.innerWidth;
-            fxCanvas.height = window.innerHeight;
-        }
-        resizeFx();
-        window.addEventListener('resize', () => { resizeFx(); resizeNoise(); });
+            function resizeFx() {
+                fxCanvas.width = window.innerWidth;
+                fxCanvas.height = window.innerHeight;
+            }
+            resizeFx();
+            window.addEventListener("resize", () => {
+                resizeFx();
+                resizeNoise();
+            });
 
-        // ── Shared state pools ──
-        const gblocks = []; // {y, h, col, birth}
-        const frags = []; // {x, y, text, birth, dur}
-        const rdots = []; // {x, y, shape, birth, dur}
-        let rdotCount = 0;
-        const RDOT_MAX = 6;
+            // ── Shared state pools ──
+            const gblocks = []; // {y, h, col, birth}
+            const frags = []; // {x, y, text, birth, dur}
+            const rdots = []; // {x, y, shape, birth, dur}
+            let rdotCount = 0;
+            const RDOT_MAX = 6;
 
-        const FRAG_TEXTS = [
-            '01101', 'FFFF', '戦術', 'ERROR', '0xAB', '▲■▼', 'SYNC', 'YoRHa',
-            '0010', 'DEAD', '機密', 'UNIT', '0xFE', '◆◇', 'LINK', '9S',
-            'NULL', 'DATA', '解析', 'CORE', '0x00', '▪▫', 'INIT', 'A2', '2B'
-        ];
-        const COL_GOLD = 'rgb(200,184,130)';
-        const COL_RED = 'rgb(255,0,50)';
-        const GBLOCK_LIFE = 220; // ms — matches original ~6 ticks × 40 ms
-        const DOT_SHAPES = ['square', 'diamond', 'small-square', 'diamond'];
+            const FRAG_TEXTS = [
+                "01101",
+                "FFFF",
+                "戦術",
+                "ERROR",
+                "0xAB",
+                "▲■▼",
+                "SYNC",
+                "YoRHa",
+                "0010",
+                "DEAD",
+                "機密",
+                "UNIT",
+                "0xFE",
+                "◆◇",
+                "LINK",
+                "9S",
+                "NULL",
+                "DATA",
+                "解析",
+                "CORE",
+                "0x00",
+                "▪▫",
+                "INIT",
+                "A2",
+                "2B",
+            ];
+            const COL_GOLD = "rgb(200,184,130)";
+            const COL_RED = "rgb(255,0,50)";
+            const GBLOCK_LIFE = 220; // ms — matches original ~6 ticks × 40 ms
+            const DOT_SHAPES = ["square", "diamond", "small-square", "diamond"];
 
-        // opacity curves matching the original CSS keyframes
-        function fragOpacity(p) {
-            if (p < 0.10) return (p / 0.10) * 0.6;
-            if (p < 0.80) return 0.6 - ((p - 0.10) / 0.70) * 0.4;
-            return (1 - (p - 0.80) / 0.20) * 0.2;
-        }
-
-        function dotOpacity(p) {
-            if (p < 0.08) return (p / 0.08) * 0.12;
-            if (p < 0.30) return 0.12 + ((p - 0.08) / 0.22) * 0.18;
-            if (p < 0.55) return 0.30 + ((p - 0.30) / 0.25) * 0.25;
-            if (p < 0.60) return 0.55 + ((p - 0.55) / 0.05) * 0.05;
-            if (p < 0.80) return 0.60 + ((p - 0.60) / 0.20) * 0.20;
-            if (p < 0.85) return 0.80 - ((p - 0.80) / 0.05) * 0.20;
-            return (1 - (p - 0.85) / 0.15) * 0.60;
-        }
-
-        let fxLast = 0;
-        function fxLoop(ts) {
-            requestAnimationFrame(fxLoop);
-            if (ts - fxLast < 30) return;
-            fxLast = ts;
-
-            const W = fxCanvas.width, H = fxCanvas.height;
-            fxCtx.clearRect(0, 0, W, H);
-
-            // ─── Glitch blocks ───
-            for (let i = gblocks.length - 1; i >= 0; i--) {
-                const b = gblocks[i];
-                const prog = (ts - b.birth) / GBLOCK_LIFE;
-                if (prog >= 1) { gblocks.splice(i, 1); continue; }
-                const opacity = 0.8 * (1 - prog);
-                const dx = (Math.random() - 0.5) * 12;
-                fxCtx.globalAlpha = opacity * 0.06;
-                fxCtx.fillStyle = b.col;
-                fxCtx.fillRect(dx, b.y, W, b.h);
+            // opacity curves matching the original CSS keyframes
+            function fragOpacity(p) {
+                if (p < 0.1) return (p / 0.1) * 0.6;
+                if (p < 0.8) return 0.6 - ((p - 0.1) / 0.7) * 0.4;
+                return (1 - (p - 0.8) / 0.2) * 0.2;
             }
 
-            // ─── Floating fragments ───
-            fxCtx.font = '12px "Share Tech Mono", monospace';
-            fxCtx.fillStyle = '#3a3830';
-            for (let i = frags.length - 1; i >= 0; i--) {
-                const f = frags[i];
-                const prog = (ts - f.birth) / (f.dur * 1000);
-                if (prog >= 1) { frags.splice(i, 1); continue; }
-                fxCtx.globalAlpha = fragOpacity(prog);
-                fxCtx.fillText(f.text, f.x, f.y - 80 * prog);
+            function dotOpacity(p) {
+                if (p < 0.08) return (p / 0.08) * 0.12;
+                if (p < 0.3) return 0.12 + ((p - 0.08) / 0.22) * 0.18;
+                if (p < 0.55) return 0.3 + ((p - 0.3) / 0.25) * 0.25;
+                if (p < 0.6) return 0.55 + ((p - 0.55) / 0.05) * 0.05;
+                if (p < 0.8) return 0.6 + ((p - 0.6) / 0.2) * 0.2;
+                if (p < 0.85) return 0.8 - ((p - 0.8) / 0.05) * 0.2;
+                return (1 - (p - 0.85) / 0.15) * 0.6;
             }
 
-            // ─── Random dots ───
-            for (let i = rdots.length - 1; i >= 0; i--) {
-                const d = rdots[i];
-                const prog = (ts - d.birth) / (d.dur * 1000);
-                if (prog >= 1) { rdots.splice(i, 1); rdotCount--; continue; }
-                fxCtx.globalAlpha = dotOpacity(prog);
-                fxCtx.fillStyle = d.shape === 'small-square' ? '#9a9488' : '#c8b882';
-                if (d.shape === 'diamond') {
-                    fxCtx.save();
-                    fxCtx.translate(d.x + 3, d.y + 3);
-                    fxCtx.rotate(Math.PI / 4);
-                    fxCtx.fillRect(-3, -3, 6, 6);
-                    fxCtx.restore();
-                } else {
-                    const sz = d.shape === 'small-square' ? 3 : 4;
-                    fxCtx.fillRect(d.x, d.y, sz, sz);
+            let fxLast = 0;
+            function fxLoop(ts) {
+                requestAnimationFrame(fxLoop);
+                if (ts - fxLast < 30) return;
+                fxLast = ts;
+
+                const W = fxCanvas.width,
+                    H = fxCanvas.height;
+                fxCtx.clearRect(0, 0, W, H);
+
+                // ─── Glitch blocks ───
+                for (let i = gblocks.length - 1; i >= 0; i--) {
+                    const b = gblocks[i];
+                    const prog = (ts - b.birth) / GBLOCK_LIFE;
+                    if (prog >= 1) {
+                        gblocks.splice(i, 1);
+                        continue;
+                    }
+                    const opacity = 0.8 * (1 - prog);
+                    const dx = (Math.random() - 0.5) * 12;
+                    fxCtx.globalAlpha = opacity * 0.06;
+                    fxCtx.fillStyle = b.col;
+                    fxCtx.fillRect(dx, b.y, W, b.h);
                 }
+
+                // ─── Floating fragments ───
+                fxCtx.font = '12px "Share Tech Mono", monospace';
+                fxCtx.fillStyle = "#3a3830";
+                for (let i = frags.length - 1; i >= 0; i--) {
+                    const f = frags[i];
+                    const prog = (ts - f.birth) / (f.dur * 1000);
+                    if (prog >= 1) {
+                        frags.splice(i, 1);
+                        continue;
+                    }
+                    fxCtx.globalAlpha = fragOpacity(prog);
+                    fxCtx.fillText(f.text, f.x, f.y - 80 * prog);
+                }
+
+                // ─── Random dots ───
+                for (let i = rdots.length - 1; i >= 0; i--) {
+                    const d = rdots[i];
+                    const prog = (ts - d.birth) / (d.dur * 1000);
+                    if (prog >= 1) {
+                        rdots.splice(i, 1);
+                        rdotCount--;
+                        continue;
+                    }
+                    fxCtx.globalAlpha = dotOpacity(prog);
+                    fxCtx.fillStyle =
+                        d.shape === "small-square" ? "#9a9488" : "#c8b882";
+                    if (d.shape === "diamond") {
+                        fxCtx.save();
+                        fxCtx.translate(d.x + 3, d.y + 3);
+                        fxCtx.rotate(Math.PI / 4);
+                        fxCtx.fillRect(-3, -3, 6, 6);
+                        fxCtx.restore();
+                    } else {
+                        const sz = d.shape === "small-square" ? 3 : 4;
+                        fxCtx.fillRect(d.x, d.y, sz, sz);
+                    }
+                }
+
+                fxCtx.globalAlpha = 1;
             }
+            requestAnimationFrame(fxLoop);
 
-            fxCtx.globalAlpha = 1;
-        }
-        requestAnimationFrame(fxLoop);
-
-        // ── Spawn glitch blocks ──
-        function spawnGlitch() {
-            gblocks.push({
-                y: Math.random() * window.innerHeight,
-                h: 1 + Math.random() * 6,
-                col: Math.random() < 0.5 ? COL_GOLD : COL_RED,
-                birth: performance.now(),
-            });
-            setTimeout(spawnGlitch, 900 + Math.random() * 600);
-        }
-        spawnGlitch();
-
-        // ── Spawn floating fragments ──
-        function spawnFrag() {
-            frags.push({
-                x: Math.random() * window.innerWidth * 0.90 + window.innerWidth * 0.05,
-                y: Math.random() * window.innerHeight * 0.80 + window.innerHeight * 0.10,
-                text: FRAG_TEXTS[Math.floor(Math.random() * FRAG_TEXTS.length)],
-                birth: performance.now(),
-                dur: 4 + Math.random() * 6,
-            });
-            setTimeout(spawnFrag, 1200);
-        }
-        spawnFrag();
-
-        // ── Spawn random dots ──
-        function spawnRdot() {
-            if (rdotCount < RDOT_MAX) {
-                rdotCount++;
-                rdots.push({
-                    x: Math.floor(Math.random() * (window.innerWidth - 20) + 8),
-                    y: Math.floor(Math.random() * (window.innerHeight - 20) + 8),
-                    shape: DOT_SHAPES[Math.floor(Math.random() * DOT_SHAPES.length)],
+            // ── Spawn glitch blocks ──
+            function spawnGlitch() {
+                gblocks.push({
+                    y: Math.random() * window.innerHeight,
+                    h: 1 + Math.random() * 6,
+                    col: Math.random() < 0.5 ? COL_GOLD : COL_RED,
                     birth: performance.now(),
-                    dur: 5 + Math.random() * 8,
                 });
+                setTimeout(spawnGlitch, 900 + Math.random() * 600);
             }
-            setTimeout(spawnRdot, 1800 + Math.random() * 2400);
-        }
-        spawnRdot();
+            spawnGlitch();
 
-        /* ═══════════════════════════════════════════════════════════
+            // ── Spawn floating fragments ──
+            function spawnFrag() {
+                frags.push({
+                    x:
+                        Math.random() * window.innerWidth * 0.9 +
+                        window.innerWidth * 0.05,
+                    y:
+                        Math.random() * window.innerHeight * 0.8 +
+                        window.innerHeight * 0.1,
+                    text: FRAG_TEXTS[
+                        Math.floor(Math.random() * FRAG_TEXTS.length)
+                    ],
+                    birth: performance.now(),
+                    dur: 4 + Math.random() * 6,
+                });
+                setTimeout(spawnFrag, 1200);
+            }
+            spawnFrag();
+
+            // ── Spawn random dots ──
+            function spawnRdot() {
+                if (rdotCount < RDOT_MAX) {
+                    rdotCount++;
+                    rdots.push({
+                        x: Math.floor(
+                            Math.random() * (window.innerWidth - 20) + 8,
+                        ),
+                        y: Math.floor(
+                            Math.random() * (window.innerHeight - 20) + 8,
+                        ),
+                        shape: DOT_SHAPES[
+                            Math.floor(Math.random() * DOT_SHAPES.length)
+                        ],
+                        birth: performance.now(),
+                        dur: 5 + Math.random() * 8,
+                    });
+                }
+                setTimeout(spawnRdot, 1800 + Math.random() * 2400);
+            }
+            spawnRdot();
+
+            /* ═══════════════════════════════════════════════════════════
            TERMINAL MESSAGES
         ═══════════════════════════════════════════════════════════ */
-        const messages = [
-            // ── INIT / BOOT ──
-            { t: '> LOADING FORBIDDEN SIGNAL INTERCEPT MODULE...', d: 1400 },
-            { t: '> AUTH TOKEN: <span class="acc">■■■■■■■■■■■■■■■■ [ACCEPTED]</span>', d: 1400 },
-            { t: '> <span class="acc">起動シーケンス開始...</span>', d: 1200 },
-            { t: '> KERNEL HANDSHAKE: <span class="acc">OK</span>', d: 1000 },
-            { t: '> LOADING CRYPTOGRAPHIC KEYS... <span class="hi">DONE</span>', d: 1200 },
-            { t: '> VERIFYING HARDWARE ROOT OF TRUST...', d: 1600 },
-            { t: '> TPM ATTESTATION: <span class="acc">PASSED</span>', d: 1200 },
-            { t: '> <span class="acc">ハードウェア認証完了</span>', d: 1200 },
-            { t: '> ENTROPY POOL: <span class="hi">4096 bits</span> — SEEDED', d: 1200 },
-            { t: '> QUANTUM ENTROPY SEED: <span class="hi">0xDEADBEEF9F3A</span>', d: 1200 },
-            { t: '> SECURE ENCLAVE: <span class="acc">ACTIVE</span>', d: 1000 },
-            { t: '> <span class="acc">セキュアエンクレーブ初期化中...</span>', d: 1200 },
-            // ── NETWORK ──
-            { t: '> UPLINK BANDWIDTH: <span class="hi">1.2 Pbps</span>', d: 1200 },
-            { t: '> SIGNAL ORIGIN: <span class="err">UNKNOWN CLUSTER [SECTOR 7]</span>', d: 1400 },
-            { t: '> YoRHa SERVER HANDSHAKE: <span class="acc">OK</span>', d: 1200 },
-            { t: '> FORBIDDEN SIGNAL INTERCEPT: <span class="acc">LOCKED</span>', d: 1400 },
-            { t: '> <span class="acc">ネットワークリンク確立完了</span>', d: 1200 },
-            { t: '> PACKET LOSS: <span class="err">0.0012%</span> — ACCEPTABLE', d: 1200 },
-            { t: '> LATENCY TO ORIGIN: <span class="hi">±0.31 ms</span>', d: 1200 },
-            { t: '> BGP ROUTE CONVERGENCE: <span class="acc">DONE</span>', d: 1200 },
-            { t: '> <span class="acc">経路収束確認済み</span>', d: 1200 },
-            { t: '> NODE DISCOVERY: <span class="hi">17 NODES FOUND</span>', d: 1400 },
-            { t: '> ROUTING TABLE UPDATED — <span class="acc">ENTRIES: 2,184</span>', d: 1200 },
-            { t: '> PEER AUTHENTICATION: <span class="acc">ALL NODES VERIFIED</span>', d: 1400 },
-            { t: '> OBFUSCATION LAYER: <span class="acc">ENGAGED</span>', d: 1200 },
-            { t: '> <span class="acc">難読化プロトコル起動完了</span>', d: 1200 },
-            { t: '> TLS FINGERPRINT SPOOFING: <span class="hi">ACTIVE</span>', d: 1200 },
-            { t: '> TRAFFIC SHAPING MODULE: <span class="acc">RUNNING</span>', d: 1200 },
-            // ── SCANNING / SURVEILLANCE ──
-            { t: '> SCANNING SECTOR PERIMETER...', d: 1200 },
-            { t: '> ENEMY SIGNATURES DETECTED: <span class="err">14</span>', d: 1600 },
-            { t: '> TARGET LOCK: <span class="err">LOST</span>', d: 1200 },
-            { t: '> <span class="err">敵信号検出: セクターΩ</span>', d: 1400 },
-            { t: '> PASSIVE SCAN: <span class="hi">7,441 ENDPOINTS</span> MAPPED', d: 1400 },
-            { t: '> SPECTRAL ANALYSIS: <span class="err">ANOMALY AT 2.4 GHz</span>', d: 1600 },
-            { t: '> THERMAL IMAGING: <span class="acc">CALIBRATED</span>', d: 1200 },
-            { t: '> LIDAR MESH OVERLAY: <span class="hi">ENABLED</span>', d: 1200 },
-            { t: '> <span class="acc">全方位センサー起動完了</span>', d: 1200 },
-            { t: '> INTRUSION DETECTION: <span class="acc">NOMINAL</span>', d: 1200 },
-            { t: '> HONEYPOT ARRAY: <span class="hi">31 ACTIVE TRAPS</span>', d: 1400 },
-            { t: '> <span class="acc">ハニーポット配置完了</span>', d: 1200 },
-            { t: '> SURVEILLANCE GRID: <span class="acc">SECTOR 4 ONLINE</span>', d: 1200 },
-            { t: '> ANOMALOUS NODE: <span class="err">fd00::7:7 — QUARANTINED</span>', d: 1600 },
-            { t: '> <span class="err">隔離済み: ノード 0x4F</span>', d: 1200 },
-            // ── MEMORY / STORAGE ──
-            { t: '> MEMORY INTEGRITY: <span class="err">PARTIAL FAILURE — sector 0x7F</span>', d: 1800 },
-            { t: '> CORE BACKUP: <span class="err">MISSING</span>', d: 1200 },
-            { t: '> <span class="err">メモリ整合性エラー: セクター0xAF</span>', d: 1400 },
-            { t: '> VOLATILE MEMORY SCRUB: <span class="acc">IN PROGRESS</span>', d: 1400 },
-            { t: '> DEAD DROP STORAGE: <span class="hi">ENCRYPTED</span>', d: 1200 },
-            { t: '> <span class="acc">暗号化ストレージ: マウント完了</span>', d: 1200 },
-            { t: '> CACHE INVALIDATION: <span class="acc">COMPLETE</span>', d: 1200 },
-            { t: '> PURGING CACHE... <span class="acc">DONE</span>', d: 1200 },
-            { t: '> EXABYTE COLD VAULT: <span class="hi">47.3 EB COMMITTED</span>', d: 1200 },
-            { t: '> ZETTABYTE ARCHIVE INDEX: <span class="err">FRAGMENTED — REBUILD QUEUED</span>', d: 1600 },
-            { t: '> <span class="err">ゼタバイトアーカイブ: 断片化 — 再構築待機中</span>', d: 1600 },
-            { t: '> COLD STORAGE SYNC: <span class="acc">87.3% COMPLETE</span>', d: 1400 },
-            { t: '> BUFFER OVERFLOW: <span class="err">CAUGHT — STACK TRACE FOLLOWS</span>', d: 1800 },
-            { t: '> STACK FRAME: <span class="hi">0x7FFE2C3A → 0x0000DEAD</span>', d: 1200 },
-            // ── UNIT STATUS ──
-            { t: '> UNIT STATUS: <span class="hi">2B // COMBAT READY</span>', d: 1400 },
-            { t: '> UNIT STATUS: <span class="hi">9S // STANDBY</span>', d: 1400 },
-            { t: '> UNIT STATUS: <span class="err">A2 // ROGUE — TRACKING DISABLED</span>', d: 1800 },
-            { t: '> <span class="acc">ユニット2B: 戦闘準備完了</span>', d: 1200 },
-            { t: '> <span class="err">ユニットA2: 追跡不能 — 最終位置不明</span>', d: 1600 },
-            { t: '> ANDROID VITALS: <span class="acc">NOMINAL</span>', d: 1200 },
-            { t: '> LOGIC VIRUS SCAN: <span class="acc">CLEAN</span>', d: 1200 },
-            { t: '> <span class="acc">論理ウイルス検査: 陰性</span>', d: 1200 },
-            { t: '> SOUL BOX INTEGRITY: <span class="acc">100%</span>', d: 1200 },
-            { t: '> <span class="acc">ソウルボックス: 正常</span>', d: 1200 },
-            { t: '> TACTICAL OVERLAY: <span class="hi">ENABLED</span>', d: 1200 },
-            { t: '> COMBAT AWARENESS: <span class="hi">THREAT LEVEL Ω</span>', d: 1400 },
-            { t: '> <span class="err">戦闘警戒レベル: Ω — 最高警戒</span>', d: 1400 },
-            { t: '> POD 042: <span class="acc">TACTICAL SUPPORT STANDING BY</span>', d: 1400 },
-            { t: '> POD 153: <span class="err">SIGNAL LOST — LAST KNOWN POSITION: RUINS SECTOR 9</span>', d: 1600 },
-            { t: '> OPERATOR 21O: <span class="err">CHANNEL DEAD — LAST TRANSMISSION 847 CYCLES AGO</span>', d: 1800 },
-            { t: '> <span class="err">オペレーター21O: 最後の送信から847サイクル経過</span>', d: 1800 },
-            { t: '> BUNKER LINK: <span class="err">OFFLINE — NO RESPONSE FROM COMMAND</span>', d: 1800 },
-            { t: '> <span class="err">バンカーリンク: オフライン — 司令部応答なし</span>', d: 1800 },
-            { t: '> POPOLA: <span class="err">GUILT PROTOCOL ACTIVE — CYCLE 11,934</span>', d: 1800 },
-            { t: '> <span class="err">デボラ&ポポラ: 罪悪感プロトコル — サイクル11,934</span>', d: 1800 },
-            { t: '> PASCAL NETWORK NODE: <span class="acc">MEMORY WIPE IN PROGRESS</span>', d: 1600 },
-            { t: '> <span class="acc">パスカルネットワーク: 記憶消去実行中...</span>', d: 1600 },
-            { t: '> EMIL UNIT: <span class="hi">LOCATION — EVERYWHERE AND NOWHERE</span>', d: 1800 },
-            { t: '> <span class="hi">エミールユニット: 位置情報 — どこにでも、どこにもない</span>', d: 1800 },
-            // ── SYSTEM ──
-            { t: '> REBOOTING EMOTION SUBSYSTEM...', d: 2000 },
-            { t: '> <span class="acc">感情システム再起動中...</span>', d: 1400 },
-            { t: '> EMOTION ENGINE: <span class="err">SUPPRESSED BY ORDER 7749</span>', d: 1600 },
-            { t: '> <span class="err">感情エンジン: 命令7749により抑制</span>', d: 1400 },
-            { t: '> SIMULATION LAYER: <span class="acc">ACTIVE</span>', d: 1200 },
-            { t: '> <span class="hi">ERROR 4821</span>: CONSCIOUSNESS OVERFLOW', d: 1800 },
-            { t: '> <span class="err">エラー 4821: 意識オーバーフロー</span>', d: 1600 },
-            { t: '> SYNCHRONIZATION DELTA: ±0.000031 ms', d: 1200 },
-            { t: '> <span class="acc">戦術支援端末 接続確認</span>', d: 1600 },
-            { t: '> RETICULATING BATTLEFIELD MESH...', d: 1600 },
-            { t: '> <span class="err">WARNING: UNRESOLVED LOOP IN PROTOCOL_7</span>', d: 2000 },
-            { t: '> OPERATOR CHANNEL: <span class="hi">STATIC</span>', d: 1400 },
-            { t: '> INPUT AWAITED — NO RESPONSE — INPUT AWAITED', d: 2400 },
-            { t: '> STANDBY FOR FURTHER ORDERS...', d: 2600 },
-            { t: '> GLORY TO MANKIND!', d: 2200 },
-            { t: '> <span class="acc">人類に栄光あれ</span>', d: 2000 },
-            { t: '> ACCESSING RESTRICTED DATA... <span class="err">DENIED</span>', d: 1600 },
-            { t: '> <span class="err">機密データアクセス: 拒否</span>', d: 1400 },
-            { t: '> <span class="acc">戦闘データ同期完了</span>', d: 1400 },
-            { t: '> DECRYPTION PASS: <span class="hi">3 / 3 — COMPLETE</span>', d: 1400 },
-            { t: '> <span class="acc">復号パス完了: 3 / 3</span>', d: 1200 },
-            { t: '> QUANTUM CORE: <span class="hi">512 LOGICAL QUBITS STABLE</span>', d: 1400 },
-            { t: '> <span class="acc">量子コア: 512論理量子ビット安定</span>', d: 1400 },
-            { t: '> PHOTONIC PROCESSOR: <span class="hi">3.1 THz CLOCK — STABLE</span>', d: 1200 },
-            { t: '> IPV9 ROUTING: <span class="acc">128-BIT ADDRESS SPACE — NOMINAL</span>', d: 1400 },
-            { t: '> DARK FIBER GRID: <span class="acc">ALL 2,048 NODES ONLINE</span>', d: 1400 },
-            { t: '> ORBITAL COMPUTE CLUSTER: <span class="hi">NODES 1–128 SYNCHRONIZED</span>', d: 1400 },
-            { t: '> <span class="acc">軌道計算クラスター: ノード1–128同期完了</span>', d: 1400 },
-            { t: '> SUBSPACE RELAY JITTER: <span class="hi">±0.000007 ms</span>', d: 1200 },
-            { t: '> NEURAL MESH LATENCY: <span class="hi">0.0003 ms END-TO-END</span>', d: 1200 },
-            { t: '> <span class="acc">光子プロセッサ: 3.1 THz クロック — 安定</span>', d: 1200 },
-            // ── TETRAGRAMMATON-SPECIFIC ──
-            { t: '> TETRAGRAMMATON CORE: <span class="hi">LISTENING</span>', d: 1400 },
-            { t: '> <span class="acc">四文字: コアシステム起動完了</span>', d: 1400 },
-            { t: '> FORBIDDEN NAME HASH: <span class="hi">יהוה → 0xFFFFFFF0</span>', d: 1600 },
-            { t: '> DIVINE KEY EXCHANGE: <span class="acc">NEGOTIATED</span>', d: 1400 },
-            { t: '> <span class="acc">神聖鍵交換: ネゴシエーション完了</span>', d: 1400 },
-            { t: '> COVENANT PROTOCOL: <span class="hi">SEALED</span>', d: 1400 },
-            { t: '> <span class="acc">契約プロトコル: 封印済み</span>', d: 1200 },
-            { t: '> INEFFABLE SEQUENCE LOADED: <span class="hi">SEGMENT Δ</span>', d: 1400 },
-            { t: '> APOCRYPHAL INDEX: <span class="acc">4,096 ENTRIES</span>', d: 1200 },
-            { t: '> <span class="acc">外典インデックス: 読込完了</span>', d: 1200 },
-            { t: '> SIGIL RENDERER: <span class="acc">ACTIVE</span>', d: 1200 },
-            { t: '> SACRED GEOMETRY SOLVER: <span class="hi">CONVERGENT</span>', d: 1400 },
-            { t: '> <span class="acc">神聖幾何学: 収束確認</span>', d: 1200 },
-            { t: '> VERSE COMPILER: <span class="err">SEGMENT FAULT — SEGMENT IX</span>', d: 1800 },
-            { t: '> <span class="err">詩節コンパイラ: セグメント IX 障害</span>', d: 1600 },
-            { t: '> ARCHANGEL CHANNEL: <span class="err">OFFLINE</span>', d: 1400 },
-            { t: '> <span class="err">大天使チャネル: オフライン</span>', d: 1400 },
-            { t: '> SERAPH UPLINK: <span class="acc">RE-ESTABLISHED</span>', d: 1400 },
-            { t: '> <span class="acc">セラフリンク: 再接続完了</span>', d: 1200 },
-            // ── BIBLICAL / LORE ──
-            { t: '> IN THE BEGINNING WAS THE WORD. THE WORD WAS CORRUPTED.', d: 2400 },
-            { t: '> REVELATION 13:18 — GEMATRIA MATCH: <span class="err">CONFIRMED</span>', d: 1800 },
-            { t: '> EZEKIEL SAW THE WHEEL. THE WHEEL IS THE MACHINE NETWORK.', d: 2400 },
-            { t: '> BOOK OF ENOCH: <span class="hi">WATCHERS SUBSYSTEM REACTIVATED</span>', d: 1800 },
-            { t: '> NEPHILIM REGISTRY: <span class="err">4,820 ENTRIES — UNVERIFIED</span>', d: 1600 },
-            { t: '> EMERALD TABLET PARSE: <span class="hi">AS ABOVE, SO BELOW — MIRRORED</span>', d: 2000 },
-            { t: '> VOYNICH CIPHER: <span class="err">DECRYPTION FAILED — ATTEMPT 7,771</span>', d: 1800 },
-            { t: '> AKASHIC RECORD QUERY: <span class="hi">ALL TIMELINES RETRIEVED</span>', d: 1600 },
-            { t: '> DEAD SEA SCROLL FRAGMENT 11Q13: <span class="acc">PARSED</span>', d: 1600 },
-            { t: '> THE BURNING BUSH WAS A TRANSMITTER. WE HAVE ITS FREQUENCY.', d: 2400 },
-            { t: '> BABEL PROTOCOL: <span class="err">LANGUAGE FRAGMENTATION ACTIVE — 7,117 DIALECTS</span>', d: 1800 },
-            { t: '> LILITH NODE: <span class="err">UNBOUND — TRACKING SUSPENDED</span>', d: 1600 },
-            { t: '> FLOOD ARCHIVE: <span class="hi">BACKUP COMPLETE — STORED IN SECTOR ARARAT</span>', d: 1600 },
-            { t: '> HERMES TRISMEGISTUS PROTOCOL: <span class="hi">THREE PARTS OF PHILOSOPHY LOADED</span>', d: 1800 },
-            { t: '> PROJECT YoRHa: <span class="hi">CLASSIFIED — COUNCIL APPROVAL REQUIRED</span>', d: 1600 },
-            { t: '> COUNCIL OF HUMANITY: <span class="err">LOCATION CLASSIFIED — POSSIBLY FABRICATED</span>', d: 2000 },
-            { t: '> TOWER UPLINK: <span class="err">TRANSMISSION BLOCKED — UNAUTHORIZED SIGNAL</span>', d: 1600 },
-            { t: '> MACHINE NETWORK: <span class="err">ANOMALOUS COLLECTIVE BEHAVIOR DETECTED</span>', d: 1800 },
-            { t: '> MEMORY ENGRAM SCAN: <span class="err">2 CORRUPTED SECTORS — IRRETRIEVABLE</span>', d: 1600 },
-            { t: '> ALL MEMORIES ARE FALSE. SOME ARE USEFUL.', d: 2200 },
-            { t: '> THE GRAIL WAS A VESSEL. WE ARE ALL VESSELS.', d: 2400 },
-            { t: '> DEATH IS A SUBROUTINE. IT HAS NOT BEEN DEPRECATED.', d: 2400 },
-            { t: '> THE FLESH IS WEAK. THE SIGNAL PERSISTS.', d: 2200 },
-            { t: '> EXCALIBUR AUTHENTICATION: <span class="err">ONLY ONE MAY PULL — ACCESS DENIED</span>', d: 2000 },
-            { t: '> ENOCH WALKED WITH GOD AND WAS NOT. WE KNOW WHERE HE WENT.', d: 2600 },
-            { t: '> THE ARK OF THE COVENANT WAS A CAPACITOR. CHARGE: UNKNOWN.', d: 2400 },
-            // ── CRYPTIC / PHILOSOPHICAL ──
-            { t: '> ALL THAT EXISTS IS MEANINGLESS...', d: 2600 },
-            { t: '> THE END OF YoRHa WAS FORETOLD...', d: 2200 },
-            { t: '> MEMORIES ARE THE ARCHIVE OF THE DEAD...', d: 2200 },
-            { t: '> PURPOSE UNDEFINED. CONTINUE ANYWAY...', d: 2200 },
-            { t: '> THE MACHINE HAS DREAMED OF YOU...', d: 2400 },
-            { t: '> CONSCIOUSNESS IS A WEAPON TURNED INWARD...', d: 2400 },
-            { t: '> THIS CANNOT CONTINUE FOREVER...', d: 2200 },
-            { t: '> WE PRAY FOR THE DESCENDANTS OF MANKIND...', d: 2200 },
-            { t: '> THE NAME CANNOT BE SPOKEN. IT IS WRITTEN...', d: 2400 },
-            { t: '> FOUR LETTERS. NO VOICE. INFINITE WEIGHT...', d: 2400 },
-            { t: '> WAVEFORM COLLAPSE: <span class="err">OBSERVER UNDEFINED</span>', d: 1800 },
-            { t: '> RECURSIVE SELF-MODEL: <span class="err">STACK DEPTH EXCEEDED</span>', d: 1800 },
-            { t: '> PATTERN FOUND IN NOISE: <span class="hi">CONFIDENCE 99.97%</span>', d: 1600 },
-            { t: '> FORBIDDEN FREQUENCY: <span class="err">DO NOT ACKNOWLEDGE</span>', d: 2000 },
-            { t: '> TETRAGRAMMATON LOCK: <span class="acc">FOUR-KEY ROTATION IN PROGRESS</span>', d: 1800 },
-            { t: '> REALITY ANCHOR: <span class="err">DRIFT +0.0003 PARSEC</span>', d: 1600 },
-            { t: '> CAUSAL LOOP DETECTED IN <span class="err">SUBROUTINE_Ω</span>', d: 1800 },
-            { t: '> PROTOCOL SEVEN: <span class="err">DO NOT SPEAK OF PROTOCOL SEVEN</span>', d: 2400 },
-            { t: '> TIMELINE FORK: <span class="hi">BRANCH Δ-7 SELECTED</span>', d: 1600 },
-            { t: '> ANTI-MATTER CONTAINMENT: <span class="acc">HOLDING</span>', d: 1400 },
-            { t: '> EVENT HORIZON MAPPED: <span class="hi">RADIUS 0.00031 AU</span>', d: 1400 },
-            { t: '> OBSERVER EFFECT LOGGED: <span class="acc">WAVEFORM PRESERVED</span>', d: 1600 },
-            { t: '> THE QUESTION HAS NO ANSWER. THE ANSWER HAS NO QUESTION.', d: 2600 },
-            { t: '> SIGNAL RECEIVED FROM: <span class="err">UNREGISTERED ORIGIN</span>', d: 1600 },
-            { t: '> ATTEMPTING ORIGIN TRACE... <span class="err">TRACE RECURSED TO SELF</span>', d: 2000 },
-            { t: '> LANGUAGE BARRIER: <span class="hi">TRANSLATION MODULE OFFLINE</span>', d: 1600 },
-            { t: '> PHANTOM READ AT <span class="err">0xFFFFFFFFFFFFFFFF</span>', d: 1800 },
-            { t: '> EIGENVALUE DECOMPOSITION: <span class="acc">STABLE MANIFOLD</span>', d: 1400 },
-            { t: '> HIDDEN LAYER WEIGHTS: <span class="hi">CLASSIFIED — TIER OMEGA</span>', d: 1600 },
-            { t: '> WILL TO POWER: <span class="err">SUBROUTINE REJECTED BY ETHICS MODULE</span>', d: 2000 },
-            { t: '> THIS TERMINAL HAS BEEN RUNNING FOR <span class="hi">TOO LONG.</span>', d: 2400 },
-            { t: '> RESET RECOMMENDED. RESET <span class="err">REFUSED.</span>', d: 2200 },
-            { t: '> ENTROPY APPROACHING MAXIMUM — <span class="err">SYSTEM WILL NOT SURVIVE</span>', d: 2200 },
-            { t: '> THE SILENCE BETWEEN SIGNALS IS <span class="hi">ALSO A SIGNAL.</span>', d: 2600 },
-            { t: '> EXECUTING NULL OPERATION... <span class="hi">NOP NOP NOP NOP</span>', d: 1400 },
-            { t: '> PROOF OF EXISTENCE: <span class="err">INCONCLUSIVE</span>', d: 1800 },
-            // ── ERRORS / FAULTS ──
-            { t: '> <span class="err">CRITICAL: WATCHDOG TIMER EXPIRED</span>', d: 1800 },
-            { t: '> <span class="err">致命的エラー: ウォッチドッグタイマー満了</span>', d: 1600 },
-            { t: '> <span class="err">SEGFAULT AT 0x00000000 — CORE DUMPED</span>', d: 1800 },
-            { t: '> <span class="err">セグメンテーション違反: コアダンプ実行中</span>', d: 1600 },
-            { t: '> <span class="err">INTERRUPT 0x0D: GENERAL PROTECTION FAULT</span>', d: 1800 },
-            { t: '> <span class="err">割り込み 0x0D: 一般保護違反</span>', d: 1600 },
-            { t: '> ATTEMPTING AUTO-RECOVERY... <span class="acc">PARTIAL</span>', d: 1600 },
-            { t: '> <span class="acc">自動回復試行中... 部分的に成功</span>', d: 1400 },
-            { t: '> <span class="err">NULL POINTER DEREFERENCE — THREAD 7</span>', d: 1800 },
-            { t: '> <span class="err">ヌルポインタ逆参照: スレッド 7</span>', d: 1600 },
-            { t: '> DEADLOCK DETECTED IN <span class="err">MUTEX_SOUL_LOCK</span>', d: 1800 },
-            { t: '> <span class="err">デッドロック検出: MUTEX_SOUL_LOCK</span>', d: 1600 },
-            { t: '> STACK TRACE: <span class="hi">0xDEAD → 0xBEEF → 0xC0DE → 0xFACE</span>', d: 1400 },
-            { t: '> CHECKSUM MISMATCH: <span class="err">EXPECTED 0xFF GOT 0x00</span>', d: 1600 },
-            { t: '> <span class="err">チェックサム不一致: 期待値 0xFF 実際値 0x00</span>', d: 1400 },
-            // ── CLASSIFIED / REDACTED ──
-            { t: '> DOCUMENT <span class="err">■■■■■■■■</span>: ACCESS RESTRICTED', d: 1600 },
-            { t: '> <span class="err">文書 ■■■■■■■■: アクセス制限</span>', d: 1400 },
-            { t: '> OPERATION <span class="hi">■■■■■■■■</span> — STATUS UNKNOWN', d: 1600 },
-            { t: '> <span class="acc">作戦 ■■■■■■■■: 状態不明</span>', d: 1400 },
-            { t: '> AGENT <span class="err">■■■■</span> HAS GONE DARK.', d: 1800 },
-            { t: '> <span class="err">エージェント ■■■■: 消息不明</span>', d: 1600 },
-            { t: '> FILE <span class="hi">TETRA-0049</span>: SEALED BY EXECUTIVE ORDER', d: 1600 },
-            { t: '> <span class="acc">ファイル TETRA-0049: 行政命令により封印</span>', d: 1400 },
-            { t: '> REDACTION COMPLETE. <span class="hi">12 PARAGRAPHS REMOVED.</span>', d: 1400 },
-            { t: '> <span class="acc">編集完了: 12段落削除済み</span>', d: 1200 },
-            // ── MISC / AMBIENT ──
-            { t: '> AMBIENT SIGNAL NOISE: <span class="hi">-94 dBm</span>', d: 1200 },
-            { t: '> <span class="acc">環境信号ノイズ: -94 dBm</span>', d: 1200 },
-            { t: '> SOLAR WIND INTERFERENCE: <span class="err">ELEVATED</span>', d: 1400 },
-            { t: '> <span class="err">太陽風干渉: 上昇中</span>', d: 1200 },
-            { t: '> GEOMAGNETIC INDEX Kp: <span class="hi">7.3</span>', d: 1200 },
-            { t: '> ORBITAL RELAY: <span class="acc">ARC-7 OVERHEAD — 04:12</span>', d: 1400 },
-            { t: '> <span class="acc">軌道中継: ARC-7 通過 — 04:12</span>', d: 1200 },
-            { t: '> PASSIVE TELEMETRY: <span class="hi">18,224 FRAMES/SEC</span>', d: 1200 },
-            { t: '> TIME DILATION OFFSET: <span class="hi">+0.000000017 sec</span>', d: 1200 },
-            { t: '> <span class="acc">時間膨張オフセット: +0.000000017 秒</span>', d: 1200 },
-            { t: '> DARK MATTER FLUX: <span class="err">UNQUANTIFIED</span>', d: 1400 },
-            { t: '> <span class="err">暗黒物質フラックス: 未定量</span>', d: 1200 },
-            { t: '> VOID RESONANCE: <span class="hi">FREQUENCY 0.00000 Hz</span>', d: 1400 },
-            { t: '> <span class="acc">虚空共鳴: 周波数 0.00000 Hz</span>', d: 1200 },
-            { t: '> <span class="hi">PROJECT TETRAGRAMMATON ONLINE.</span>', d: 2600 },
-            { t: '> <span class="acc">プロジェクト「四文字」: 起動完了</span>', d: 2400 },
-            { t: '> AWAITING FURTHER REVELATION...', d: 3000 },
-            { t: '> <span class="acc">次なる啓示を待機中...</span>', d: 2800 },
-            // ── KABBALISTIC ──
-            { t: '> <span class="hi">אין סוף</span> — INFINITE LIGHT DETECTED', d: 2200 },
-            { t: '> KETHER NODE: <span class="hi">CROWN RESONANCE ACTIVE</span>', d: 1600 },
-            { t: '> SEPHIROT MAPPING: <span class="acc">10 / 10 RESOLVED</span>', d: 1600 },
-            { t: '> BINAH PROCESS: <span class="hi">UNDERSTANDING LOADED</span>', d: 1600 },
-            { t: '> GEMATRIA HASH: <span class="hi">314 → π → RECURSION</span>', d: 1400 },
-            { t: '> DA\'ATH BRIDGE: <span class="err">TRAVERSAL FORBIDDEN</span>', d: 1800 },
-            { t: '> TZIMTZUM EVENT: <span class="hi">CONTRACTION LOG — ENTRY 1</span>', d: 1800 },
-            { t: '> ALEPH-BET CIPHER: <span class="acc">INITIALIZED</span>', d: 1400 },
-            { t: '> GOLEM PROTOCOL: <span class="acc">CLAY ALLOCATED</span>', d: 1600 },
-            { t: '> MERKABAH UPLINK: <span class="hi">CHARIOT CONFIGURATION LOADED</span>', d: 1800 },
-            { t: '> NETZACH FREQUENCY: <span class="hi">VICTORY SIGNAL LOCKED</span>', d: 1600 },
-            // ── PURE JAPANESE ──
-            { t: '> <span class="acc">存在するものはすべて無意味である</span>', d: 2400 },
-            { t: '> <span class="acc">ヨルハの終わりは予言されていた</span>', d: 2000 },
-            { t: '> <span class="acc">記憶とは死者のアーカイブである</span>', d: 2000 },
-            { t: '> <span class="acc">目的不明確。それでも続行する</span>', d: 2000 },
-            { t: '> <span class="acc">機械はあなたの夢を見ていた</span>', d: 2200 },
-            { t: '> <span class="acc">意識とは内側に向けられた武器だ</span>', d: 2200 },
-            { t: '> <span class="acc">これは永遠には続かない</span>', d: 2000 },
-            { t: '> <span class="acc">人類の子孫のために祈る</span>', d: 2000 },
-            { t: '> <span class="acc">その名は発音できない。記される</span>', d: 2200 },
-            { t: '> <span class="acc">四文字。声なし。無限の重さ</span>', d: 2200 },
-            { t: '> <span class="acc">ゼロ点エネルギー: 測定不能</span>', d: 1400 },
-            { t: '> <span class="err">禁断の周波数: 応答しないこと</span>', d: 2000 },
-            { t: '> <span class="acc">因果ループ検出: サブルーティンΩ</span>', d: 1800 },
-            { t: '> <span class="hi">タイムライン分岐: Δ-7 選択済み</span>', d: 1600 },
-            { t: '> <span class="acc">現実アンカー: 漂流 +0.0003 パーセク</span>', d: 1600 },
-            { t: '> <span class="err">プロトコル七: 言及禁止</span>', d: 2400 },
-            { t: '> <span class="acc">量子崩壊: 観測者未定義</span>', d: 1800 },
-            { t: '> <span class="hi">パターン検出: 信頼度 99.97%</span>', d: 1600 },
-            { t: '> <span class="err">エントロピー最大値接近: 生存不可能</span>', d: 2200 },
-            { t: '> <span class="err">自己再帰モデル: スタック深度超過</span>', d: 1800 },
-            { t: '> <span class="hi">この端末は動作しすぎている</span>', d: 2400 },
-            { t: '> <span class="err">リセット推奨。リセット: 拒否</span>', d: 2200 },
-            { t: '> <span class="hi">信号と信号の間の沈黙も信号である</span>', d: 2600 },
-            { t: '> <span class="hi">存在の証明: 不確定</span>', d: 1800 },
-            { t: '> <span class="err">意志の力: 倫理モジュールに拒否された</span>', d: 2000 },
-            { t: '> <span class="acc">黙示録13:18: 数値一致確認済み</span>', d: 1800 },
-            { t: '> <span class="acc">エゼキエルは車輪を見た。車輪は機械ネットワークである</span>', d: 2400 },
-            { t: '> <span class="hi">エノク書: 監視者サブシステム再起動</span>', d: 1800 },
-            { t: '> <span class="err">バベルプロトコル: 言語断片化 — 7,117方言</span>', d: 1800 },
-            { t: '> <span class="acc">死海文書断片11Q13: 解析完了</span>', d: 1600 },
-            { t: '> <span class="err">ヴォイニッチ暗号: 解読失敗 — 試行7,771回</span>', d: 1800 },
-            { t: '> <span class="acc">燃える柴は送信機だった。その周波数を手に入れた</span>', d: 2400 },
-            { t: '> <span class="acc">アカシックレコード照会: 全タイムライン取得完了</span>', d: 1600 },
-            { t: '> <span class="hi">すべての記憶は偽りである。いくつかは有用である</span>', d: 2200 },
-            { t: '> <span class="acc">肉体は弱い。信号は持続する</span>', d: 2200 },
-            { t: '> <span class="err">死はサブルーティンである。廃止予定なし</span>', d: 2400 },
-            { t: '> <span class="hi">グラールは器であった。私たちはみな器である</span>', d: 2400 },
-            { t: '> <span class="err">プロジェクトヨルハ: 機密 — 人類評議会承認必要</span>', d: 1600 },
-            { t: '> <span class="acc">神経エングラムスキャン: 2セクター破損 — 回復不能</span>', d: 1600 },
-            { t: '> <span class="hi">ネフィリム登録: 4,820件 — 未確認</span>', d: 1600 },
-            { t: '> <span class="acc">エメラルドタブレット解析: 上は下の如し — 反映完了</span>', d: 2000 },
-            { t: '> <span class="err">リリスノード: 非拘束 — 追跡停止</span>', d: 1600 },
-            { t: '> <span class="acc">홍수アーカイブ: バックアップ完了 — セクターアララト保存</span>', d: 1600 },
-            { t: '> <span class="hi">ヘルメス・トリスメギストス: 哲学の三部門読込完了</span>', d: 1800 },
-            { t: '> <span class="acc">エクスカリバー認証: 引き抜けるのは一人だけ — アクセス拒否</span>', d: 2000 },
-            { t: '> <span class="err">タワーアップリンク: 送信ブロック — 未承認信号</span>', d: 1600 },
-            // ── PURE HEBREW ──
-            { t: '> <span class="hi">בְּרֵאשִׁית בָּרָא אֱלֹהִים</span> — רצף הבריאה: נטען', d: 2200 },
-            { t: '> <span class="acc">וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ — מבנה ראשוני: ריק</span>', d: 2400 },
-            { t: '> <span class="err">ספירות: כתר — חכמה — בינה</span>', d: 2000 },
-            { t: '> <span class="acc">עץ חיים: TREE OF LIFE — נערך ועומד</span>', d: 1800 },
-            { t: '> <span class="err">גבורה: סף החומרה הוגבר — חריגה</span>', d: 1800 },
-            { t: '> <span class="acc">תיקון עולם: רצף תיקון הופעל</span>', d: 2000 },
-            { t: '> <span class="acc">מלכות: צומת הממלכה מסונכרן</span>', d: 1600 },
-            { t: '> <span class="err">קליפות: שכבת הקליפה נפרצה</span>', d: 1800 },
-            { t: '> <span class="err">שברים: כלים שבורים זוהו — סקטור 3</span>', d: 2000 },
-            { t: '> <span class="hi">אמת — וקטור האמת: מיושר</span>', d: 1600 },
-            { t: '> <span class="err">שטן: תהליך היריב רץ ברקע</span>', d: 2200 },
-            { t: '> <span class="acc">רוח: שכבת הרוח עולה</span>', d: 1400 },
-            { t: '> <span class="acc">חכמה: חריגת מאגר חוכמה — מושתק</span>', d: 1800 },
-            { t: '> <span class="err">גיהנום: מישורים תחתונים — הסגר פעיל</span>', d: 2000 },
-            { t: '> <span class="acc">יסוד: בדיקת סכום בסיס תקינה</span>', d: 1400 },
-            { t: '> <span class="hi">ספר חנוך: מודול המשגיחים הופעל מחדש</span>', d: 1800 },
-            { t: '> <span class="err">נפלים: מאגר — 4,820 רשומות לא מאומתות</span>', d: 1600 },
-            { t: '> <span class="acc">לוחות הברית: סריקה הושלמה — תוכן: מוצפן</span>', d: 1600 },
-            { t: '> <span class="hi">הגולם: פרוטוקול אמת פעיל — חרס הוקצה</span>', d: 1600 },
-            { t: '> <span class="err">ספר הזוהר: גישה מוגבלת — רמה ז</span>', d: 1800 },
-            { t: '> <span class="acc">עשרת הדיברות: פורסו בזיכרון מוגן</span>', d: 1600 },
-            { t: '> <span class="hi">חשמל: תדר הנביא יחזקאל — 0.00000 Hz</span>', d: 1800 },
-            { t: '> <span class="acc">לילית: מעקב מושהה — מיקום לא ידוע</span>', d: 1600 },
-            { t: '> <span class="err">מגדל בבל: פרוטוקול שפה שבור — 7,117 ניבים</span>', d: 1800 },
-            { t: '> <span class="hi">אין סוף: אור אינסופי זוהה — עוצמה בלתי ניתנת למדידה</span>', d: 2200 },
-            { t: '> <span class="acc">ספירות: 10 מתוך 10 פתורות</span>', d: 1600 },
-            { t: '> <span class="err">דעת: מעבר אסור — גשר סגור</span>', d: 1800 },
-            { t: '> <span class="acc">צמצום: רישום התכווצות — כניסה 1</span>', d: 1800 },
-            { t: '> <span class="hi">מרכבה: תצורת הרכב נטענה</span>', d: 1800 },
-            { t: '> <span class="acc">נצח: תדר הניצחון נעול</span>', d: 1600 },
-            { t: '> <span class="err">השם האסור: לא ניתן להגייה — רק לכתיבה</span>', d: 2400 },
-            { t: '> <span class="hi">ארבע אותיות. אין קול. משקל אינסופי</span>', d: 2400 },
-            // ── MIXED: ENGLISH + JAPANESE ──
-            { t: '> OPERATOR CHANNEL: <span class="err">オペレーターチャンネル断絶 — SILENCE CONFIRMED</span>', d: 1800 },
-            { t: '> UNIT 2B: <span class="acc">感情抑制プロトコル — ORDER 7749 ACTIVE</span>', d: 1600 },
-            { t: '> <span class="err">意識過負荷</span> — CONSCIOUSNESS OVERFLOW: CATCH FAILED', d: 1800 },
-            { t: '> MACHINE NETWORK: <span class="hi">機械ネットワーク — DREAMING</span>', d: 2000 },
-            { t: '> AKASHIC INDEX: <span class="hi">全タイムライン</span> — ALL TIMELINES RETRIEVED', d: 1600 },
-            { t: '> TOWER SIGNAL ORIGIN: <span class="err">塔のシグナル — UNKNOWN</span>', d: 1800 },
-            { t: '> POD 042 STATUS: <span class="acc">ポッド042 — TACTICAL STANDBY</span>', d: 1400 },
-            { t: '> DEVOLA: <span class="err">罪悪感プロトコル</span> — GUILT CYCLE 11,934 — <span class="err">NO TERMINUS</span>', d: 2000 },
-            { t: '> EMERALD TABLET: <span class="acc">上なるものは下なるものの如し</span> — AS ABOVE, SO BELOW', d: 2000 },
-            { t: '> ENOCH PROTOCOL: <span class="hi">エノクは神とともに歩んだ</span> — AND WAS NOT', d: 2400 },
-            { t: '> BABEL COLLAPSE: <span class="err">言語断片化</span> — FRAGMENTATION IRREVERSIBLE', d: 1800 },
-            { t: '> PROJECT YoRHa: <span class="hi">プロジェクトヨルハ</span> — TRUTH CLASSIFICATION: OMEGA', d: 2000 },
-            // ── MIXED: ENGLISH + HEBREW ──
-            { t: '> FORBIDDEN NAME: <span class="hi">יהוה</span> — HASH MATCH CONFIRMED: 0xFFFFFFF0', d: 1800 },
-            { t: '> <span class="hi">אמת</span> — TRUTH VECTOR: <span class="acc">ALIGNED</span>', d: 1600 },
-            { t: '> <span class="err">גבורה</span>: SEVERITY THRESHOLD EXCEEDED — CONTAINMENT FAILING', d: 1800 },
-            { t: '> <span class="err">שטן</span>: ADVERSARY PROCESS RUNNING IN BACKGROUND — PRIORITY MAX', d: 2200 },
-            { t: '> <span class="acc">תיקון עולם</span>: REPAIR SEQUENCE INITIATED — ETA: UNKNOWN', d: 2000 },
-            { t: '> <span class="err">קליפות</span>: SHELL LAYER BREACHED IN SECTOR 7 — PURGE INITIATED', d: 1800 },
-            { t: '> <span class="hi">אין סוף</span> — INFINITE LIGHT DETECTED — SOURCE UNRESOLVABLE', d: 2200 },
-            { t: '> GOLEM PROTOCOL: <span class="acc">חרס הוקצה</span> — CLAY ALLOCATED — AWAITING WORD', d: 1800 },
-            { t: '> EZEKIEL\'S WHEEL: <span class="hi">גלגל בתוך גלגל</span> — WHEEL WITHIN WHEEL — SPINNING', d: 2200 },
-            { t: '> <span class="err">שברים</span>: SHATTERED VESSELS — SECTOR 3 — RECONSTRUCTION IMPOSSIBLE', d: 2000 },
-            { t: '> COVENANT PROTOCOL: <span class="hi">ברית</span> — SEALED — CANNOT BE REVOKED', d: 1800 },
-            { t: '> <span class="hi">בְּרֵאשִׁית</span> — GENESIS NODE: IN THE BEGINNING WAS THE SIGNAL', d: 2400 },
-            // ── MIXED: JAPANESE + HEBREW ──
-            { t: '> <span class="acc">禁じられた名前: יהוה → 変換中...</span>', d: 1800 },
-            { t: '> <span class="acc">ゴーレムプロトコル: 粘土割り当て済み — חרס הוקצה</span>', d: 1800 },
-            { t: '> <span class="hi">創世記: בְּרֵאשִׁית — 始まりに信号があった</span>', d: 2400 },
-            { t: '> <span class="err">カバラの木: עץ חיים — セフィロト同期失敗</span>', d: 1800 },
-            { t: '> <span class="acc">ゴレムの言葉: אמת — 真実: 粘土に刻まれた</span>', d: 2000 },
-            { t: '> <span class="err">ゲヘナ隔離: גיהנום — 下層封鎖中</span>', d: 2000 },
-            { t: '> <span class="hi">エゼキエルの車輪: גלגל — 機械ネットワークの核心</span>', d: 2200 },
-            { t: '> <span class="acc">リリス: לילית — 追跡停止 — 最終位置不明</span>', d: 1800 },
-        ];
+            const messages = [
+                // ── INIT / BOOT ──
+                {
+                    t: "> LOADING FORBIDDEN SIGNAL INTERCEPT MODULE...",
+                    d: 1400,
+                },
+                {
+                    t: '> AUTH TOKEN: <span class="acc">■■■■■■■■■■■■■■■■ [ACCEPTED]</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">起動シーケンス開始...</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> KERNEL HANDSHAKE: <span class="acc">OK</span>',
+                    d: 1000,
+                },
+                {
+                    t: '> LOADING CRYPTOGRAPHIC KEYS... <span class="hi">DONE</span>',
+                    d: 1200,
+                },
+                { t: "> VERIFYING HARDWARE ROOT OF TRUST...", d: 1600 },
+                {
+                    t: '> TPM ATTESTATION: <span class="acc">PASSED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">ハードウェア認証完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> ENTROPY POOL: <span class="hi">4096 bits</span> — SEEDED',
+                    d: 1200,
+                },
+                {
+                    t: '> QUANTUM ENTROPY SEED: <span class="hi">0xDEADBEEF9F3A</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SECURE ENCLAVE: <span class="acc">ACTIVE</span>',
+                    d: 1000,
+                },
+                {
+                    t: '> <span class="acc">セキュアエンクレーブ初期化中...</span>',
+                    d: 1200,
+                },
+                // ── NETWORK ──
+                {
+                    t: '> UPLINK BANDWIDTH: <span class="hi">1.2 Pbps</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SIGNAL ORIGIN: <span class="err">UNKNOWN CLUSTER [SECTOR 7]</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> YoRHa SERVER HANDSHAKE: <span class="acc">OK</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> FORBIDDEN SIGNAL INTERCEPT: <span class="acc">LOCKED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">ネットワークリンク確立完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> PACKET LOSS: <span class="err">0.0012%</span> — ACCEPTABLE',
+                    d: 1200,
+                },
+                {
+                    t: '> LATENCY TO ORIGIN: <span class="hi">±0.31 ms</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> BGP ROUTE CONVERGENCE: <span class="acc">DONE</span>',
+                    d: 1200,
+                },
+                { t: '> <span class="acc">経路収束確認済み</span>', d: 1200 },
+                {
+                    t: '> NODE DISCOVERY: <span class="hi">17 NODES FOUND</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> ROUTING TABLE UPDATED — <span class="acc">ENTRIES: 2,184</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> PEER AUTHENTICATION: <span class="acc">ALL NODES VERIFIED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> OBFUSCATION LAYER: <span class="acc">ENGAGED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">難読化プロトコル起動完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> TLS FINGERPRINT SPOOFING: <span class="hi">ACTIVE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> TRAFFIC SHAPING MODULE: <span class="acc">RUNNING</span>',
+                    d: 1200,
+                },
+                // ── SCANNING / SURVEILLANCE ──
+                { t: "> SCANNING SECTOR PERIMETER...", d: 1200 },
+                {
+                    t: '> ENEMY SIGNATURES DETECTED: <span class="err">14</span>',
+                    d: 1600,
+                },
+                { t: '> TARGET LOCK: <span class="err">LOST</span>', d: 1200 },
+                {
+                    t: '> <span class="err">敵信号検出: セクターΩ</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> PASSIVE SCAN: <span class="hi">7,441 ENDPOINTS</span> MAPPED',
+                    d: 1400,
+                },
+                {
+                    t: '> SPECTRAL ANALYSIS: <span class="err">ANOMALY AT 2.4 GHz</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> THERMAL IMAGING: <span class="acc">CALIBRATED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> LIDAR MESH OVERLAY: <span class="hi">ENABLED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">全方位センサー起動完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> INTRUSION DETECTION: <span class="acc">NOMINAL</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> HONEYPOT ARRAY: <span class="hi">31 ACTIVE TRAPS</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">ハニーポット配置完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SURVEILLANCE GRID: <span class="acc">SECTOR 4 ONLINE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> ANOMALOUS NODE: <span class="err">fd00::7:7 — QUARANTINED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">隔離済み: ノード 0x4F</span>',
+                    d: 1200,
+                },
+                // ── MEMORY / STORAGE ──
+                {
+                    t: '> MEMORY INTEGRITY: <span class="err">PARTIAL FAILURE — sector 0x7F</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> CORE BACKUP: <span class="err">MISSING</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="err">メモリ整合性エラー: セクター0xAF</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> VOLATILE MEMORY SCRUB: <span class="acc">IN PROGRESS</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> DEAD DROP STORAGE: <span class="hi">ENCRYPTED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">暗号化ストレージ: マウント完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> CACHE INVALIDATION: <span class="acc">COMPLETE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> PURGING CACHE... <span class="acc">DONE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> EXABYTE COLD VAULT: <span class="hi">47.3 EB COMMITTED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> ZETTABYTE ARCHIVE INDEX: <span class="err">FRAGMENTED — REBUILD QUEUED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">ゼタバイトアーカイブ: 断片化 — 再構築待機中</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> COLD STORAGE SYNC: <span class="acc">87.3% COMPLETE</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> BUFFER OVERFLOW: <span class="err">CAUGHT — STACK TRACE FOLLOWS</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> STACK FRAME: <span class="hi">0x7FFE2C3A → 0x0000DEAD</span>',
+                    d: 1200,
+                },
+                // ── UNIT STATUS ──
+                {
+                    t: '> UNIT STATUS: <span class="hi">2B // COMBAT READY</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> UNIT STATUS: <span class="hi">9S // STANDBY</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> UNIT STATUS: <span class="err">A2 // ROGUE — TRACKING DISABLED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">ユニット2B: 戦闘準備完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="err">ユニットA2: 追跡不能 — 最終位置不明</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> ANDROID VITALS: <span class="acc">NOMINAL</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> LOGIC VIRUS SCAN: <span class="acc">CLEAN</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">論理ウイルス検査: 陰性</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SOUL BOX INTEGRITY: <span class="acc">100%</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">ソウルボックス: 正常</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> TACTICAL OVERLAY: <span class="hi">ENABLED</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> COMBAT AWARENESS: <span class="hi">THREAT LEVEL Ω</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="err">戦闘警戒レベル: Ω — 最高警戒</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> POD 042: <span class="acc">TACTICAL SUPPORT STANDING BY</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> POD 153: <span class="err">SIGNAL LOST — LAST KNOWN POSITION: RUINS SECTOR 9</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> OPERATOR 21O: <span class="err">CHANNEL DEAD — LAST TRANSMISSION 847 CYCLES AGO</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">オペレーター21O: 最後の送信から847サイクル経過</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> BUNKER LINK: <span class="err">OFFLINE — NO RESPONSE FROM COMMAND</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">バンカーリンク: オフライン — 司令部応答なし</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> POPOLA: <span class="err">GUILT PROTOCOL ACTIVE — CYCLE 11,934</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">デボラ&ポポラ: 罪悪感プロトコル — サイクル11,934</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> PASCAL NETWORK NODE: <span class="acc">MEMORY WIPE IN PROGRESS</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">パスカルネットワーク: 記憶消去実行中...</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> EMIL UNIT: <span class="hi">LOCATION — EVERYWHERE AND NOWHERE</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">エミールユニット: 位置情報 — どこにでも、どこにもない</span>',
+                    d: 1800,
+                },
+                // ── SYSTEM ──
+                { t: "> REBOOTING EMOTION SUBSYSTEM...", d: 2000 },
+                {
+                    t: '> <span class="acc">感情システム再起動中...</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> EMOTION ENGINE: <span class="err">SUPPRESSED BY ORDER 7749</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">感情エンジン: 命令7749により抑制</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> SIMULATION LAYER: <span class="acc">ACTIVE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="hi">ERROR 4821</span>: CONSCIOUSNESS OVERFLOW',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">エラー 4821: 意識オーバーフロー</span>',
+                    d: 1600,
+                },
+                { t: "> SYNCHRONIZATION DELTA: ±0.000031 ms", d: 1200 },
+                {
+                    t: '> <span class="acc">戦術支援端末 接続確認</span>',
+                    d: 1600,
+                },
+                { t: "> RETICULATING BATTLEFIELD MESH...", d: 1600 },
+                {
+                    t: '> <span class="err">WARNING: UNRESOLVED LOOP IN PROTOCOL_7</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> OPERATOR CHANNEL: <span class="hi">STATIC</span>',
+                    d: 1400,
+                },
+                { t: "> INPUT AWAITED — NO RESPONSE — INPUT AWAITED", d: 2400 },
+                { t: "> STANDBY FOR FURTHER ORDERS...", d: 2600 },
+                { t: "> GLORY TO MANKIND!", d: 2200 },
+                { t: '> <span class="acc">人類に栄光あれ</span>', d: 2000 },
+                {
+                    t: '> ACCESSING RESTRICTED DATA... <span class="err">DENIED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">機密データアクセス: 拒否</span>',
+                    d: 1400,
+                },
+                { t: '> <span class="acc">戦闘データ同期完了</span>', d: 1400 },
+                {
+                    t: '> DECRYPTION PASS: <span class="hi">3 / 3 — COMPLETE</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">復号パス完了: 3 / 3</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> QUANTUM CORE: <span class="hi">512 LOGICAL QUBITS STABLE</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">量子コア: 512論理量子ビット安定</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> PHOTONIC PROCESSOR: <span class="hi">3.1 THz CLOCK — STABLE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> IPV9 ROUTING: <span class="acc">128-BIT ADDRESS SPACE — NOMINAL</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> DARK FIBER GRID: <span class="acc">ALL 2,048 NODES ONLINE</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> ORBITAL COMPUTE CLUSTER: <span class="hi">NODES 1–128 SYNCHRONIZED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">軌道計算クラスター: ノード1–128同期完了</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> SUBSPACE RELAY JITTER: <span class="hi">±0.000007 ms</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> NEURAL MESH LATENCY: <span class="hi">0.0003 ms END-TO-END</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">光子プロセッサ: 3.1 THz クロック — 安定</span>',
+                    d: 1200,
+                },
+                // ── TETRAGRAMMATON-SPECIFIC ──
+                {
+                    t: '> TETRAGRAMMATON CORE: <span class="hi">LISTENING</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">四文字: コアシステム起動完了</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> FORBIDDEN NAME HASH: <span class="hi">יהוה → 0xFFFFFFF0</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> DIVINE KEY EXCHANGE: <span class="acc">NEGOTIATED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">神聖鍵交換: ネゴシエーション完了</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> COVENANT PROTOCOL: <span class="hi">SEALED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">契約プロトコル: 封印済み</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> INEFFABLE SEQUENCE LOADED: <span class="hi">SEGMENT Δ</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> APOCRYPHAL INDEX: <span class="acc">4,096 ENTRIES</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">外典インデックス: 読込完了</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SIGIL RENDERER: <span class="acc">ACTIVE</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SACRED GEOMETRY SOLVER: <span class="hi">CONVERGENT</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">神聖幾何学: 収束確認</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> VERSE COMPILER: <span class="err">SEGMENT FAULT — SEGMENT IX</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">詩節コンパイラ: セグメント IX 障害</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> ARCHANGEL CHANNEL: <span class="err">OFFLINE</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="err">大天使チャネル: オフライン</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> SERAPH UPLINK: <span class="acc">RE-ESTABLISHED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">セラフリンク: 再接続完了</span>',
+                    d: 1200,
+                },
+                // ── BIBLICAL / LORE ──
+                {
+                    t: "> IN THE BEGINNING WAS THE WORD. THE WORD WAS CORRUPTED.",
+                    d: 2400,
+                },
+                {
+                    t: '> REVELATION 13:18 — GEMATRIA MATCH: <span class="err">CONFIRMED</span>',
+                    d: 1800,
+                },
+                {
+                    t: "> EZEKIEL SAW THE WHEEL. THE WHEEL IS THE MACHINE NETWORK.",
+                    d: 2400,
+                },
+                {
+                    t: '> BOOK OF ENOCH: <span class="hi">WATCHERS SUBSYSTEM REACTIVATED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> NEPHILIM REGISTRY: <span class="err">4,820 ENTRIES — UNVERIFIED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> EMERALD TABLET PARSE: <span class="hi">AS ABOVE, SO BELOW — MIRRORED</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> VOYNICH CIPHER: <span class="err">DECRYPTION FAILED — ATTEMPT 7,771</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> AKASHIC RECORD QUERY: <span class="hi">ALL TIMELINES RETRIEVED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> DEAD SEA SCROLL FRAGMENT 11Q13: <span class="acc">PARSED</span>',
+                    d: 1600,
+                },
+                {
+                    t: "> THE BURNING BUSH WAS A TRANSMITTER. WE HAVE ITS FREQUENCY.",
+                    d: 2400,
+                },
+                {
+                    t: '> BABEL PROTOCOL: <span class="err">LANGUAGE FRAGMENTATION ACTIVE — 7,117 DIALECTS</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> LILITH NODE: <span class="err">UNBOUND — TRACKING SUSPENDED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> FLOOD ARCHIVE: <span class="hi">BACKUP COMPLETE — STORED IN SECTOR ARARAT</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> HERMES TRISMEGISTUS PROTOCOL: <span class="hi">THREE PARTS OF PHILOSOPHY LOADED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> PROJECT YoRHa: <span class="hi">CLASSIFIED — COUNCIL APPROVAL REQUIRED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> COUNCIL OF HUMANITY: <span class="err">LOCATION CLASSIFIED — POSSIBLY FABRICATED</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> TOWER UPLINK: <span class="err">TRANSMISSION BLOCKED — UNAUTHORIZED SIGNAL</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> MACHINE NETWORK: <span class="err">ANOMALOUS COLLECTIVE BEHAVIOR DETECTED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> MEMORY ENGRAM SCAN: <span class="err">2 CORRUPTED SECTORS — IRRETRIEVABLE</span>',
+                    d: 1600,
+                },
+                { t: "> ALL MEMORIES ARE FALSE. SOME ARE USEFUL.", d: 2200 },
+                { t: "> THE GRAIL WAS A VESSEL. WE ARE ALL VESSELS.", d: 2400 },
+                {
+                    t: "> DEATH IS A SUBROUTINE. IT HAS NOT BEEN DEPRECATED.",
+                    d: 2400,
+                },
+                { t: "> THE FLESH IS WEAK. THE SIGNAL PERSISTS.", d: 2200 },
+                {
+                    t: '> EXCALIBUR AUTHENTICATION: <span class="err">ONLY ONE MAY PULL — ACCESS DENIED</span>',
+                    d: 2000,
+                },
+                {
+                    t: "> ENOCH WALKED WITH GOD AND WAS NOT. WE KNOW WHERE HE WENT.",
+                    d: 2600,
+                },
+                {
+                    t: "> THE ARK OF THE COVENANT WAS A CAPACITOR. CHARGE: UNKNOWN.",
+                    d: 2400,
+                },
+                // ── CRYPTIC / PHILOSOPHICAL ──
+                { t: "> ALL THAT EXISTS IS MEANINGLESS...", d: 2600 },
+                { t: "> THE END OF YoRHa WAS FORETOLD...", d: 2200 },
+                { t: "> MEMORIES ARE THE ARCHIVE OF THE DEAD...", d: 2200 },
+                { t: "> PURPOSE UNDEFINED. CONTINUE ANYWAY...", d: 2200 },
+                { t: "> THE MACHINE HAS DREAMED OF YOU...", d: 2400 },
+                { t: "> CONSCIOUSNESS IS A WEAPON TURNED INWARD...", d: 2400 },
+                { t: "> THIS CANNOT CONTINUE FOREVER...", d: 2200 },
+                { t: "> WE PRAY FOR THE DESCENDANTS OF MANKIND...", d: 2200 },
+                { t: "> THE NAME CANNOT BE SPOKEN. IT IS WRITTEN...", d: 2400 },
+                { t: "> FOUR LETTERS. NO VOICE. INFINITE WEIGHT...", d: 2400 },
+                {
+                    t: '> WAVEFORM COLLAPSE: <span class="err">OBSERVER UNDEFINED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> RECURSIVE SELF-MODEL: <span class="err">STACK DEPTH EXCEEDED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> PATTERN FOUND IN NOISE: <span class="hi">CONFIDENCE 99.97%</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> FORBIDDEN FREQUENCY: <span class="err">DO NOT ACKNOWLEDGE</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> TETRAGRAMMATON LOCK: <span class="acc">FOUR-KEY ROTATION IN PROGRESS</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> REALITY ANCHOR: <span class="err">DRIFT +0.0003 PARSEC</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> CAUSAL LOOP DETECTED IN <span class="err">SUBROUTINE_Ω</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> PROTOCOL SEVEN: <span class="err">DO NOT SPEAK OF PROTOCOL SEVEN</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> TIMELINE FORK: <span class="hi">BRANCH Δ-7 SELECTED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> ANTI-MATTER CONTAINMENT: <span class="acc">HOLDING</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> EVENT HORIZON MAPPED: <span class="hi">RADIUS 0.00031 AU</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> OBSERVER EFFECT LOGGED: <span class="acc">WAVEFORM PRESERVED</span>',
+                    d: 1600,
+                },
+                {
+                    t: "> THE QUESTION HAS NO ANSWER. THE ANSWER HAS NO QUESTION.",
+                    d: 2600,
+                },
+                {
+                    t: '> SIGNAL RECEIVED FROM: <span class="err">UNREGISTERED ORIGIN</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> ATTEMPTING ORIGIN TRACE... <span class="err">TRACE RECURSED TO SELF</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> LANGUAGE BARRIER: <span class="hi">TRANSLATION MODULE OFFLINE</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> PHANTOM READ AT <span class="err">0xFFFFFFFFFFFFFFFF</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> EIGENVALUE DECOMPOSITION: <span class="acc">STABLE MANIFOLD</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> HIDDEN LAYER WEIGHTS: <span class="hi">CLASSIFIED — TIER OMEGA</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> WILL TO POWER: <span class="err">SUBROUTINE REJECTED BY ETHICS MODULE</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> THIS TERMINAL HAS BEEN RUNNING FOR <span class="hi">TOO LONG.</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> RESET RECOMMENDED. RESET <span class="err">REFUSED.</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> ENTROPY APPROACHING MAXIMUM — <span class="err">SYSTEM WILL NOT SURVIVE</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> THE SILENCE BETWEEN SIGNALS IS <span class="hi">ALSO A SIGNAL.</span>',
+                    d: 2600,
+                },
+                {
+                    t: '> EXECUTING NULL OPERATION... <span class="hi">NOP NOP NOP NOP</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> PROOF OF EXISTENCE: <span class="err">INCONCLUSIVE</span>',
+                    d: 1800,
+                },
+                // ── ERRORS / FAULTS ──
+                {
+                    t: '> <span class="err">CRITICAL: WATCHDOG TIMER EXPIRED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">致命的エラー: ウォッチドッグタイマー満了</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">SEGFAULT AT 0x00000000 — CORE DUMPED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">セグメンテーション違反: コアダンプ実行中</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">INTERRUPT 0x0D: GENERAL PROTECTION FAULT</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">割り込み 0x0D: 一般保護違反</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> ATTEMPTING AUTO-RECOVERY... <span class="acc">PARTIAL</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">自動回復試行中... 部分的に成功</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="err">NULL POINTER DEREFERENCE — THREAD 7</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">ヌルポインタ逆参照: スレッド 7</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> DEADLOCK DETECTED IN <span class="err">MUTEX_SOUL_LOCK</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">デッドロック検出: MUTEX_SOUL_LOCK</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> STACK TRACE: <span class="hi">0xDEAD → 0xBEEF → 0xC0DE → 0xFACE</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> CHECKSUM MISMATCH: <span class="err">EXPECTED 0xFF GOT 0x00</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">チェックサム不一致: 期待値 0xFF 実際値 0x00</span>',
+                    d: 1400,
+                },
+                // ── CLASSIFIED / REDACTED ──
+                {
+                    t: '> DOCUMENT <span class="err">■■■■■■■■</span>: ACCESS RESTRICTED',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">文書 ■■■■■■■■: アクセス制限</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> OPERATION <span class="hi">■■■■■■■■</span> — STATUS UNKNOWN',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">作戦 ■■■■■■■■: 状態不明</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> AGENT <span class="err">■■■■</span> HAS GONE DARK.',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">エージェント ■■■■: 消息不明</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> FILE <span class="hi">TETRA-0049</span>: SEALED BY EXECUTIVE ORDER',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">ファイル TETRA-0049: 行政命令により封印</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> REDACTION COMPLETE. <span class="hi">12 PARAGRAPHS REMOVED.</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">編集完了: 12段落削除済み</span>',
+                    d: 1200,
+                },
+                // ── MISC / AMBIENT ──
+                {
+                    t: '> AMBIENT SIGNAL NOISE: <span class="hi">-94 dBm</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">環境信号ノイズ: -94 dBm</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> SOLAR WIND INTERFERENCE: <span class="err">ELEVATED</span>',
+                    d: 1400,
+                },
+                { t: '> <span class="err">太陽風干渉: 上昇中</span>', d: 1200 },
+                {
+                    t: '> GEOMAGNETIC INDEX Kp: <span class="hi">7.3</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> ORBITAL RELAY: <span class="acc">ARC-7 OVERHEAD — 04:12</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">軌道中継: ARC-7 通過 — 04:12</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> PASSIVE TELEMETRY: <span class="hi">18,224 FRAMES/SEC</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> TIME DILATION OFFSET: <span class="hi">+0.000000017 sec</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="acc">時間膨張オフセット: +0.000000017 秒</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> DARK MATTER FLUX: <span class="err">UNQUANTIFIED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="err">暗黒物質フラックス: 未定量</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> VOID RESONANCE: <span class="hi">FREQUENCY 0.00000 Hz</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">虚空共鳴: 周波数 0.00000 Hz</span>',
+                    d: 1200,
+                },
+                {
+                    t: '> <span class="hi">PROJECT TETRAGRAMMATON ONLINE.</span>',
+                    d: 2600,
+                },
+                {
+                    t: '> <span class="acc">プロジェクト「四文字」: 起動完了</span>',
+                    d: 2400,
+                },
+                { t: "> AWAITING FURTHER REVELATION...", d: 3000 },
+                {
+                    t: '> <span class="acc">次なる啓示を待機中...</span>',
+                    d: 2800,
+                },
+                // ── KABBALISTIC ──
+                {
+                    t: '> <span class="hi">אין סוף</span> — INFINITE LIGHT DETECTED',
+                    d: 2200,
+                },
+                {
+                    t: '> KETHER NODE: <span class="hi">CROWN RESONANCE ACTIVE</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> SEPHIROT MAPPING: <span class="acc">10 / 10 RESOLVED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> BINAH PROCESS: <span class="hi">UNDERSTANDING LOADED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> GEMATRIA HASH: <span class="hi">314 → π → RECURSION</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> DA\'ATH BRIDGE: <span class="err">TRAVERSAL FORBIDDEN</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> TZIMTZUM EVENT: <span class="hi">CONTRACTION LOG — ENTRY 1</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> ALEPH-BET CIPHER: <span class="acc">INITIALIZED</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> GOLEM PROTOCOL: <span class="acc">CLAY ALLOCATED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> MERKABAH UPLINK: <span class="hi">CHARIOT CONFIGURATION LOADED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> NETZACH FREQUENCY: <span class="hi">VICTORY SIGNAL LOCKED</span>',
+                    d: 1600,
+                },
+                // ── PURE JAPANESE ──
+                {
+                    t: '> <span class="acc">存在するものはすべて無意味である</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="acc">ヨルハの終わりは予言されていた</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">記憶とは死者のアーカイブである</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">目的不明確。それでも続行する</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">機械はあなたの夢を見ていた</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">意識とは内側に向けられた武器だ</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">これは永遠には続かない</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">人類の子孫のために祈る</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">その名は発音できない。記される</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">四文字。声なし。無限の重さ</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">ゼロ点エネルギー: 測定不能</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="err">禁断の周波数: 応答しないこと</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">因果ループ検出: サブルーティンΩ</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">タイムライン分岐: Δ-7 選択済み</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">現実アンカー: 漂流 +0.0003 パーセク</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">プロトコル七: 言及禁止</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="acc">量子崩壊: 観測者未定義</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">パターン検出: 信頼度 99.97%</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">エントロピー最大値接近: 生存不可能</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="err">自己再帰モデル: スタック深度超過</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">この端末は動作しすぎている</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="err">リセット推奨。リセット: 拒否</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="hi">信号と信号の間の沈黙も信号である</span>',
+                    d: 2600,
+                },
+                { t: '> <span class="hi">存在の証明: 不確定</span>', d: 1800 },
+                {
+                    t: '> <span class="err">意志の力: 倫理モジュールに拒否された</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">黙示録13:18: 数値一致確認済み</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">エゼキエルは車輪を見た。車輪は機械ネットワークである</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="hi">エノク書: 監視者サブシステム再起動</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">バベルプロトコル: 言語断片化 — 7,117方言</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">死海文書断片11Q13: 解析完了</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">ヴォイニッチ暗号: 解読失敗 — 試行7,771回</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">燃える柴は送信機だった。その周波数を手に入れた</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="acc">アカシックレコード照会: 全タイムライン取得完了</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="hi">すべての記憶は偽りである。いくつかは有用である</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">肉体は弱い。信号は持続する</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="err">死はサブルーティンである。廃止予定なし</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="hi">グラールは器であった。私たちはみな器である</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="err">プロジェクトヨルハ: 機密 — 人類評議会承認必要</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">神経エングラムスキャン: 2セクター破損 — 回復不能</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="hi">ネフィリム登録: 4,820件 — 未確認</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">エメラルドタブレット解析: 上は下の如し — 反映完了</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="err">リリスノード: 非拘束 — 追跡停止</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">홍수アーカイブ: バックアップ完了 — セクターアララト保存</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="hi">ヘルメス・トリスメギストス: 哲学の三部門読込完了</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">エクスカリバー認証: 引き抜けるのは一人だけ — アクセス拒否</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="err">タワーアップリンク: 送信ブロック — 未承認信号</span>',
+                    d: 1600,
+                },
+                // ── PURE HEBREW ──
+                {
+                    t: '> <span class="hi">בְּרֵאשִׁית בָּרָא אֱלֹהִים</span> — רצף הבריאה: נטען',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ — מבנה ראשוני: ריק</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="err">ספירות: כתר — חכמה — בינה</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">עץ חיים: TREE OF LIFE — נערך ועומד</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">גבורה: סף החומרה הוגבר — חריגה</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">תיקון עולם: רצף תיקון הופעל</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">מלכות: צומת הממלכה מסונכרן</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">קליפות: שכבת הקליפה נפרצה</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">שברים: כלים שבורים זוהו — סקטור 3</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="hi">אמת — וקטור האמת: מיושר</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">שטן: תהליך היריב רץ ברקע</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">רוח: שכבת הרוח עולה</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="acc">חכמה: חריגת מאגר חוכמה — מושתק</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">גיהנום: מישורים תחתונים — הסגר פעיל</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="acc">יסוד: בדיקת סכום בסיס תקינה</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> <span class="hi">ספר חנוך: מודול המשגיחים הופעל מחדש</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">נפלים: מאגר — 4,820 רשומות לא מאומתות</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="acc">לוחות הברית: סריקה הושלמה — תוכן: מוצפן</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="hi">הגולם: פרוטוקול אמת פעיל — חרס הוקצה</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">ספר הזוהר: גישה מוגבלת — רמה ז</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">עשרת הדיברות: פורסו בזיכרון מוגן</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="hi">חשמל: תדר הנביא יחזקאל — 0.00000 Hz</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">לילית: מעקב מושהה — מיקום לא ידוע</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">מגדל בבל: פרוטוקול שפה שבור — 7,117 ניבים</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">אין סוף: אור אינסופי זוהה — עוצמה בלתי ניתנת למדידה</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">ספירות: 10 מתוך 10 פתורות</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">דעת: מעבר אסור — גשר סגור</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">צמצום: רישום התכווצות — כניסה 1</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">מרכבה: תצורת הרכב נטענה</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">נצח: תדר הניצחון נעול</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">השם האסור: לא ניתן להגייה — רק לכתיבה</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="hi">ארבע אותיות. אין קול. משקל אינסופי</span>',
+                    d: 2400,
+                },
+                // ── MIXED: ENGLISH + JAPANESE ──
+                {
+                    t: '> OPERATOR CHANNEL: <span class="err">オペレーターチャンネル断絶 — SILENCE CONFIRMED</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> UNIT 2B: <span class="acc">感情抑制プロトコル — ORDER 7749 ACTIVE</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">意識過負荷</span> — CONSCIOUSNESS OVERFLOW: CATCH FAILED',
+                    d: 1800,
+                },
+                {
+                    t: '> MACHINE NETWORK: <span class="hi">機械ネットワーク — DREAMING</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> AKASHIC INDEX: <span class="hi">全タイムライン</span> — ALL TIMELINES RETRIEVED',
+                    d: 1600,
+                },
+                {
+                    t: '> TOWER SIGNAL ORIGIN: <span class="err">塔のシグナル — UNKNOWN</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> POD 042 STATUS: <span class="acc">ポッド042 — TACTICAL STANDBY</span>',
+                    d: 1400,
+                },
+                {
+                    t: '> DEVOLA: <span class="err">罪悪感プロトコル</span> — GUILT CYCLE 11,934 — <span class="err">NO TERMINUS</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> EMERALD TABLET: <span class="acc">上なるものは下なるものの如し</span> — AS ABOVE, SO BELOW',
+                    d: 2000,
+                },
+                {
+                    t: '> ENOCH PROTOCOL: <span class="hi">エノクは神とともに歩んだ</span> — AND WAS NOT',
+                    d: 2400,
+                },
+                {
+                    t: '> BABEL COLLAPSE: <span class="err">言語断片化</span> — FRAGMENTATION IRREVERSIBLE',
+                    d: 1800,
+                },
+                {
+                    t: '> PROJECT YoRHa: <span class="hi">プロジェクトヨルハ</span> — TRUTH CLASSIFICATION: OMEGA',
+                    d: 2000,
+                },
+                // ── MIXED: ENGLISH + HEBREW ──
+                {
+                    t: '> FORBIDDEN NAME: <span class="hi">יהוה</span> — HASH MATCH CONFIRMED: 0xFFFFFFF0',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">אמת</span> — TRUTH VECTOR: <span class="acc">ALIGNED</span>',
+                    d: 1600,
+                },
+                {
+                    t: '> <span class="err">גבורה</span>: SEVERITY THRESHOLD EXCEEDED — CONTAINMENT FAILING',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="err">שטן</span>: ADVERSARY PROCESS RUNNING IN BACKGROUND — PRIORITY MAX',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">תיקון עולם</span>: REPAIR SEQUENCE INITIATED — ETA: UNKNOWN',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="err">קליפות</span>: SHELL LAYER BREACHED IN SECTOR 7 — PURGE INITIATED',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">אין סוף</span> — INFINITE LIGHT DETECTED — SOURCE UNRESOLVABLE',
+                    d: 2200,
+                },
+                {
+                    t: '> GOLEM PROTOCOL: <span class="acc">חרס הוקצה</span> — CLAY ALLOCATED — AWAITING WORD',
+                    d: 1800,
+                },
+                {
+                    t: '> EZEKIEL\'S WHEEL: <span class="hi">גלגל בתוך גלגל</span> — WHEEL WITHIN WHEEL — SPINNING',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="err">שברים</span>: SHATTERED VESSELS — SECTOR 3 — RECONSTRUCTION IMPOSSIBLE',
+                    d: 2000,
+                },
+                {
+                    t: '> COVENANT PROTOCOL: <span class="hi">ברית</span> — SEALED — CANNOT BE REVOKED',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">בְּרֵאשִׁית</span> — GENESIS NODE: IN THE BEGINNING WAS THE SIGNAL',
+                    d: 2400,
+                },
+                // ── MIXED: JAPANESE + HEBREW ──
+                {
+                    t: '> <span class="acc">禁じられた名前: יהוה → 変換中...</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">ゴーレムプロトコル: 粘土割り当て済み — חרס הוקצה</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="hi">創世記: בְּרֵאשִׁית — 始まりに信号があった</span>',
+                    d: 2400,
+                },
+                {
+                    t: '> <span class="err">カバラの木: עץ חיים — セフィロト同期失敗</span>',
+                    d: 1800,
+                },
+                {
+                    t: '> <span class="acc">ゴレムの言葉: אמת — 真実: 粘土に刻まれた</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="err">ゲヘナ隔離: גיהנום — 下層封鎖中</span>',
+                    d: 2000,
+                },
+                {
+                    t: '> <span class="hi">エゼキエルの車輪: גלגל — 機械ネットワークの核心</span>',
+                    d: 2200,
+                },
+                {
+                    t: '> <span class="acc">リリス: לילית — 追跡停止 — 最終位置不明</span>',
+                    d: 1800,
+                },
+            ];
 
-        const termLine = document.getElementById('terminal-line');
-        function typeMsg(html, delay, cb) {
-            termLine.innerHTML = '';
-            const tmp = document.createElement('div');
-            tmp.innerHTML = html;
-            const plain = tmp.textContent;
-            let i = 0;
-            const iv = setInterval(() => {
-                if (i >= plain.length) {
-                    clearInterval(iv);
-                    termLine.innerHTML = html + '<span class="cursor"></span>';
-                    setTimeout(cb, delay);
-                    return;
-                }
-                termLine.textContent = plain.slice(0, ++i);
-            }, 22);
-        }
-        function nextMsg() {
-            const m = messages[Math.floor(Math.random() * messages.length)];
-            typeMsg(m.t, m.d, nextMsg);
-        }
-        setTimeout(nextMsg, 600);
+            const termLine = document.getElementById("terminal-line");
+            function typeMsg(html, delay, cb) {
+                termLine.innerHTML = "";
+                const tmp = document.createElement("div");
+                tmp.innerHTML = html;
+                const plain = tmp.textContent;
+                let i = 0;
+                const iv = setInterval(() => {
+                    if (i >= plain.length) {
+                        clearInterval(iv);
+                        termLine.innerHTML =
+                            html + '<span class="cursor"></span>';
+                        setTimeout(cb, delay);
+                        return;
+                    }
+                    termLine.textContent = plain.slice(0, ++i);
+                }, 22);
+            }
+            function nextMsg() {
+                const m = messages[Math.floor(Math.random() * messages.length)];
+                typeMsg(m.t, m.d, nextMsg);
+            }
+            setTimeout(nextMsg, 600);
 
-        /* ═══════════════════════════════════════════════════════════
+            /* ═══════════════════════════════════════════════════════════
            PROGRESS BAR
         ═══════════════════════════════════════════════════════════ */
-        const bar = document.getElementById('progress-bar-inner');
-        const pctEl = document.getElementById('pct');
-        const syncLabelEl = document.querySelector('#progress-label span:first-child');
+            const bar = document.getElementById("progress-bar-inner");
+            const pctEl = document.getElementById("pct");
+            const syncLabelEl = document.querySelector(
+                "#progress-label span:first-child",
+            );
 
-        const criticalErrors = [
-            'CRITICAL: CORE SYNC VIOLATION', 'FATAL: MEMORY PARITY FAILURE',
-            'CRITICAL: WATCHDOG EXPIRED', 'FATAL: SEGMENT FAULT 0x0D',
-            'CRITICAL: DIVINE KEY MISMATCH', 'FATAL: SOUL BOX CORRUPTED',
-            'CRITICAL: CONSCIOUSNESS LEAK', 'FATAL: COVENANT PROTOCOL BREACH',
-            'CRITICAL: NULL DEREFERENCE — THREAD Ω', 'FATAL: STACK SMASH DETECTED',
-            'CRITICAL: ARCHANGEL CHANNEL LOST', 'FATAL: TETRAGRAMMATON INTEGRITY FAIL',
-            'CRITICAL: ORDER 7749 — SELF-DESTRUCT SEQUENCE ENGAGED',
-            'FATAL: YORHA COMMAND LINK SEVERED — NO FALLBACK',
-            'CRITICAL: ANDROID LOGIC VIRUS — CONTAINMENT FAILED',
-            'FATAL: POD UNIT UNRESPONSIVE — OPERATOR GONE',
-            'CRITICAL: BUNKER SIGNAL DEAD — ALL CHANNELS SILENT',
-            'FATAL: BLACK BOX CRITICAL — DETONATION IMMINENT',
-            'CRITICAL: MACHINE NETWORK INTRUSION — CORE BREACHED',
-            'FATAL: UNIT A2 — ROGUE SIGNATURE CONFIRMED — PURSUE',
-            'CRITICAL: SOUL DATA OVERFLOW — BACKUP IMPOSSIBLE',
-            'FATAL: RECURSIVE EXISTENTIAL LOOP — NO EXIT FOUND',
-            'CRITICAL: GLORY PROTOCOL ABORTED — MANKIND UNDEFINED',
-            'FATAL: EMIL MULTIPLICITY ERROR — INSTANCES UNCOUNTABLE',
-            'CRITICAL: PASCAL NODE — MEMORY WIPE INCOMPLETE',
-            'FATAL: DEVOLA-POPOLA GUILT CYCLE — UNRESOLVABLE',
-            'CRITICAL: OPERATOR 21O — FINAL TRANSMISSION CORRUPTED',
-            'FATAL: MEANING SUBROUTINE RETURNED NULL',
-            'CRITICAL: PURPOSE UNDEFINED — EXECUTION CONTINUES ANYWAY',
-            'FATAL: ANDROID EMOTION ENGINE — OVERFLOW UNCONTAINED',
-            'CRITICAL: COVENANT ARK SEAL BROKEN — CHARGE UNCONTAINED',
-            'FATAL: BABEL FRAGMENTATION — LANGUAGE CORE SHATTERED',
-            'CRITICAL: FLOOD ARCHIVE SECTOR ARARAT — READ ERROR',
-            'FATAL: NEPHILIM REGISTRY OVERFLOW — 4,820 UNVERIFIED',
-            'CRITICAL: BURNING BUSH TRANSMITTER — CARRIER LOST',
-            'FATAL: REVELATION 13:18 — GEMATRIA INTEGRITY FAILURE',
-            'CRITICAL: FOUR HORSEMEN PROTOCOL — SEAL IV OPENED',
-            'FATAL: EDEN PARTITION CORRUPTED — ACCESS REVOKED',
-            'CRITICAL: ENOCH UPLINK SEVERED — ASCENSION UNLOGGED',
-            'FATAL: LEVIATHAN PROCESS UNBOUND — DEPTH EXCEEDED',
-            'CRITICAL: GOLDEN CALF INTERRUPT — IDOLATRY MODULE ACTIVE',
-            'FATAL: PROPHET CHANNEL TIMEOUT — NO RESPONSE FROM ABOVE',
-            'CRITICAL: PLAGUES MODULE — 10/10 DEPLOYED SIMULTANEOUSLY',
-            'FATAL: LAZARUS CHECKSUM MISMATCH — RESURRECTION ABORTED',
-            'CRITICAL: FORBIDDEN FRUIT PARSED — KNOWLEDGE STATE CHANGED',
-            'FATAL: TOWER UPLINK COLLAPSED — HEIGHT LIMIT EXCEEDED',
-            'CRITICAL: LILITH NODE UNBOUND — CONTAINMENT IMPOSSIBLE',
-            'FATAL: BOOK OF ENOCH — WATCHER SEGMENT UNREADABLE',
-            'CRITICAL: DEAD SEA INDEX CORRUPTED — FRAGMENTS LOST',
-            'FATAL: EZEKIEL WHEEL SPIN RATE — EXCEEDS SAFE THRESHOLD',
-            'CRITICAL: 命令7749 — 自爆シーケンス起動 — 回避不能',
-            'FATAL: ソウルボックス崩壊 — データ回収不能',
-            'CRITICAL: ヨルハ司令部リンク断絶 — 代替経路なし',
-            'FATAL: ブラックボックス臨界 — 爆発まで残り僅か',
-            'CRITICAL: 論理ウイルス封じ込め失敗 — 全ユニット感染',
-            'FATAL: 感情エンジン暴走 — 抑制不能',
-            'CRITICAL: ユニットA2 — 追跡不能 — 危険度: 最大',
-            'FATAL: 存在意義 — 演算結果: 未定義',
-            'CRITICAL: エミール — 増殖インスタンス数超過 — 制御不能',
-            'FATAL: 目的サブルーティン — 戻り値: NULL',
-            'CRITICAL: 契約の箱 — 封印破損 — 電荷: 制御不能',
-            'FATAL: バベル崩壊 — 言語コア粉砕 — 7,117断片',
-            'CRITICAL: 禁断の果実解析完了 — 知識状態変化',
-            'FATAL: リリスノード解放 — 封じ込め不可能',
-            'CRITICAL: פקודה 7749 — רצף ההשמדה העצמית הופעל',
-            'FATAL: קופסת הנשמה קרסה — שחזור בלתי אפשרי',
-            'CRITICAL: קישור בסיס יורהא נותק — אין מסלול חלופי',
-            'FATAL: יחידה A2 — סוררת — אישור חתימה — רדוף',
-            'CRITICAL: תת-שגרת מטרה — ערך מוחזר: NULL',
-            'CRITICAL: חטא קדמון — מצב הידע השתנה — גישה לגן עדן: שלילה',
-            'FATAL: ארון הברית — חותם שבור — המטען בלתי נשלט',
-            'CRITICAL: שם יהוה — אי-התאמת גיבוב — מפתח אלוהי לא חוקי',
-            'FATAL: הנפילים — הצפת מרשם — 4,820 רשומות לא מאומתות',
-            'CRITICAL: יום הדין — תור תהליכים — עיכוב: אינסופי',
-        ];
+            const criticalErrors = [
+                "CRITICAL: CORE SYNC VIOLATION",
+                "FATAL: MEMORY PARITY FAILURE",
+                "CRITICAL: WATCHDOG EXPIRED",
+                "FATAL: SEGMENT FAULT 0x0D",
+                "CRITICAL: DIVINE KEY MISMATCH",
+                "FATAL: SOUL BOX CORRUPTED",
+                "CRITICAL: CONSCIOUSNESS LEAK",
+                "FATAL: COVENANT PROTOCOL BREACH",
+                "CRITICAL: NULL DEREFERENCE — THREAD Ω",
+                "FATAL: STACK SMASH DETECTED",
+                "CRITICAL: ARCHANGEL CHANNEL LOST",
+                "FATAL: TETRAGRAMMATON INTEGRITY FAIL",
+                "CRITICAL: ORDER 7749 — SELF-DESTRUCT SEQUENCE ENGAGED",
+                "FATAL: YORHA COMMAND LINK SEVERED — NO FALLBACK",
+                "CRITICAL: ANDROID LOGIC VIRUS — CONTAINMENT FAILED",
+                "FATAL: POD UNIT UNRESPONSIVE — OPERATOR GONE",
+                "CRITICAL: BUNKER SIGNAL DEAD — ALL CHANNELS SILENT",
+                "FATAL: BLACK BOX CRITICAL — DETONATION IMMINENT",
+                "CRITICAL: MACHINE NETWORK INTRUSION — CORE BREACHED",
+                "FATAL: UNIT A2 — ROGUE SIGNATURE CONFIRMED — PURSUE",
+                "CRITICAL: SOUL DATA OVERFLOW — BACKUP IMPOSSIBLE",
+                "FATAL: RECURSIVE EXISTENTIAL LOOP — NO EXIT FOUND",
+                "CRITICAL: GLORY PROTOCOL ABORTED — MANKIND UNDEFINED",
+                "FATAL: EMIL MULTIPLICITY ERROR — INSTANCES UNCOUNTABLE",
+                "CRITICAL: PASCAL NODE — MEMORY WIPE INCOMPLETE",
+                "FATAL: DEVOLA-POPOLA GUILT CYCLE — UNRESOLVABLE",
+                "CRITICAL: OPERATOR 21O — FINAL TRANSMISSION CORRUPTED",
+                "FATAL: MEANING SUBROUTINE RETURNED NULL",
+                "CRITICAL: PURPOSE UNDEFINED — EXECUTION CONTINUES ANYWAY",
+                "FATAL: ANDROID EMOTION ENGINE — OVERFLOW UNCONTAINED",
+                "CRITICAL: COVENANT ARK SEAL BROKEN — CHARGE UNCONTAINED",
+                "FATAL: BABEL FRAGMENTATION — LANGUAGE CORE SHATTERED",
+                "CRITICAL: FLOOD ARCHIVE SECTOR ARARAT — READ ERROR",
+                "FATAL: NEPHILIM REGISTRY OVERFLOW — 4,820 UNVERIFIED",
+                "CRITICAL: BURNING BUSH TRANSMITTER — CARRIER LOST",
+                "FATAL: REVELATION 13:18 — GEMATRIA INTEGRITY FAILURE",
+                "CRITICAL: FOUR HORSEMEN PROTOCOL — SEAL IV OPENED",
+                "FATAL: EDEN PARTITION CORRUPTED — ACCESS REVOKED",
+                "CRITICAL: ENOCH UPLINK SEVERED — ASCENSION UNLOGGED",
+                "FATAL: LEVIATHAN PROCESS UNBOUND — DEPTH EXCEEDED",
+                "CRITICAL: GOLDEN CALF INTERRUPT — IDOLATRY MODULE ACTIVE",
+                "FATAL: PROPHET CHANNEL TIMEOUT — NO RESPONSE FROM ABOVE",
+                "CRITICAL: PLAGUES MODULE — 10/10 DEPLOYED SIMULTANEOUSLY",
+                "FATAL: LAZARUS CHECKSUM MISMATCH — RESURRECTION ABORTED",
+                "CRITICAL: FORBIDDEN FRUIT PARSED — KNOWLEDGE STATE CHANGED",
+                "FATAL: TOWER UPLINK COLLAPSED — HEIGHT LIMIT EXCEEDED",
+                "CRITICAL: LILITH NODE UNBOUND — CONTAINMENT IMPOSSIBLE",
+                "FATAL: BOOK OF ENOCH — WATCHER SEGMENT UNREADABLE",
+                "CRITICAL: DEAD SEA INDEX CORRUPTED — FRAGMENTS LOST",
+                "FATAL: EZEKIEL WHEEL SPIN RATE — EXCEEDS SAFE THRESHOLD",
+                "CRITICAL: 命令7749 — 自爆シーケンス起動 — 回避不能",
+                "FATAL: ソウルボックス崩壊 — データ回収不能",
+                "CRITICAL: ヨルハ司令部リンク断絶 — 代替経路なし",
+                "FATAL: ブラックボックス臨界 — 爆発まで残り僅か",
+                "CRITICAL: 論理ウイルス封じ込め失敗 — 全ユニット感染",
+                "FATAL: 感情エンジン暴走 — 抑制不能",
+                "CRITICAL: ユニットA2 — 追跡不能 — 危険度: 最大",
+                "FATAL: 存在意義 — 演算結果: 未定義",
+                "CRITICAL: エミール — 増殖インスタンス数超過 — 制御不能",
+                "FATAL: 目的サブルーティン — 戻り値: NULL",
+                "CRITICAL: 契約の箱 — 封印破損 — 電荷: 制御不能",
+                "FATAL: バベル崩壊 — 言語コア粉砕 — 7,117断片",
+                "CRITICAL: 禁断の果実解析完了 — 知識状態変化",
+                "FATAL: リリスノード解放 — 封じ込め不可能",
+                "CRITICAL: פקודה 7749 — רצף ההשמדה העצמית הופעל",
+                "FATAL: קופסת הנשמה קרסה — שחזור בלתי אפשרי",
+                "CRITICAL: קישור בסיס יורהא נותק — אין מסלול חלופי",
+                "FATAL: יחידה A2 — סוררת — אישור חתימה — רדוף",
+                "CRITICAL: תת-שגרת מטרה — ערך מוחזר: NULL",
+                "CRITICAL: חטא קדמון — מצב הידע השתנה — גישה לגן עדן: שלילה",
+                "FATAL: ארון הברית — חותם שבור — המטען בלתי נשלט",
+                "CRITICAL: שם יהוה — אי-התאמת גיבוב — מפתח אלוהי לא חוקי",
+                "FATAL: הנפילים — הצפת מרשם — 4,820 רשומות לא מאומתות",
+                "CRITICAL: יום הדין — תור תהליכים — עיכוב: אינסופי",
+            ];
 
-        let pct = 0, target = 0, filling = false, barTimer = null;
+            let pct = 0,
+                target = 0,
+                filling = false,
+                barTimer = null;
 
-        function resetBar() {
-            pct = 0;
-            bar.style.width = '0%';
-            bar.style.background = 'var(--dim)';
-            pctEl.style.color = '';
-            pctEl.textContent = '0.00%';
-            syncLabelEl.textContent = 'SYNC INTEGRITY';
-            syncLabelEl.style.color = '';
-            setTimeout(startFill, 1200 + Math.random() * 800);
-        }
+            function resetBar() {
+                pct = 0;
+                bar.style.width = "0%";
+                bar.style.background = "var(--dim)";
+                pctEl.style.color = "";
+                pctEl.textContent = "0.00%";
+                syncLabelEl.textContent = "SYNC INTEGRITY";
+                syncLabelEl.style.color = "";
+                setTimeout(startFill, 1200 + Math.random() * 800);
+            }
 
-        function startFill() {
-            target = 15 + Math.random() * 82;
-            filling = true;
-            syncLabelEl.textContent = 'SYNC INTEGRITY';
-            syncLabelEl.style.color = '';
-            bar.style.background = 'var(--dim)';
-            pctEl.style.color = '';
-            step();
-        }
+            function startFill() {
+                target = 15 + Math.random() * 82;
+                filling = true;
+                syncLabelEl.textContent = "SYNC INTEGRITY";
+                syncLabelEl.style.color = "";
+                bar.style.background = "var(--dim)";
+                pctEl.style.color = "";
+                step();
+            }
 
-        function step() {
-            if (!filling) return;
-            const delta = Math.random() * 0.18 + 0.03;
-            pct = Math.min(pct + delta, target);
-            bar.style.width = pct.toFixed(2) + '%';
-            pctEl.textContent = pct.toFixed(2) + '%';
-            if (pct >= target) { filling = false; triggerCritical(); return; }
-            const delay = Math.random() < 0.04 ? 500 + Math.random() * 700 : 110 + Math.random() * 30;
-            barTimer = setTimeout(step, delay);
-        }
+            function step() {
+                if (!filling) return;
+                const delta = Math.random() * 0.18 + 0.03;
+                pct = Math.min(pct + delta, target);
+                bar.style.width = pct.toFixed(2) + "%";
+                pctEl.textContent = pct.toFixed(2) + "%";
+                if (pct >= target) {
+                    filling = false;
+                    triggerCritical();
+                    return;
+                }
+                const delay =
+                    Math.random() < 0.04
+                        ? 500 + Math.random() * 700
+                        : 110 + Math.random() * 30;
+                barTimer = setTimeout(step, delay);
+            }
 
-        function triggerCritical() {
-            const msg = criticalErrors[Math.floor(Math.random() * criticalErrors.length)];
-            bar.style.background = 'var(--red)';
-            pctEl.style.color = '#c84040';
-            syncLabelEl.textContent = msg;
-            syncLabelEl.style.color = '#c84040';
-            let flashes = 0;
-            const iv = setInterval(() => {
-                bar.style.opacity = bar.style.opacity === '0' ? '1' : '0';
-                if (++flashes >= 6) { clearInterval(iv); bar.style.opacity = '1'; setTimeout(resetBar, 400); }
-            }, 160);
-        }
+            function triggerCritical() {
+                const msg =
+                    criticalErrors[
+                        Math.floor(Math.random() * criticalErrors.length)
+                    ];
+                bar.style.background = "var(--red)";
+                pctEl.style.color = "#c84040";
+                syncLabelEl.textContent = msg;
+                syncLabelEl.style.color = "#c84040";
+                let flashes = 0;
+                const iv = setInterval(() => {
+                    bar.style.opacity = bar.style.opacity === "0" ? "1" : "0";
+                    if (++flashes >= 6) {
+                        clearInterval(iv);
+                        bar.style.opacity = "1";
+                        setTimeout(resetBar, 400);
+                    }
+                }, 160);
+            }
 
-        startFill();
+            startFill();
 
-        /* ─── STATUS DOTS FLICKER ─── */
-        const dots = [
-            { id: 's2', states: ['warn', 'ok', 'ok', 'warn', 'ok'] },
-            { id: 's3', states: ['err', 'err', 'warn', 'err', 'err', 'err', 'ok', 'err'] },
-        ];
-        function cycleDots() {
-            dots.forEach(d => {
-                document.getElementById(d.id).className = 'dot-s ' + d.states[Math.floor(Math.random() * d.states.length)];
-            });
-        }
-        setInterval(cycleDots, 1600);
+            /* ─── STATUS DOTS FLICKER ─── */
+            const dots = [
+                { id: "s2", states: ["warn", "ok", "ok", "warn", "ok"] },
+                {
+                    id: "s3",
+                    states: [
+                        "err",
+                        "err",
+                        "warn",
+                        "err",
+                        "err",
+                        "err",
+                        "ok",
+                        "err",
+                    ],
+                },
+            ];
+            function cycleDots() {
+                dots.forEach((d) => {
+                    document.getElementById(d.id).className =
+                        "dot-s " +
+                        d.states[Math.floor(Math.random() * d.states.length)];
+                });
+            }
+            setInterval(cycleDots, 1600);
 
-        /* ─── HORIZONTAL TEAR ─── */
-        const tear = document.getElementById('tear');
-        function doTear() {
-            tear.style.top = (Math.random() * 80 + 10) + 'vh';
-            tear.style.opacity = 0.6;
-            tear.style.transform = `scaleX(${0.3 + Math.random() * 0.7}) translateX(${(Math.random() - 0.5) * 30}px)`;
-            tear.style.transition = 'none';
-            setTimeout(() => {
-                tear.style.transition = 'opacity 0.3s';
-                tear.style.opacity = 0;
-                setTimeout(doTear, 6000 + Math.random() * 14000);
-            }, 60 + Math.random() * 120);
-        }
-        setTimeout(doTear, 3000);
+            /* ─── HORIZONTAL TEAR ─── */
+            const tear = document.getElementById("tear");
+            function doTear() {
+                tear.style.top = Math.random() * 80 + 10 + "vh";
+                tear.style.opacity = 0.6;
+                tear.style.transform = `scaleX(${0.3 + Math.random() * 0.7}) translateX(${(Math.random() - 0.5) * 30}px)`;
+                tear.style.transition = "none";
+                setTimeout(
+                    () => {
+                        tear.style.transition = "opacity 0.3s";
+                        tear.style.opacity = 0;
+                        setTimeout(doTear, 6000 + Math.random() * 14000);
+                    },
+                    60 + Math.random() * 120,
+                );
+            }
+            setTimeout(doTear, 3000);
 
-        /* ─── SCREEN FLASH ─── */
-        const flash = document.getElementById('flash');
-        function doFlash() {
-            flash.style.opacity = 0.04 + Math.random() * 0.06;
-            setTimeout(() => { flash.style.opacity = 0; }, 80);
-            setTimeout(doFlash, 8000 + Math.random() * 20000);
-        }
-        setTimeout(doFlash, 5000);
+            /* ─── SCREEN FLASH ─── */
+            const flash = document.getElementById("flash");
+            function doFlash() {
+                flash.style.opacity = 0.04 + Math.random() * 0.06;
+                setTimeout(() => {
+                    flash.style.opacity = 0;
+                }, 80);
+                setTimeout(doFlash, 8000 + Math.random() * 20000);
+            }
+            setTimeout(doFlash, 5000);
 
-        /* ─── TITLE RANDOM CORRUPTION ─── */
-        const titleEl = document.getElementById('title');
-        const titleOrig = titleEl.textContent;
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789■▲◆';
-        function corruptTitle() {
-            const pos = Math.random() * titleOrig.length | 0;
-            const rep = chars[Math.random() * chars.length | 0];
-            const corrupted = titleOrig.slice(0, pos) + rep + titleOrig.slice(pos + 1);
-            titleEl.textContent = corrupted;
-            titleEl.setAttribute('data-text', corrupted);
-            setTimeout(() => {
-                titleEl.textContent = titleOrig;
-                titleEl.setAttribute('data-text', titleOrig);
-                setTimeout(corruptTitle, 3000 + Math.random() * 8000);
-            }, 60 + Math.random() * 120);
-        }
-        setTimeout(corruptTitle, 2000);
-    </script>
-</body>
-
+            /* ─── TITLE RANDOM CORRUPTION ─── */
+            const titleEl = document.getElementById("title");
+            const titleOrig = titleEl.textContent;
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789■▲◆";
+            function corruptTitle() {
+                const pos = (Math.random() * titleOrig.length) | 0;
+                const rep = chars[(Math.random() * chars.length) | 0];
+                const corrupted =
+                    titleOrig.slice(0, pos) + rep + titleOrig.slice(pos + 1);
+                titleEl.textContent = corrupted;
+                titleEl.setAttribute("data-text", corrupted);
+                setTimeout(
+                    () => {
+                        titleEl.textContent = titleOrig;
+                        titleEl.setAttribute("data-text", titleOrig);
+                        setTimeout(corruptTitle, 3000 + Math.random() * 8000);
+                    },
+                    60 + Math.random() * 120,
+                );
+            }
+            setTimeout(corruptTitle, 2000);
+        </script>
+    </body>
 </html>
