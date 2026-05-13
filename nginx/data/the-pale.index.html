@@ -1,5 +1,3 @@
-<!-- fully vibecoded with Claude -->
-
 <!doctype html>
 <html lang="en">
     <head>
@@ -929,10 +927,6 @@
                 src.start();
             }
 
-            fetchSecretAudio(
-                "./ab0e191645d2e0530bc95835c49fdb48615590b2272a1efc9636dbda12f175f2.opus",
-            ).catch((e) => console.warn("Failed:", e));
-
             document.addEventListener("keypress", async (e) => {
                 keyBuffer += e.key;
                 if (keyBuffer.length > 128) keyBuffer = keyBuffer.slice(-128);
@@ -943,6 +937,10 @@
                     const hash = await hashString(candidate);
                     if (hash === SECRET_HASH) {
                         keyBuffer = "";
+
+                        await fetchSecretAudio(`./${candidate}.opus`).catch(
+                            (e) => console.warn("Failed:", e),
+                        );
                         playSecret();
                         return;
                     }
