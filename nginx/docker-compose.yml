@@ -13,8 +13,13 @@ services:
       localnet:
         ipv4_address: 172.20.0.20
     volumes:
-      - /etc/letsencrypt/:/etc/letsencrypt/
-      - ./data/:/data/
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
+        read_only: true
+      - type: bind
+        source: ./data
+        target: /data
       - type: bind
         source: ./nginx.conf
         target: /etc/nginx/nginx.conf

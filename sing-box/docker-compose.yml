@@ -15,7 +15,10 @@ services:
     ports:
       - 443:443
     volumes:
-      - /etc/letsencrypt/:/etc/letsencrypt/
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
+        read_only: true
       - type: bind
         source: ./config.json
         target: /etc/sing-box/config.json

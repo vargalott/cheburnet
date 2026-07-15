@@ -13,7 +13,9 @@ services:
       localnet:
         ipv4_address: 172.20.0.40
     volumes:
-      - ./data/:/data/
+      - type: bind
+        source: ./data
+        target: /data
     environment:
       DOMAIN: https://DOMAIN/vault
       SIGNUPS_ALLOWED: false
