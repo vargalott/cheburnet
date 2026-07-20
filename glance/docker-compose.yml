@@ -6,7 +6,7 @@ networks:
 
 services:
   glance:
-    image: glanceapp/glance
+    image: glanceapp/glance:latest
     container_name: glance
     restart: always
     networks:

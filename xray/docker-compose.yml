@@ -6,7 +6,7 @@ networks:
 
 services:
   xray:
-    image: ghcr.io/xtls/xray-core
+    image: ghcr.io/xtls/xray-core:latest
     container_name: xray
     restart: always
     user: root

@@ -6,7 +6,7 @@ networks:
 
 services:
   hysteria2:
-    image: tobyxdd/hysteria
+    image: tobyxdd/hysteria:latest
     container_name: hysteria2
     restart: always
     networks:
