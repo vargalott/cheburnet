@@ -52,7 +52,7 @@
     },
     {
       "protocol": "blackhole",
-      "tag": "block"
+      "tag": "reject"
     }
   ],
   "routing": {
@@ -61,17 +61,17 @@
       {
         "type": "field",
         "protocol": ["bittorrent"],
-        "outboundTag": "block"
+        "outboundTag": "reject"
       },
       {
         "type": "field",
         "ip": ["geoip:private", "geoip:ru"],
-        "outboundTag": "block"
+        "outboundTag": "reject"
       },
       {
         "type": "field",
         "domain": ["geosite:category-gov-ru"],
-        "outboundTag": "block"
+        "outboundTag": "reject"
       },
       {
         "type": "field",
@@ -91,7 +91,7 @@
           "domain:xn--80adxhks",
           "domain:xn--90ais"
         ],
-        "outboundTag": "block"
+        "outboundTag": "reject"
       }
     ]
   }
