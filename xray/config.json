@@ -36,7 +36,7 @@
         "realitySettings": {
           "show": false,
           "dest": "172.20.0.20:443",
-          "fingerprint": "chrome",
+          "fingerprint": "firefox",
           "xver": 2,
           "serverNames": ["SERVER"],
           "privateKey": "PVK",
