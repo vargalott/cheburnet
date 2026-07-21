@@ -43,6 +43,42 @@
           "shortIds": ["ID"]
         }
       }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "email": "USER",
+            "id": "UUID"
+          }
+        ],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": ["http", "tls", "quic"]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "xhttpSettings": {
+          "path": "/SECRET",
+          "mode": "stream-one"
+        },
+        "security": "reality",
+        "realitySettings": {
+          "show": false,
+          "dest": "172.20.0.20:443",
+          "fingerprint": "firefox",
+          "xver": 2,
+          "serverNames": ["SERVER"],
+          "privateKey": "PVK",
+          "shortIds": ["ID"]
+        }
+      }
     }
   ],
   "outbounds": [
