@@ -17,6 +17,9 @@
 
 ## (not only) cheburnet
 
+[mihomo client configuration](https://github.com/vargalott/mihomo)
+
+
 ##### ubuntu server init
 ```sh
 IU_SSH_KEY="key" IU_CERT_EMAIL="email" IU_CERT_DOMAIN="domain" bash <(wget -qO- https://raw.githubusercontent.com/vargalott/cheburnet/main/.ubuntu/init.sh)
