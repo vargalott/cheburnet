@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ELYSIUM — Transmission Archive</title>
+    <style>
+      :root {
+        --paper: #e8ddc4;
+        --paper-dim: #dccdaa;
+        --paper-alt: #ddd0b6;
+        --ink: #241f1a;
+        --ink-soft: #4a4038;
+        --rust: #a13a2b;
+        --teal: #2f5b57;
+        --ochre: #a9822f;
+        --mist: #8fa094;
+        --glow: #d9b46a;
+        --line: rgba(36, 31, 26, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      ::selection {
+        background: var(--rust);
+        color: var(--paper);
+      }
+
+      a {
+        color: var(--rust);
+      }
+
+      /* ---------- background mist canvas ---------- */
+      #mist-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .grain-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.05;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      }
+
+      .scanlines {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        opacity: 0.045;
+        background: repeating-linear-gradient(
+          to bottom,
+          var(--ink) 0px,
+          var(--ink) 1px,
+          transparent 2px,
+          transparent 3px
+        );
+        animation: scancrawl 9s linear infinite;
+      }
+      @keyframes scancrawl {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: 0 300px;
+        }
+      }
+
+      /* dust motes */
+      .motes {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .mote {
+        position: absolute;
+        bottom: -10px;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--ochre);
+        opacity: 0.35;
+        animation-name: drift;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+      @keyframes drift {
+        0% {
+          transform: translate(0, 0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.4;
+        }
+        90% {
+          opacity: 0.15;
+        }
+        100% {
+          transform: translate(var(--dx, 20px), -110vh);
+          opacity: 0;
+        }
+      }
+
+      main,
+      header,
+      footer {
+        position: relative;
+        z-index: 3;
+      }
+
+      /* ---------- signal bars, top corner ---------- */
+      .signal {
+        position: fixed;
+        top: 18px;
+        right: 22px;
+        z-index: 5;
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        font-family: "Courier New", ui-monospace, monospace;
+      }
+      .signal span {
+        width: 4px;
+        background: var(--ink-soft);
+        opacity: 0.5;
+        animation: bar 2.6s ease-in-out infinite;
+      }
+      .signal span:nth-child(1) {
+        height: 6px;
+        animation-delay: 0s;
+      }
+      .signal span:nth-child(2) {
+        height: 10px;
+        animation-delay: 0.3s;
+      }
+      .signal span:nth-child(3) {
+        height: 14px;
+        animation-delay: 0.6s;
+      }
+      .signal span:nth-child(4) {
+        height: 18px;
+        animation-delay: 0.9s;
+      }
+      @keyframes bar {
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 0.75;
+        }
+      }
+
+      /* ---------- hero ---------- */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6vh 6vw;
+      }
+
+      .eyebrow {
+        font-family: "Courier New", ui-monospace, monospace;
+        letter-spacing: 0.35em;
+        font-size: 0.7rem;
+        color: var(--ink-soft);
+        margin: 0 0 2.2rem;
+        opacity: 0.75;
+      }
+      .eyebrow::before {
+        content: "◍ ";
+        color: var(--rust);
+      }
+
+      .elysium-title {
+        margin: 0;
+        font-size: clamp(3.2rem, 13vw, 9rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        line-height: 0.95;
+        position: relative;
+        display: inline-block;
+        color: var(--ink);
+        text-shadow:
+          1px 0 var(--paper-dim),
+          2px 0 var(--paper-dim),
+          -1px 1px var(--rust),
+          2px 2px 0 rgba(36, 31, 26, 0.15);
+        user-select: none;
+      }
+
+      .elysium-title span {
+        display: inline-block;
+        position: relative;
+        animation: chroma 5.5s ease-in-out infinite;
+      }
+      .elysium-title span:nth-child(3n) {
+        animation-delay: -1.2s;
+      }
+      .elysium-title span:nth-child(5n) {
+        animation-delay: -2.7s;
+      }
+
+      @keyframes chroma {
+        0%,
+        100% {
+          text-shadow:
+            -2px 0 var(--rust),
+            2px 0 var(--teal);
+          transform: translate(0, 0);
+        }
+        50% {
+          text-shadow:
+            2px 0 var(--rust),
+            -2px 0 var(--teal);
+          transform: translate(0, 0);
+        }
+      }
+
+      .elysium-title span.rainbow {
+        background: linear-gradient(
+          90deg,
+          #a13a2b,
+          #a9822f,
+          #2f5b57,
+          #4b6ea8,
+          #7c4b8e,
+          #a13a2b
+        );
+        background-size: 300% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: rainbowshift 7s linear infinite;
+        text-shadow: none;
+      }
+      @keyframes rainbowshift {
+        to {
+          background-position: -300% 0;
+        }
+      }
+
+      .elysium-title.glitching span {
+        animation: none;
+      }
+      .elysium-title.glitching span:nth-child(odd) {
+        transform: translate(-6px, 2px) skewX(6deg);
+      }
+      .elysium-title.glitching span:nth-child(even) {
+        transform: translate(5px, -3px) skewX(-4deg);
+      }
+
+      .subtitle {
+        margin: 1.6rem 0 0;
+        font-size: 1.05rem;
+        font-style: italic;
+        color: var(--ink-soft);
+        max-width: 32ch;
+      }
+
+      .scope {
+        display: block;
+        width: min(480px, 80vw);
+        height: 64px;
+        margin: 2.4rem auto 1.6rem;
+        opacity: 0.75;
+      }
+
+      .tune-btn {
+        font-family: "Courier New", ui-monospace, monospace;
+        letter-spacing: 0.2em;
+        font-size: 0.75rem;
+        background: transparent;
+        border: 1px solid var(--ink);
+        color: var(--ink);
+        padding: 0.9em 1.6em;
+        cursor: pointer;
+        transition:
+          background 0.25s ease,
+          color 0.25s ease,
+          transform 0.15s ease;
+      }
+      .tune-btn:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .tune-btn:active {
+        transform: scale(0.97);
+      }
+      .tune-btn:focus-visible {
+        outline: 2px solid var(--rust);
+        outline-offset: 3px;
+      }
+
+      .scroll-hint {
+        position: absolute;
+        bottom: 26px;
+        font-size: 1rem;
+        color: var(--ink-soft);
+        opacity: 0.5;
+        animation: bob 2.4s ease-in-out infinite;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(6px);
+        }
+      }
+
+      /* ---------- content sections ---------- */
+      .entry {
+        max-width: 620px;
+        margin: 0 auto;
+        padding: 14vh 6vw;
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 1s ease,
+          transform 1s ease;
+      }
+      .entry.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .entry.alt {
+        background: rgba(217, 180, 106, 0.12);
+      }
+
+      .entry .index {
+        font-family: "Courier New", ui-monospace, monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.3em;
+        color: var(--rust);
+        display: block;
+        margin-bottom: 0.8rem;
+      }
+
+      .entry h2 {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        letter-spacing: 0.03em;
+        margin: 0 0 1.2rem;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 0.6rem;
+      }
+
+      .entry p {
+        font-size: 1.05rem;
+        line-height: 1.85;
+        color: var(--ink-soft);
+        margin: 0 0 1.2rem;
+      }
+
+      .entry p:last-of-type {
+        margin-bottom: 0;
+      }
+
+      /* ---------- dial widget ---------- */
+      .dial-wrap {
+        margin-top: 2.6rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .dial {
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        border: 2px solid var(--ink);
+        position: relative;
+        cursor: grab;
+        background: radial-gradient(
+          circle at 35% 30%,
+          var(--paper-dim),
+          var(--paper-alt)
+        );
+        touch-action: none;
+        flex-shrink: 0;
+      }
+      .dial:active {
+        cursor: grabbing;
+      }
+      .dial:focus-visible {
+        outline: 2px solid var(--rust);
+        outline-offset: 4px;
+      }
+      .dial::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        width: 3px;
+        height: 30px;
+        background: var(--rust);
+        transform-origin: 50% 38px;
+        transform: translateX(-50%) rotate(var(--angle, -120deg));
+      }
+
+      .dial-readout {
+        font-family: "Courier New", ui-monospace, monospace;
+        font-size: 1.6rem;
+        letter-spacing: 0.05em;
+        color: var(--ink);
+      }
+      .dial-readout .hz {
+        font-size: 0.7rem;
+        color: var(--ink-soft);
+        display: block;
+        letter-spacing: 0.3em;
+        margin-top: 0.3rem;
+      }
+
+      .closing {
+        text-align: center;
+      }
+      .closing h2 {
+        border-bottom: none;
+      }
+
+      footer {
+        text-align: center;
+        padding: 8vh 6vw 6vh;
+        font-family: "Courier New", ui-monospace, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        color: var(--ink-soft);
+        opacity: 0.65;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+        .scanlines,
+        .motes {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="mist-canvas"></canvas>
+    <div class="grain-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="motes" id="motes"></div>
+
+    <div class="signal" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+    <header class="hero" id="hero">
+      <p class="eyebrow">TRANSMISSION LOG · FREQUENCY UNKNOWN</p>
+      <h1 class="elysium-title" id="title" aria-label="Elysium">
+        <span>E</span><span>L</span><span>Y</span><span>S</span><span>I</span
+        ><span>U</span><span>M</span>
+      </h1>
+      <p class="subtitle">the last continent that still answers when called</p>
+      <canvas class="scope" id="scope"></canvas>
+      <button class="tune-btn" id="tuneBtn" type="button">◉ TUNE IN</button>
+      <div class="scroll-hint" aria-hidden="true">▼</div>
+    </header>
+
+    <main>
+      <section class="entry" data-n="I">
+        <span class="index">I — ON THE GREY</span>
+        <h2>The Pale</h2>
+        <p>
+          Between every scrap of land there is a grey that has no weather and no
+          year. Sailors call it the Pale. It does not flood, it does not freeze
+          — it only erases, patiently, the way a name wears off a gravestone
+          nobody visits anymore.
+        </p>
+        <p>
+          No ship has crossed it and come back the same. No signal has crossed
+          it and stayed intact. Every isola left standing is an island in that
+          grey now, and every isola believes, quietly, that it is the last one
+          still lit.
+        </p>
+      </section>
+
+      <section class="entry alt" data-n="II">
+        <span class="index">II — WHAT REMAINS</span>
+        <h2>Isolas</h2>
+        <p>
+          The isolas trade a little less with each passing decade — not from
+          spite, but from distance. The grey between them widens a few meters
+          every year, unhurried, undramatic, and the maps are updated less often
+          than they should be, because nobody wants to be the cartographer who
+          admits the world is shrinking.
+        </p>
+        <p>
+          Somewhere on one of them a mural is fading from a century that already
+          failed. Somewhere on another, someone is repainting it from memory,
+          badly, and calling that hope.
+        </p>
+      </section>
+
+      <section class="entry" data-n="III">
+        <span class="index">III — THE HISS</span>
+        <h2>Static</h2>
+        <p>
+          Underneath the noise there is supposedly a frequency that still
+          carries a voice. Nobody agrees on what it says. Some hear a folk song
+          from a country that doesn't exist anymore. Some hear a shipping
+          forecast. Some hear a woman laughing. Most hear nothing, and keep
+          listening anyway.
+        </p>
+        <div class="dial-wrap">
+          <div
+            class="dial"
+            id="dial"
+            tabindex="0"
+            role="slider"
+            aria-label="Tuning dial"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+          ></div>
+          <div class="dial-readout">
+            <span id="freqNum">88.4</span>
+            <span class="hz">MHz · DRIFTING</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="entry alt closing" data-n="IV">
+        <span class="index">IV — STILL TURNING</span>
+        <h2>A World, Unfinished</h2>
+        <p>
+          A world doesn't need saving to keep turning. It only needs someone,
+          somewhere, still fool enough to tune in — and to sit with the hiss
+          until it starts, almost, to sound like company.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>an unaffiliated archive · fragments only · no signal guaranteed</p>
+    </footer>
+
+    <script>
+      (() => {
+        "use strict";
+
+        /* ---------------- mist background ---------------- */
+        const mistCanvas = document.getElementById("mist-canvas");
+        const mctx = mistCanvas.getContext("2d");
+        let w, h;
+        function resize() {
+          w = mistCanvas.width = window.innerWidth;
+          h = mistCanvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+
+        const blobs = [
+          {
+            rx: 0.25,
+            ry: 0.3,
+            r: 0.55,
+            speed: 0.00011,
+            phase: 0,
+            color: "rgba(143,160,148,0.55)",
+          },
+          {
+            rx: 0.7,
+            ry: 0.6,
+            r: 0.5,
+            speed: 0.00015,
+            phase: 2.1,
+            color: "rgba(169,130,47,0.18)",
+          },
+          {
+            rx: 0.5,
+            ry: 0.8,
+            r: 0.6,
+            speed: 0.00009,
+            phase: 4.2,
+            color: "rgba(47,91,87,0.20)",
+          },
+          {
+            rx: 0.85,
+            ry: 0.2,
+            r: 0.4,
+            speed: 0.00013,
+            phase: 1.3,
+            color: "rgba(161,58,43,0.10)",
+          },
+        ];
+
+        function paintMist(t) {
+          mctx.fillStyle = "rgba(232,221,196,0.10)";
+          mctx.fillRect(0, 0, w, h);
+          for (const b of blobs) {
+            const cx = (b.rx + 0.12 * Math.sin(t * b.speed + b.phase)) * w;
+            const cy = (b.ry + 0.1 * Math.cos(t * b.speed * 1.3 + b.phase)) * h;
+            const r = b.r * Math.max(w, h) * 0.5;
+            const grad = mctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+            grad.addColorStop(0, b.color);
+            grad.addColorStop(1, "rgba(0,0,0,0)");
+            mctx.fillStyle = grad;
+            mctx.beginPath();
+            mctx.arc(cx, cy, r, 0, Math.PI * 2);
+            mctx.fill();
+          }
+          requestAnimationFrame(paintMist);
+        }
+        requestAnimationFrame(paintMist);
+
+        /* ---------------- dust motes ---------------- */
+        const motesEl = document.getElementById("motes");
+        const moteCount = window.matchMedia("(prefers-reduced-motion: reduce)")
+          .matches
+          ? 0
+          : 26;
+        for (let i = 0; i < moteCount; i++) {
+          const m = document.createElement("div");
+          m.className = "mote";
+          const left = Math.random() * 100;
+          const dur = 14 + Math.random() * 18;
+          const delay = -Math.random() * dur;
+          const dx = (Math.random() * 80 - 40).toFixed(0) + "px";
+          m.style.left = left + "vw";
+          m.style.setProperty("--dx", dx);
+          m.style.animationDuration = dur + "s";
+          m.style.animationDelay = delay + "s";
+          motesEl.appendChild(m);
+        }
+
+        /* ---------------- title glitch + rainbow letters ---------------- */
+        const title = document.getElementById("title");
+        const letters = Array.from(title.querySelectorAll("span"));
+
+        function pickRainbowLetters() {
+          letters.forEach((l) => l.classList.remove("rainbow"));
+          const count = 1 + Math.floor(Math.random() * 2);
+          const pool = [...letters];
+          for (let i = 0; i < count && pool.length; i++) {
+            const idx = Math.floor(Math.random() * pool.length);
+            pool.splice(idx, 1)[0].classList.add("rainbow");
+          }
+        }
+        pickRainbowLetters();
+        setInterval(pickRainbowLetters, 9000);
+
+        function fireGlitch() {
+          title.classList.add("glitching");
+          setTimeout(
+            () => title.classList.remove("glitching"),
+            140 + Math.random() * 120,
+          );
+          setTimeout(fireGlitch, 3500 + Math.random() * 5500);
+        }
+        setTimeout(fireGlitch, 2200);
+
+        /* ---------------- scroll reveal ---------------- */
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) e.target.classList.add("visible");
+            });
+          },
+          { threshold: 0.18 },
+        );
+        document.querySelectorAll(".entry").forEach((el) => io.observe(el));
+
+        /* ---------------- audio: generative ambient drone ---------------- */
+        let actx = null;
+        let master,
+          noiseFilter,
+          playing = false;
+        let analyser, scopeData;
+        const oscBank = [];
+
+        function buildAudio() {
+          actx = new (window.AudioContext || window.webkitAudioContext)();
+
+          master = actx.createGain();
+          master.gain.value = 0;
+          master.connect(actx.destination);
+
+          analyser = actx.createAnalyser();
+          analyser.fftSize = 1024;
+          scopeData = new Uint8Array(analyser.fftSize);
+          master.connect(analyser);
+
+          // drone chord: root + fifth + soft major-ish colour tone, slow detune LFOs
+          const freqs = [98, 146.83, 174.61, 246.94]; // G2 D3 F3 B3 - open, slightly unresolved
+          freqs.forEach((f, i) => {
+            const osc = actx.createOscillator();
+            osc.type = i % 2 === 0 ? "sine" : "triangle";
+            osc.frequency.value = f;
+
+            const g = actx.createGain();
+            g.gain.value = 0.11 / (i * 0.4 + 1);
+
+            const lfo = actx.createOscillator();
+            lfo.frequency.value = 0.05 + Math.random() * 0.08;
+            const lfoGain = actx.createGain();
+            lfoGain.gain.value = 2 + i;
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.detune);
+            lfo.start();
+
+            osc.connect(g);
+            g.connect(master);
+            osc.start();
+            oscBank.push(osc, lfo);
+          });
+
+          // filtered noise layer, the "static" of the Pale
+          const bufSize = actx.sampleRate * 2;
+          const buffer = actx.createBuffer(1, bufSize, actx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufSize; i++)
+            data[i] = (Math.random() * 2 - 1) * 0.5;
+
+          const noise = actx.createBufferSource();
+          noise.buffer = buffer;
+          noise.loop = true;
+
+          noiseFilter = actx.createBiquadFilter();
+          noiseFilter.type = "bandpass";
+          noiseFilter.frequency.value = 800;
+          noiseFilter.Q.value = 0.7;
+
+          const noiseGain = actx.createGain();
+          noiseGain.gain.value = 0.05;
+
+          noise.connect(noiseFilter);
+          noiseFilter.connect(noiseGain);
+          noiseGain.connect(master);
+          noise.start();
+
+          const nLfo = actx.createOscillator();
+          nLfo.frequency.value = 0.03;
+          const nLfoGain = actx.createGain();
+          nLfoGain.gain.value = 400;
+          nLfo.connect(nLfoGain);
+          nLfoGain.connect(noiseFilter.frequency);
+          nLfo.start();
+          oscBank.push(nLfo);
+        }
+
+        function tick(freq) {
+          if (!actx) return;
+          const o = actx.createOscillator();
+          const g = actx.createGain();
+          o.type = "sine";
+          o.frequency.value = freq;
+          g.gain.value = 0.0001;
+          o.connect(g);
+          g.connect(master);
+          const now = actx.currentTime;
+          g.gain.linearRampToValueAtTime(0.05, now + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+          o.start(now);
+          o.stop(now + 0.55);
+        }
+
+        const tuneBtn = document.getElementById("tuneBtn");
+        tuneBtn.addEventListener("click", () => {
+          if (!actx) buildAudio();
+          if (actx.state === "suspended") actx.resume();
+
+          if (!playing) {
+            master.gain.cancelScheduledValues(actx.currentTime);
+            master.gain.linearRampToValueAtTime(0.9, actx.currentTime + 2.2);
+            tuneBtn.textContent = "◉ TUNE OUT";
+            playing = true;
+            tick(660);
+          } else {
+            master.gain.cancelScheduledValues(actx.currentTime);
+            master.gain.linearRampToValueAtTime(0.0001, actx.currentTime + 1.2);
+            tuneBtn.textContent = "◉ TUNE IN";
+            playing = false;
+          }
+        });
+
+        /* ---------------- oscilloscope ---------------- */
+        const scope = document.getElementById("scope");
+        const sctx = scope.getContext("2d");
+        function sizeScope() {
+          scope.width = scope.clientWidth * devicePixelRatio;
+          scope.height = scope.clientHeight * devicePixelRatio;
+        }
+        sizeScope();
+        window.addEventListener("resize", sizeScope);
+
+        function drawScope(t) {
+          const cw = scope.width,
+            ch = scope.height;
+          sctx.clearRect(0, 0, cw, ch);
+          sctx.beginPath();
+          sctx.lineWidth = 1.5 * devicePixelRatio;
+          sctx.strokeStyle = "#a13a2b";
+
+          if (analyser && playing) {
+            analyser.getByteTimeDomainData(scopeData);
+            const step = cw / scopeData.length;
+            for (let i = 0; i < scopeData.length; i++) {
+              const v = scopeData[i] / 128.0;
+              const y = (v * ch) / 2;
+              const x = i * step;
+              i === 0 ? sctx.moveTo(x, y) : sctx.lineTo(x, y);
+            }
+          } else {
+            for (let x = 0; x < cw; x++) {
+              const y = ch / 2 + Math.sin(x * 0.04 + t * 0.002) * (ch * 0.06);
+              x === 0 ? sctx.moveTo(x, y) : sctx.lineTo(x, y);
+            }
+          }
+          sctx.stroke();
+          requestAnimationFrame(drawScope);
+        }
+        requestAnimationFrame(drawScope);
+
+        /* ---------------- tuning dial ---------------- */
+        const dial = document.getElementById("dial");
+        const freqNum = document.getElementById("freqNum");
+        let angle = -120;
+        let dragging = false;
+
+        function setAngle(a) {
+          angle = Math.max(-140, Math.min(140, a));
+          dial.style.setProperty("--angle", angle + "deg");
+          const pct = (angle + 140) / 280;
+          const mhz = (87.5 + pct * (108 - 87.5)).toFixed(1);
+          freqNum.textContent = mhz;
+          dial.setAttribute("aria-valuenow", Math.round(pct * 100));
+          if (noiseFilter) {
+            noiseFilter.frequency.setTargetAtTime(
+              300 + pct * 3200,
+              actx.currentTime,
+              0.05,
+            );
+          }
+        }
+        setAngle(angle);
+
+        function angleFromEvent(e) {
+          const rect = dial.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          const rad = Math.atan2(clientX - cx, -(clientY - cy));
+          return rad * (180 / Math.PI);
+        }
+
+        let lastNotch = 0;
+        function maybeTick(newAngle) {
+          const notch = Math.round(newAngle / 12);
+          if (notch !== lastNotch) {
+            lastNotch = notch;
+            if (playing) tick(300 + Math.random() * 500);
+          }
+        }
+
+        dial.addEventListener("pointerdown", (e) => {
+          dragging = true;
+          dial.setPointerCapture(e.pointerId);
+        });
+        dial.addEventListener("pointerup", () => (dragging = false));
+        dial.addEventListener("pointercancel", () => (dragging = false));
+        dial.addEventListener("pointermove", (e) => {
+          if (!dragging) return;
+          const a = angleFromEvent(e);
+          setAngle(a);
+          maybeTick(a);
+        });
+        dial.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+            setAngle(angle + 6);
+            maybeTick(angle);
+            e.preventDefault();
+          }
+          if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+            setAngle(angle - 6);
+            maybeTick(angle);
+            e.preventDefault();
+          }
+        });
+
+        // gentle idle drift on the readout, evoking a dial that never quite holds still
+        setInterval(() => {
+          if (!dragging && Math.random() < 0.4) {
+            setAngle(angle + (Math.random() * 4 - 2));
+          }
+        }, 2200);
+      })();
+    </script>
+  </body>
+</html>
