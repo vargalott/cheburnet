@@ -1,1266 +1,1249 @@
+<!-- fully vibecoded with Claude -->
+
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>The Pale</title>
-        <link
-            rel="icon"
-            type="image/x-icon"
-            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB0UlEQVQ4T2P8/fFELQPDv2oGBkZ2BlIAI8NPhv+MrYy/Px3/wfCfgTTNMIuAhjD+/nj8PykWo6vFMOD///8MW7cfZ9ix6yQDEzMTAyMjI8OfP38ZnB2NGfx9bBiYgWLIAMOACVNWM5w6fZ2htyObQVJSGKz23btPDGXV0xmUFKUYqspicRvw4OELhsS0doaaijiwjcjg1JnrDOXVMximTSxi0NSQh0uhuGDTliMM/ZNXM6xc3MAgJiaIYsCHD18YAsOrGbIzAhlCAh2wG7Bm/QGGqTPWM6xd3swgJMSHYsD7958ZgiJqGLLTgQYE4TDg7PmbDCUV0xj6u3IYDPRVUQw4c+4GQ2nldIaJPXkMerrK2F3w798/hrziiQw83JwMbU1pDExMkBD/+/cvQ2nVdAZmIL+rLRMcM/CkgJwOLl6+wyAmKsgwf9E2hpev3oOdC1I8efpaBmlJEYakBG+Gp09fo7gOJRCnzlzPoCAnweDlYcFw/ORVhpcv3zEwszAzCArwMthY6TLs3H2K4dadJwx5WcHYXTB34VaGpct3M7CwMDEA0xMwzmMYWFlZGBpbF8ATVESoM0Nasi92A8hJ0tTITMDszPi/muQcCcrOjIytAK2/xiV9aPY2AAAAEGRlQkdBQkQ4NUZCNjczRTU0RkQ2G4ZK3wAAAABJRU5ErkJggg=="
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            /* ============================================================
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Pale</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB0UlEQVQ4T2P8/fFELQPDv2oGBkZ2BlIAI8NPhv+MrYy/Px3/wfCfgTTNMIuAhjD+/nj8PykWo6vFMOD///8MW7cfZ9ix6yQDEzMTAyMjI8OfP38ZnB2NGfx9bBiYgWLIAMOACVNWM5w6fZ2htyObQVJSGKz23btPDGXV0xmUFKUYqspicRvw4OELhsS0doaaijiwjcjg1JnrDOXVMximTSxi0NSQh0uhuGDTliMM/ZNXM6xc3MAgJiaIYsCHD18YAsOrGbIzAhlCAh2wG7Bm/QGGqTPWM6xd3swgJMSHYsD7958ZgiJqGLLTgQYE4TDg7PmbDCUV0xj6u3IYDPRVUQw4c+4GQ2nldIaJPXkMerrK2F3w798/hrziiQw83JwMbU1pDExMkBD/+/cvQ2nVdAZmIL+rLRMcM/CkgJwOLl6+wyAmKsgwf9E2hpev3oOdC1I8efpaBmlJEYakBG+Gp09fo7gOJRCnzlzPoCAnweDlYcFw/ORVhpcv3zEwszAzCArwMthY6TLs3H2K4dadJwx5WcHYXTB34VaGpct3M7CwMDEA0xMwzmMYWFlZGBpbF8ATVESoM0Nasi92A8hJ0tTITMDszPi/muQcCcrOjIytAK2/xiV9aPY2AAAAEGRlQkdBQkQ4NUZCNjczRTU0RkQ2G4ZK3wAAAABJRU5ErkJggg=="
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
        GRUVBOX LIGHT PALETTE + ROOT
     ============================================================ */
-            :root {
-                --bg: #fbf1c7;
-                --bg1: #ebdbb2;
-                --bg2: #d5c4a1;
-                --bg3: #bdae93;
-                --bg4: #a89984;
-                --fg: #3c3836;
-                --fg1: #504945;
-                --fg2: #665c54;
-                --fg3: #7c6f64;
-                --fg4: #928374;
-                --red: #cc241d;
-                --red2: #9d0006;
-                --yellow: #d79921;
-                --blue: #458588;
-                --blue2: #076678;
-                --orange: #d65d0e;
-                --gray: #928374;
+      :root {
+        --bg: #fbf1c7;
+        --bg1: #ebdbb2;
+        --bg2: #d5c4a1;
+        --bg3: #bdae93;
+        --bg4: #a89984;
+        --fg: #3c3836;
+        --fg1: #504945;
+        --fg2: #665c54;
+        --fg3: #7c6f64;
+        --fg4: #928374;
+        --red: #cc241d;
+        --red2: #9d0006;
+        --yellow: #d79921;
+        --blue: #458588;
+        --blue2: #076678;
+        --orange: #d65d0e;
+        --gray: #928374;
 
-                --font-title:
-                    "IM Fell English", "Palatino Linotype", "Book Antiqua",
-                    Palatino, serif;
-                --font-body: "Spectral", "Georgia", serif;
-            }
+        --font-title:
+          "IM Fell English", "Palatino Linotype", "Book Antiqua", Palatino,
+          serif;
+        --font-body: "Spectral", "Georgia", serif;
+      }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-            html,
-            body {
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-                background: var(--bg);
-                color: var(--fg);
-            }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--fg);
+      }
 
-            /* ============================================================
+      /* ============================================================
        CANVAS — FOG LAYER
     ============================================================ */
-            #fog {
-                position: fixed;
-                inset: 0;
-                pointer-events: none;
-                z-index: 1;
-            }
+      #fog {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
 
-            /* ============================================================
+      /* ============================================================
        OVERLAYS
     ============================================================ */
 
-            /* Film grain — SVG turbulence tiled */
-            .grain {
-                position: fixed;
-                inset: 0;
-                pointer-events: none;
-                z-index: 2;
-                opacity: 0.055;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-                background-size: 180px 180px;
-            }
+      /* Film grain — SVG turbulence tiled */
+      .grain {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0.055;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 180px 180px;
+      }
 
-            /* CRT scanlines */
-            .scanlines {
-                position: fixed;
-                inset: 0;
-                pointer-events: none;
-                z-index: 3;
-                background: repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(60, 56, 54, 0.018) 2px,
-                    rgba(60, 56, 54, 0.018) 4px
-                );
-            }
+      /* CRT scanlines */
+      .scanlines {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 3;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(60, 56, 54, 0.018) 2px,
+          rgba(60, 56, 54, 0.018) 4px
+        );
+      }
 
-            /* Porch collapse — white bleed at edges (the pale encroaching) */
-            .porch-collapse {
-                position: fixed;
-                inset: 0;
-                pointer-events: none;
-                z-index: 4;
-                background: radial-gradient(
-                    ellipse 75% 65% at 50% 50%,
-                    transparent 35%,
-                    rgba(255, 253, 245, 0.25) 65%,
-                    rgba(255, 252, 240, 0.6) 90%,
-                    rgba(255, 255, 255, 0.82) 100%
-                );
-            }
+      /* Porch collapse — white bleed at edges (the pale encroaching) */
+      .porch-collapse {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 4;
+        background: radial-gradient(
+          ellipse 75% 65% at 50% 50%,
+          transparent 35%,
+          rgba(255, 253, 245, 0.25) 65%,
+          rgba(255, 252, 240, 0.6) 90%,
+          rgba(255, 255, 255, 0.82) 100%
+        );
+      }
 
-            /* Depth vignette */
-            .vignette {
-                position: fixed;
-                inset: 0;
-                pointer-events: none;
-                z-index: 5;
-                background: radial-gradient(
-                    ellipse 80% 70% at 50% 50%,
-                    transparent 40%,
-                    rgba(30, 22, 15, 0.22) 100%
-                );
-            }
+      /* Depth vignette */
+      .vignette {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 5;
+        background: radial-gradient(
+          ellipse 80% 70% at 50% 50%,
+          transparent 40%,
+          rgba(30, 22, 15, 0.22) 100%
+        );
+      }
 
-            /* Full-screen glitch flash layer */
-            #glitch-flash {
-                position: fixed;
-                inset: 0;
-                pointer-events: none;
-                z-index: 20;
-                opacity: 0;
-                mix-blend-mode: hard-light;
-            }
+      /* Full-screen glitch flash layer */
+      #glitch-flash {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0;
+        mix-blend-mode: hard-light;
+      }
 
-            /* ============================================================
+      /* ============================================================
        MAIN CONTENT
     ============================================================ */
-            .stage {
-                position: fixed;
-                inset: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                z-index: 10;
-                gap: 0;
-            }
+      .stage {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        gap: 0;
+      }
 
-            /* ---- THE PALE title ---- */
-            .title-wrapper {
-                position: relative;
-                line-height: 1;
-                user-select: none;
-            }
+      /* ---- THE PALE title ---- */
+      .title-wrapper {
+        position: relative;
+        line-height: 1;
+        user-select: none;
+      }
 
-            .pale-title {
-                font-family: var(--font-title);
-                font-size: clamp(4.5rem, 14vw, 12.5rem);
-                font-weight: 400;
-                font-style: normal;
-                letter-spacing: 0.18em;
-                color: var(--fg);
-                position: relative;
-                z-index: 2;
-                display: block;
-                text-align: center;
-            }
+      .pale-title {
+        font-family: var(--font-title);
+        font-size: clamp(4.5rem, 14vw, 12.5rem);
+        font-weight: 400;
+        font-style: normal;
+        letter-spacing: 0.18em;
+        color: var(--fg);
+        position: relative;
+        z-index: 2;
+        display: block;
+        text-align: center;
+      }
 
-            /* Ghost layers for chromatic aberration */
-            .pale-ghost {
-                position: absolute;
-                top: 0;
-                left: 0;
-                font-family: var(--font-title);
-                font-size: clamp(4.5rem, 14vw, 12.5rem);
-                font-weight: 400;
-                letter-spacing: 0.18em;
-                display: block;
-                text-align: center;
-                width: 100%;
-                opacity: 0;
-                pointer-events: none;
-            }
+      /* Ghost layers for chromatic aberration */
+      .pale-ghost {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-family: var(--font-title);
+        font-size: clamp(4.5rem, 14vw, 12.5rem);
+        font-weight: 400;
+        letter-spacing: 0.18em;
+        display: block;
+        text-align: center;
+        width: 100%;
+        opacity: 0;
+        pointer-events: none;
+      }
 
-            .pale-ghost-r {
-                color: var(--red);
-                z-index: 1;
-                mix-blend-mode: multiply;
-            }
+      .pale-ghost-r {
+        color: var(--red);
+        z-index: 1;
+        mix-blend-mode: multiply;
+      }
 
-            .pale-ghost-b {
-                color: var(--blue);
-                z-index: 1;
-                mix-blend-mode: multiply;
-            }
+      .pale-ghost-b {
+        color: var(--blue);
+        z-index: 1;
+        mix-blend-mode: multiply;
+      }
 
-            /* Slice glitch keyframes */
-            @keyframes slice-r {
-                0% {
-                    clip-path: inset(12% 0 75% 0);
-                    transform: translate(-5px, 0);
-                    opacity: 0.75;
-                }
+      /* Slice glitch keyframes */
+      @keyframes slice-r {
+        0% {
+          clip-path: inset(12% 0 75% 0);
+          transform: translate(-5px, 0);
+          opacity: 0.75;
+        }
 
-                15% {
-                    clip-path: inset(63% 0 25% 0);
-                    transform: translate(4px, 0);
-                    opacity: 0.75;
-                }
+        15% {
+          clip-path: inset(63% 0 25% 0);
+          transform: translate(4px, 0);
+          opacity: 0.75;
+        }
 
-                30% {
-                    clip-path: inset(44% 0 48% 0);
-                    transform: translate(-6px, 0);
-                    opacity: 0.75;
-                }
+        30% {
+          clip-path: inset(44% 0 48% 0);
+          transform: translate(-6px, 0);
+          opacity: 0.75;
+        }
 
-                50% {
-                    clip-path: inset(80% 0 8% 0);
-                    transform: translate(3px, 0);
-                    opacity: 0.75;
-                }
+        50% {
+          clip-path: inset(80% 0 8% 0);
+          transform: translate(3px, 0);
+          opacity: 0.75;
+        }
 
-                70% {
-                    clip-path: inset(30% 0 62% 0);
-                    transform: translate(-4px, 0);
-                    opacity: 0.75;
-                }
+        70% {
+          clip-path: inset(30% 0 62% 0);
+          transform: translate(-4px, 0);
+          opacity: 0.75;
+        }
 
-                100% {
-                    clip-path: inset(55% 0 35% 0);
-                    transform: translate(5px, 0);
-                    opacity: 0.75;
-                }
-            }
+        100% {
+          clip-path: inset(55% 0 35% 0);
+          transform: translate(5px, 0);
+          opacity: 0.75;
+        }
+      }
 
-            @keyframes slice-b {
-                0% {
-                    clip-path: inset(55% 0 35% 0);
-                    transform: translate(4px, 0);
-                    opacity: 0.75;
-                }
+      @keyframes slice-b {
+        0% {
+          clip-path: inset(55% 0 35% 0);
+          transform: translate(4px, 0);
+          opacity: 0.75;
+        }
 
-                15% {
-                    clip-path: inset(10% 0 82% 0);
-                    transform: translate(-3px, 0);
-                    opacity: 0.75;
-                }
+        15% {
+          clip-path: inset(10% 0 82% 0);
+          transform: translate(-3px, 0);
+          opacity: 0.75;
+        }
 
-                30% {
-                    clip-path: inset(70% 0 18% 0);
-                    transform: translate(6px, 0);
-                    opacity: 0.75;
-                }
+        30% {
+          clip-path: inset(70% 0 18% 0);
+          transform: translate(6px, 0);
+          opacity: 0.75;
+        }
 
-                50% {
-                    clip-path: inset(38% 0 52% 0);
-                    transform: translate(-5px, 0);
-                    opacity: 0.75;
-                }
+        50% {
+          clip-path: inset(38% 0 52% 0);
+          transform: translate(-5px, 0);
+          opacity: 0.75;
+        }
 
-                70% {
-                    clip-path: inset(20% 0 72% 0);
-                    transform: translate(4px, 0);
-                    opacity: 0.75;
-                }
+        70% {
+          clip-path: inset(20% 0 72% 0);
+          transform: translate(4px, 0);
+          opacity: 0.75;
+        }
 
-                100% {
-                    clip-path: inset(48% 0 40% 0);
-                    transform: translate(-4px, 0);
-                    opacity: 0.75;
-                }
-            }
+        100% {
+          clip-path: inset(48% 0 40% 0);
+          transform: translate(-4px, 0);
+          opacity: 0.75;
+        }
+      }
 
-            .pale-ghost-r.active {
-                animation: slice-r 0.08s steps(1) infinite;
-            }
+      .pale-ghost-r.active {
+        animation: slice-r 0.08s steps(1) infinite;
+      }
 
-            .pale-ghost-b.active {
-                animation: slice-b 0.08s steps(1) infinite;
-            }
+      .pale-ghost-b.active {
+        animation: slice-b 0.08s steps(1) infinite;
+      }
 
-            @keyframes title-shake {
-                0% {
-                    transform: translate(0, 0);
-                }
+      @keyframes title-shake {
+        0% {
+          transform: translate(0, 0);
+        }
 
-                20% {
-                    transform: translate(-4px, 2px);
-                }
+        20% {
+          transform: translate(-4px, 2px);
+        }
 
-                40% {
-                    transform: translate(3px, -3px);
-                }
+        40% {
+          transform: translate(3px, -3px);
+        }
 
-                60% {
-                    transform: translate(-3px, 1px);
-                }
+        60% {
+          transform: translate(-3px, 1px);
+        }
 
-                80% {
-                    transform: translate(4px, -1px);
-                }
+        80% {
+          transform: translate(4px, -1px);
+        }
 
-                100% {
-                    transform: translate(0, 0);
-                }
-            }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
 
-            .pale-title.shaking {
-                animation: title-shake 0.18s ease-in-out;
-            }
+      .pale-title.shaking {
+        animation: title-shake 0.18s ease-in-out;
+      }
 
-            /* ---- Subtitle ---- */
-            .subtitle {
-                font-family: var(--font-body);
-                font-style: italic;
-                font-weight: 300;
-                font-size: clamp(0.65rem, 1.5vw, 0.85rem);
-                letter-spacing: 0.3em;
-                color: var(--fg4);
-                margin-top: 9rem;
-                text-align: center;
-                opacity: 0.7;
-                user-select: none;
-            }
+      /* ---- Subtitle ---- */
+      .subtitle {
+        font-family: var(--font-body);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+        letter-spacing: 0.3em;
+        color: var(--fg4);
+        margin-top: 9rem;
+        text-align: center;
+        opacity: 0.7;
+        user-select: none;
+      }
 
-            /* ---- Loader ---- */
-            .loader-wrap {
-                position: fixed;
-                bottom: 15vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.6rem;
-                width: clamp(200px, 36vw, 380px);
-            }
+      /* ---- Loader ---- */
+      .loader-wrap {
+        position: fixed;
+        bottom: 15vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        width: clamp(200px, 36vw, 380px);
+      }
 
-            .loader-label {
-                font-family: var(--font-body);
-                font-style: italic;
-                font-size: 0.65rem;
-                letter-spacing: 0.22em;
-                color: var(--gray);
-                text-transform: lowercase;
-                min-height: 1em;
-                text-align: center;
-                transition: opacity 0.4s;
-            }
+      .loader-label {
+        font-family: var(--font-body);
+        font-style: italic;
+        font-size: 0.65rem;
+        letter-spacing: 0.22em;
+        color: var(--gray);
+        text-transform: lowercase;
+        min-height: 1em;
+        text-align: center;
+        transition: opacity 0.4s;
+      }
 
-            .loader-track {
-                width: 100%;
-                height: 2px;
-                background: var(--bg2);
-                position: relative;
-                overflow: visible;
-            }
+      .loader-track {
+        width: 100%;
+        height: 2px;
+        background: var(--bg2);
+        position: relative;
+        overflow: visible;
+      }
 
-            #loader-fill {
-                height: 100%;
-                width: 0%;
-                background: var(--fg3);
-                position: relative;
-                transition: width 0.35s ease;
-            }
+      #loader-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--fg3);
+        position: relative;
+        transition: width 0.35s ease;
+      }
 
-            #loader-fill::after {
-                content: "";
-                position: absolute;
-                right: -1px;
-                top: -1px;
-                width: 3px;
-                height: 4px;
-                background: var(--fg);
-                box-shadow: 0 0 4px var(--fg2);
-            }
+      #loader-fill::after {
+        content: "";
+        position: absolute;
+        right: -1px;
+        top: -1px;
+        width: 3px;
+        height: 4px;
+        background: var(--fg);
+        box-shadow: 0 0 4px var(--fg2);
+      }
 
-            #loader-error {
-                font-family: var(--font-body);
-                font-style: italic;
-                font-size: 0.6rem;
-                letter-spacing: 0.18em;
-                color: var(--red);
-                text-align: center;
-                min-height: 1em;
-                opacity: 0;
-                transition: opacity 0.6s ease;
-            }
+      #loader-error {
+        font-family: var(--font-body);
+        font-style: italic;
+        font-size: 0.6rem;
+        letter-spacing: 0.18em;
+        color: var(--red);
+        text-align: center;
+        min-height: 1em;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+      }
 
-            #loader-error.show {
-                opacity: 1;
-            }
+      #loader-error.show {
+        opacity: 1;
+      }
 
-            /* ============================================================
+      /* ============================================================
        FLOATING PALE FRAGMENTS
     ============================================================ */
-            .fragment {
-                position: fixed;
-                font-family: var(--font-body);
-                font-style: italic;
-                font-weight: 300;
-                color: var(--fg3);
-                pointer-events: none;
-                z-index: 9;
-                opacity: 0;
-                letter-spacing: 0.06em;
-                white-space: nowrap;
-                transition: opacity 2.5s ease;
-            }
+      .fragment {
+        position: fixed;
+        font-family: var(--font-body);
+        font-style: italic;
+        font-weight: 300;
+        color: var(--fg3);
+        pointer-events: none;
+        z-index: 9;
+        opacity: 0;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+        transition: opacity 2.5s ease;
+      }
 
-            .fragment.visible {
-                opacity: 0.35;
-            }
+      .fragment.visible {
+        opacity: 0.35;
+      }
 
-            /* ============================================================
+      /* ============================================================
        HORIZONTAL INTERFERENCE LINES
     ============================================================ */
-            .hline {
-                position: fixed;
-                left: 0;
-                height: 1px;
-                pointer-events: none;
-                z-index: 18;
-                opacity: 0;
-                transition: opacity 0.05s;
-            }
+      .hline {
+        position: fixed;
+        left: 0;
+        height: 1px;
+        pointer-events: none;
+        z-index: 18;
+        opacity: 0;
+        transition: opacity 0.05s;
+      }
 
-            /* ============================================================
+      /* ============================================================
        ENTER OVERLAY
     ============================================================ */
-            #enter {
-                position: fixed;
-                inset: 0;
-                z-index: 200;
-                background: var(--bg);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: opacity 2s ease;
-            }
+      #enter {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: opacity 2s ease;
+      }
 
-            #enter.gone {
-                opacity: 0;
-                pointer-events: none;
-            }
+      #enter.gone {
+        opacity: 0;
+        pointer-events: none;
+      }
 
-            .enter-inner {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.4rem;
-            }
+      .enter-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.4rem;
+      }
 
-            .enter-heading {
-                font-family: var(--font-title);
-                font-size: clamp(3rem, 9vw, 7rem);
-                color: var(--fg);
-                letter-spacing: 0.2em;
-                opacity: 0.15;
-            }
+      .enter-heading {
+        font-family: var(--font-title);
+        font-size: clamp(3rem, 9vw, 7rem);
+        color: var(--fg);
+        letter-spacing: 0.2em;
+        opacity: 0.15;
+      }
 
-            .enter-cue {
-                font-family: var(--font-body);
-                font-style: italic;
-                font-size: 0.72rem;
-                letter-spacing: 0.35em;
-                color: var(--gray);
-                text-transform: lowercase;
-                animation: breathe 2.4s ease-in-out infinite;
-            }
+      .enter-cue {
+        font-family: var(--font-body);
+        font-style: italic;
+        font-size: 0.72rem;
+        letter-spacing: 0.35em;
+        color: var(--gray);
+        text-transform: lowercase;
+        animation: breathe 2.4s ease-in-out infinite;
+      }
 
-            @keyframes breathe {
-                0%,
-                100% {
-                    opacity: 0.3;
-                }
+      @keyframes breathe {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
 
-                50% {
-                    opacity: 0.9;
-                }
-            }
-        </style>
-    </head>
+        50% {
+          opacity: 0.9;
+        }
+      }
+    </style>
+  </head>
 
-    <body>
-        <!-- ENTER GATE -->
-        <div id="enter">
-            <div class="enter-inner">
-                <div class="enter-heading">THE PALE</div>
-                <div class="enter-cue">— touch to enter —</div>
-            </div>
+  <body>
+    <!-- ENTER GATE -->
+    <div id="enter">
+      <div class="enter-inner">
+        <div class="enter-heading">THE PALE</div>
+        <div class="enter-cue">— touch to enter —</div>
+      </div>
+    </div>
+
+    <!-- FOG -->
+    <canvas id="fog"></canvas>
+
+    <!-- OVERLAYS -->
+    <div class="grain"></div>
+    <div class="scanlines"></div>
+    <div class="porch-collapse"></div>
+    <div class="vignette"></div>
+    <div id="glitch-flash"></div>
+
+    <p class="subtitle">the transition state of being into nothingness</p>
+
+    <!-- MAIN STAGE -->
+    <div class="stage">
+      <div class="title-wrapper">
+        <span class="pale-ghost pale-ghost-r" id="ghost-r" aria-hidden="true"
+          >THE PALE</span
+        >
+        <span class="pale-ghost pale-ghost-b" id="ghost-b" aria-hidden="true"
+          >THE PALE</span
+        >
+        <h1 class="pale-title" id="title">THE PALE</h1>
+      </div>
+
+      <div class="loader-wrap">
+        <div id="loader-error"></div>
+        <div class="loader-track">
+          <div id="loader-fill"></div>
         </div>
-
-        <!-- FOG -->
-        <canvas id="fog"></canvas>
-
-        <!-- OVERLAYS -->
-        <div class="grain"></div>
-        <div class="scanlines"></div>
-        <div class="porch-collapse"></div>
-        <div class="vignette"></div>
-        <div id="glitch-flash"></div>
-
-        <p class="subtitle">the transition state of being into nothingness</p>
-
-        <!-- MAIN STAGE -->
-        <div class="stage">
-            <div class="title-wrapper">
-                <span
-                    class="pale-ghost pale-ghost-r"
-                    id="ghost-r"
-                    aria-hidden="true"
-                    >THE PALE</span
-                >
-                <span
-                    class="pale-ghost pale-ghost-b"
-                    id="ghost-b"
-                    aria-hidden="true"
-                    >THE PALE</span
-                >
-                <h1 class="pale-title" id="title">THE PALE</h1>
-            </div>
-
-            <div class="loader-wrap">
-                <div id="loader-error"></div>
-                <div class="loader-track">
-                    <div id="loader-fill"></div>
-                </div>
-                <div class="loader-label" id="loader-label">
-                    establishing connection...
-                </div>
-            </div>
+        <div class="loader-label" id="loader-label">
+          establishing connection...
         </div>
+      </div>
+    </div>
 
-        <script>
-            /* ================================================================
+    <script>
+      /* ================================================================
                 CONSTANTS
             ================================================================ */
-            const GLITCH_CHARS =
-                "█░▓▒│┤╡╣║╗╝╜┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╙╘╒╓╫╪┘┌▄▀■□▪▫◘◙◦‼¶§▬↕↑↓→←∟↔▲▼ĦĞŦƦɅΨΩΦΔΣΠΛξζ";
-            const ORIGINAL = "THE PALE";
+      const GLITCH_CHARS =
+        "█░▓▒│┤╡╣║╗╝╜┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╙╘╒╓╫╪┘┌▄▀■□▪▫◘◙◦‼¶§▬↕↑↓→←∟↔▲▼ĦĞŦƦɅΨΩΦΔΣΠΛξζ";
+      const ORIGINAL = "THE PALE";
 
-            const FRAGMENTS = [
-                // The Pale — nature & description
-                "achromatic. odourless. featureless.",
-                "the enemy of matter and life",
-                "transition state of being into nothingness",
-                "numbers stop working here",
-                "a white mourning",
-                "APRES LE MONDE — LE GRIS",
-                "APRES LE GRIS — LE MONDE DE NOUVEAU",
-                "over-radiated by the past",
-                "porch collapse",
-                "the pale is expanding at an unknown rate",
-                "it smells like apricots",
-                "a great, unnatural territory",
-                "do not look directly at the pale",
-                "a nervous shadow eating away at reality",
-                "forgotten",
-                "signal lost",
-                "entroponetic resonance detected",
-                "five crews did not return",
-                "memory dissolving",
-                "the pale was thought to be impregnable",
-                "she is over-radiated by the past",
-                "72% of the known surface",
-                "no one has ever passed the number barrier",
-                "the pale does not permit passage",
-                "achromatic corona above the disc",
+      const FRAGMENTS = [
+        // The Pale — nature & description
+        "achromatic. odourless. featureless.",
+        "the enemy of matter and life",
+        "transition state of being into nothingness",
+        "numbers stop working here",
+        "a white mourning",
+        "APRES LE MONDE — LE GRIS",
+        "APRES LE GRIS — LE MONDE DE NOUVEAU",
+        "over-radiated by the past",
+        "porch collapse",
+        "the pale is expanding at an unknown rate",
+        "it smells like apricots",
+        "a great, unnatural territory",
+        "do not look directly at the pale",
+        "a nervous shadow eating away at reality",
+        "forgotten",
+        "signal lost",
+        "entroponetic resonance detected",
+        "five crews did not return",
+        "memory dissolving",
+        "the pale was thought to be impregnable",
+        "she is over-radiated by the past",
+        "72% of the known surface",
+        "no one has ever passed the number barrier",
+        "the pale does not permit passage",
+        "achromatic corona above the disc",
 
-                // Expansion — pale lore, world, geography
-                "separative tissue between the isolas",
-                "grey flares. prominences. arching over isolas.",
-                "a mould adapted to grow at the edge of the unrest",
-                "cold vapour marked by spores",
-                "matter evaporating into the grey",
-                "the silence begins here",
-                "measured only by its surroundings",
-                "hydrotransducers recording the silence",
-                "two returned. but had lost their minds.",
-                "eight expeditions sent. five did not return.",
-                "orbital flight — impossible",
-                "the dark grey corona above the disc",
-                "rarefied past. spread thin.",
-                "the pale came with you. no one remembers it before.",
-                "the cnidarians do not remember. the birds do not.",
-                "there is unanimous agreement: you will destroy us all.",
-                "interisolary mass — compressed beyond measurement",
-                "the world and the pale border one another here",
-                "she funded voyages until there was nothing left to fund",
-                "APRES LA VIE — MORT",
-                "APRES LA MORT — LA VIE DE NOUVEAU",
-                "after the pale — the new world",
-                "her innocence. dolores dei.",
+        // Expansion — pale lore, world, geography
+        "separative tissue between the isolas",
+        "grey flares. prominences. arching over isolas.",
+        "a mould adapted to grow at the edge of the unrest",
+        "cold vapour marked by spores",
+        "matter evaporating into the grey",
+        "the silence begins here",
+        "measured only by its surroundings",
+        "hydrotransducers recording the silence",
+        "two returned. but had lost their minds.",
+        "eight expeditions sent. five did not return.",
+        "orbital flight — impossible",
+        "the dark grey corona above the disc",
+        "rarefied past. spread thin.",
+        "the pale came with you. no one remembers it before.",
+        "the cnidarians do not remember. the birds do not.",
+        "there is unanimous agreement: you will destroy us all.",
+        "interisolary mass — compressed beyond measurement",
+        "the world and the pale border one another here",
+        "she funded voyages until there was nothing left to fund",
+        "APRES LA VIE — MORT",
+        "APRES LA MORT — LA VIE DE NOUVEAU",
+        "after the pale — the new world",
+        "her innocence. dolores dei.",
 
-                // DE aesthetic — detective, the city, the self
-                "you didn't want to be this type of animal anymore",
-                "the femme fatale finishing her cigarette on the mezzanine",
-                "a dilapidated hotel room in a dilapidated district",
-                "past glories and occupied masses",
-                "the destructothon",
-                "a volatile simian nervous system. ominously new to the planet.",
-                "the miracle animal",
-                "you are total, extreme madness",
-                "i went unnoticed by the soldiers of the revolution",
-                "even the first settlers did not see me",
-                "the pale is the most dominant geological feature",
-                "the pale tethers us even as it destroys us",
-                "it is human suffering. trauma. the things we drink away.",
-                "she comes to you in your last dream",
-                "not as who she was",
-                "the woman in the shattered glass window",
+        // DE aesthetic — detective, the city, the self
+        "you didn't want to be this type of animal anymore",
+        "the femme fatale finishing her cigarette on the mezzanine",
+        "a dilapidated hotel room in a dilapidated district",
+        "past glories and occupied masses",
+        "the destructothon",
+        "a volatile simian nervous system. ominously new to the planet.",
+        "the miracle animal",
+        "you are total, extreme madness",
+        "i went unnoticed by the soldiers of the revolution",
+        "even the first settlers did not see me",
+        "the pale is the most dominant geological feature",
+        "the pale tethers us even as it destroys us",
+        "it is human suffering. trauma. the things we drink away.",
+        "she comes to you in your last dream",
+        "not as who she was",
+        "the woman in the shattered glass window",
 
-                // Radio/signal/transmission flavour
-                "transmission incomplete",
-                "carrier frequency lost",
-                "signal absorbed — no echo returned",
-                "resonance beyond measurable bandwidth",
-                "static at the edge of the world",
-                "voice unrecoverable",
-                "pale latitude: indeterminate",
-                "entroponetic field: critical",
-                "aerostatic contact severed",
-                "last known position: the grey",
-                "do not attempt re-entry",
-                "the signal passed through. the signal did not return.",
-                "reception degrades beyond the number barrier",
-                "radio waves have mass here. they sink.",
-                "the pale does not reflect. it absorbs.",
+        // Radio/signal/transmission flavour
+        "transmission incomplete",
+        "carrier frequency lost",
+        "signal absorbed — no echo returned",
+        "resonance beyond measurable bandwidth",
+        "static at the edge of the world",
+        "voice unrecoverable",
+        "pale latitude: indeterminate",
+        "entroponetic field: critical",
+        "aerostatic contact severed",
+        "last known position: the grey",
+        "do not attempt re-entry",
+        "the signal passed through. the signal did not return.",
+        "reception degrades beyond the number barrier",
+        "radio waves have mass here. they sink.",
+        "the pale does not reflect. it absorbs.",
 
-                // Existential / philosophical DE register
-                "the past is not behind you. it is around you.",
-                "forgetting is not loss. forgetting is the pale.",
-                "every isola is an island of memory surrounded by nothing",
-                "the world forgets itself into grey",
-                "history evaporates. politics remain.",
-                "you cannot revolution your way out of nothingness",
-                "the pale predates ideology",
-                "matter itself is uncertain here",
-                "consciousness is a brief resistance to the grey",
-                "to be remembered is to hold back the pale. briefly.",
-                "even grief dissolves eventually",
-                "the pale is patient",
-                "it has always been expanding",
-                "it was here before the question was asked",
-                "nothing answers from the other side",
-                "the pale does not mourn. it simply continues.",
-                "somewhere in the grey: everything you have forgotten",
-                "the pale is what remains when meaning leaves",
-                "an ocean at the edge of an ocean",
-                "crossed only out of utmost necessity",
-            ];
+        // Existential / philosophical DE register
+        "the past is not behind you. it is around you.",
+        "forgetting is not loss. forgetting is the pale.",
+        "every isola is an island of memory surrounded by nothing",
+        "the world forgets itself into grey",
+        "history evaporates. politics remain.",
+        "you cannot revolution your way out of nothingness",
+        "the pale predates ideology",
+        "matter itself is uncertain here",
+        "consciousness is a brief resistance to the grey",
+        "to be remembered is to hold back the pale. briefly.",
+        "even grief dissolves eventually",
+        "the pale is patient",
+        "it has always been expanding",
+        "it was here before the question was asked",
+        "nothing answers from the other side",
+        "the pale does not mourn. it simply continues.",
+        "somewhere in the grey: everything you have forgotten",
+        "the pale is what remains when meaning leaves",
+        "an ocean at the edge of an ocean",
+        "crossed only out of utmost necessity",
+      ];
 
-            const LOAD_LABELS = [
-                // establishing / connecting
-                "establishing connection...",
-                "locating signal origin...",
-                "initialising pale transceiver...",
-                "opening interisolary channel...",
-                "negotiating carrier frequency...",
-                "binding to pale latitude...",
-                "searching for echo...",
-                "handshake pending...",
-                "awaiting acknowledgement...",
-                "probing the grey...",
+      const LOAD_LABELS = [
+        // establishing / connecting
+        "establishing connection...",
+        "locating signal origin...",
+        "initialising pale transceiver...",
+        "opening interisolary channel...",
+        "negotiating carrier frequency...",
+        "binding to pale latitude...",
+        "searching for echo...",
+        "handshake pending...",
+        "awaiting acknowledgement...",
+        "probing the grey...",
 
-                // calibrating / measuring
-                "calibrating pale latitude...",
-                "calculating pale exposure...",
-                "measuring entroponetic field...",
-                "triangulating signal source...",
-                "sampling achromatic density...",
-                "reading hydrotransducer output...",
-                "recording the silence...",
-                "estimating porch collapse radius...",
-                "mapping number barrier perimeter...",
-                "gauging interisolary distance...",
+        // calibrating / measuring
+        "calibrating pale latitude...",
+        "calculating pale exposure...",
+        "measuring entroponetic field...",
+        "triangulating signal source...",
+        "sampling achromatic density...",
+        "reading hydrotransducer output...",
+        "recording the silence...",
+        "estimating porch collapse radius...",
+        "mapping number barrier perimeter...",
+        "gauging interisolary distance...",
 
-                // processing / compressing
-                "compressing interisolary mass...",
-                "collapsing carrier wave...",
-                "fragmenting transmission packet...",
-                "encoding pale coordinates...",
-                "decoding achromatic static...",
-                "parsing entroponetic resonance...",
-                "reconstructing signal fragments...",
-                "decompressing grey matter...",
-                "reassembling lost packets...",
-                "processing void response...",
+        // processing / compressing
+        "compressing interisolary mass...",
+        "collapsing carrier wave...",
+        "fragmenting transmission packet...",
+        "encoding pale coordinates...",
+        "decoding achromatic static...",
+        "parsing entroponetic resonance...",
+        "reconstructing signal fragments...",
+        "decompressing grey matter...",
+        "reassembling lost packets...",
+        "processing void response...",
 
-                // transmitting / bouncing
-                "bouncing radio signal...",
-                "routing through pale corridor...",
-                "relaying across porch collapse...",
-                "pushing signal into the grey...",
-                "waiting for wave return...",
-                "rebroadcasting on pale frequency...",
-                "amplifying carrier signal...",
-                "compensating for pale absorption...",
-                "redirecting through isola relay...",
-                "signal in transit...",
+        // transmitting / bouncing
+        "bouncing radio signal...",
+        "routing through pale corridor...",
+        "relaying across porch collapse...",
+        "pushing signal into the grey...",
+        "waiting for wave return...",
+        "rebroadcasting on pale frequency...",
+        "amplifying carrier signal...",
+        "compensating for pale absorption...",
+        "redirecting through isola relay...",
+        "signal in transit...",
 
-                // aligning / traversing
-                "entroponetic alignment...",
-                "traversing porch collapse...",
-                "awaiting signal return...",
-                "synchronising pale oscillators...",
-                "aligning with achromatic axis...",
-                "stabilising grey interference...",
-                "correcting for pale drift...",
-                "holding position at the number barrier...",
-                "maintaining pale exposure threshold...",
-                "connection tenuous. holding...",
-            ];
+        // aligning / traversing
+        "entroponetic alignment...",
+        "traversing porch collapse...",
+        "awaiting signal return...",
+        "synchronising pale oscillators...",
+        "aligning with achromatic axis...",
+        "stabilising grey interference...",
+        "correcting for pale drift...",
+        "holding position at the number barrier...",
+        "maintaining pale exposure threshold...",
+        "connection tenuous. holding...",
+      ];
 
-            const ERRORS = [
-                // failure
-                "SIGNAL LOST — PALE INTERFERENCE DETECTED",
-                "ENTROPONETIC RESONANCE OVERLOAD",
-                "CONNECTION SWALLOWED BY THE GREY",
-                "ACHROMATIC BARRIER — TRANSMISSION IMPOSSIBLE",
-                "NUMBERS HAVE STOPPED WORKING HERE",
-                "PORCH COLLAPSE — SIGNAL ABORT",
-                "OVER-RADIATION THRESHOLD EXCEEDED",
-                "THE PALE DOES NOT PERMIT PASSAGE",
-                "SIGNAL DISSOLVED INTO NOTHINGNESS",
-                "RADIO WAVES ABSORBED — NO RETURN",
-                "MEMORY COULD NOT BE RETRIEVED",
-                "PALE LATITUDE COMPRESSION FAILED",
-                "AEROSTATIC SIGNAL LOST IN THE GREY",
+      const ERRORS = [
+        // failure
+        "SIGNAL LOST — PALE INTERFERENCE DETECTED",
+        "ENTROPONETIC RESONANCE OVERLOAD",
+        "CONNECTION SWALLOWED BY THE GREY",
+        "ACHROMATIC BARRIER — TRANSMISSION IMPOSSIBLE",
+        "NUMBERS HAVE STOPPED WORKING HERE",
+        "PORCH COLLAPSE — SIGNAL ABORT",
+        "OVER-RADIATION THRESHOLD EXCEEDED",
+        "THE PALE DOES NOT PERMIT PASSAGE",
+        "SIGNAL DISSOLVED INTO NOTHINGNESS",
+        "RADIO WAVES ABSORBED — NO RETURN",
+        "MEMORY COULD NOT BE RETRIEVED",
+        "PALE LATITUDE COMPRESSION FAILED",
+        "AEROSTATIC SIGNAL LOST IN THE GREY",
 
-                // signal / transmission failure
-                "CARRIER WAVE CONSUMED BY THE GREY",
-                "TRANSMISSION INCOMPLETE — PALE ABSORBED REMAINDER",
-                "NO ECHO DETECTED — SIGNAL DID NOT RETURN",
-                "INTERISOLARY CHANNEL COLLAPSED",
-                "RELAY STATION UNREACHABLE — PALE EXPANSION CONFIRMED",
-                "FREQUENCY DISSOLVED AT NUMBER BARRIER",
-                "PALE CORRIDOR SEALED — REROUTING IMPOSSIBLE",
-                "HANDSHAKE FAILED — NO RESPONSE FROM THE OTHER SIDE",
-                "SIGNAL FRAGMENTED BEYOND RECONSTRUCTION",
-                "TRANSMISSION SWALLOWED BEFORE ARRIVAL",
-                "BROADCAST ABSORBED — PALE REFLECTIVITY: ZERO",
-                "DEAD CHANNEL — PALE INTERFERENCE AT MAXIMUM",
-                "CARRIER FREQUENCY LOST IN ACHROMATIC STATIC",
+        // signal / transmission failure
+        "CARRIER WAVE CONSUMED BY THE GREY",
+        "TRANSMISSION INCOMPLETE — PALE ABSORBED REMAINDER",
+        "NO ECHO DETECTED — SIGNAL DID NOT RETURN",
+        "INTERISOLARY CHANNEL COLLAPSED",
+        "RELAY STATION UNREACHABLE — PALE EXPANSION CONFIRMED",
+        "FREQUENCY DISSOLVED AT NUMBER BARRIER",
+        "PALE CORRIDOR SEALED — REROUTING IMPOSSIBLE",
+        "HANDSHAKE FAILED — NO RESPONSE FROM THE OTHER SIDE",
+        "SIGNAL FRAGMENTED BEYOND RECONSTRUCTION",
+        "TRANSMISSION SWALLOWED BEFORE ARRIVAL",
+        "BROADCAST ABSORBED — PALE REFLECTIVITY: ZERO",
+        "DEAD CHANNEL — PALE INTERFERENCE AT MAXIMUM",
+        "CARRIER FREQUENCY LOST IN ACHROMATIC STATIC",
 
-                // measurement / system failure
-                "HYDROTRANSDUCER ARRAY OFFLINE",
-                "ENTROPONETIC FIELD EXCEEDS MEASURABLE RANGE",
-                "PALE EXPOSURE CRITICAL — INSTRUMENTATION FAILED",
-                "ACHROMATIC DENSITY INCALCULABLE",
-                "NUMBER BARRIER BREACHED — MATHEMATICS UNRELIABLE",
-                "PALE LATITUDE: INDETERMINATE",
-                "MEASUREMENT IMPOSSIBLE — SURROUNDINGS HAVE DISSOLVED",
-                "PALE RADIUS EXPANDING — RECALIBRATION FAILED",
-                "GREY MATTER COMPRESSION: FATAL ERROR",
-                "OSCILLATOR DESYNCHRONISED — PALE DRIFT UNCOMPENSATED",
+        // measurement / system failure
+        "HYDROTRANSDUCER ARRAY OFFLINE",
+        "ENTROPONETIC FIELD EXCEEDS MEASURABLE RANGE",
+        "PALE EXPOSURE CRITICAL — INSTRUMENTATION FAILED",
+        "ACHROMATIC DENSITY INCALCULABLE",
+        "NUMBER BARRIER BREACHED — MATHEMATICS UNRELIABLE",
+        "PALE LATITUDE: INDETERMINATE",
+        "MEASUREMENT IMPOSSIBLE — SURROUNDINGS HAVE DISSOLVED",
+        "PALE RADIUS EXPANDING — RECALIBRATION FAILED",
+        "GREY MATTER COMPRESSION: FATAL ERROR",
+        "OSCILLATOR DESYNCHRONISED — PALE DRIFT UNCOMPENSATED",
 
-                // existential / lore-register failures
-                "FIVE CREWS DID NOT RETURN — CONNECTION TERMINATED",
-                "SHE IS OVER-RADIATED — SIGNAL NON-VIABLE",
-                "THE PALE PREDATES THIS PROTOCOL",
-                "MEMORY EVAPORATED BEFORE RETRIEVAL",
-                "FORGOTTEN — NO CACHE REMAINS",
-                "THE GREY DOES NOT ANSWER",
-                "CONSCIOUSNESS REQUIRED FOR CONNECTION — NONE DETECTED",
-                "PALE IS PATIENT — TRANSMISSION IS NOT",
-                "ALL MEANING DISSOLVED IN TRANSIT",
-                "CONNECTION TENUOUS — THEN GONE",
-                "THE PALE DOES NOT MOURN THE LOST PACKET",
-                "AFTER THE SIGNAL — THE GREY. AFTER THE GREY — NOTHING.",
-            ];
+        // existential / lore-register failures
+        "FIVE CREWS DID NOT RETURN — CONNECTION TERMINATED",
+        "SHE IS OVER-RADIATED — SIGNAL NON-VIABLE",
+        "THE PALE PREDATES THIS PROTOCOL",
+        "MEMORY EVAPORATED BEFORE RETRIEVAL",
+        "FORGOTTEN — NO CACHE REMAINS",
+        "THE GREY DOES NOT ANSWER",
+        "CONSCIOUSNESS REQUIRED FOR CONNECTION — NONE DETECTED",
+        "PALE IS PATIENT — TRANSMISSION IS NOT",
+        "ALL MEANING DISSOLVED IN TRANSIT",
+        "CONNECTION TENUOUS — THEN GONE",
+        "THE PALE DOES NOT MOURN THE LOST PACKET",
+        "AFTER THE SIGNAL — THE GREY. AFTER THE GREY — NOTHING.",
+      ];
 
-            /* ================================================================
+      /* ================================================================
                 FOG CANVAS
             ================================================================ */
-            const canvas = document.getElementById("fog");
-            const ctx = canvas.getContext("2d");
-            let blobs = [];
-            let W, H;
+      const canvas = document.getElementById("fog");
+      const ctx = canvas.getContext("2d");
+      let blobs = [];
+      let W, H;
 
-            function resizeCanvas() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
+      function resizeCanvas() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
 
-            function initBlobs() {
-                blobs = [];
-                for (let i = 0; i < 22; i++) {
-                    blobs.push({
-                        x: Math.random() * W,
-                        y: Math.random() * H,
-                        r: Math.random() * 280 + 70,
-                        vx: (Math.random() - 0.5) * 0.18,
-                        vy: (Math.random() - 0.5) * 0.12,
-                        ph: Math.random() * Math.PI * 2,
-                        sp: Math.random() * 0.0015 + 0.0008,
-                        alpha: Math.random() * 0.07 + 0.02,
-                        warm: Math.random() < 0.4, // slightly warm vs pure white
-                    });
-                }
-            }
+      function initBlobs() {
+        blobs = [];
+        for (let i = 0; i < 22; i++) {
+          blobs.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: Math.random() * 280 + 70,
+            vx: (Math.random() - 0.5) * 0.18,
+            vy: (Math.random() - 0.5) * 0.12,
+            ph: Math.random() * Math.PI * 2,
+            sp: Math.random() * 0.0015 + 0.0008,
+            alpha: Math.random() * 0.07 + 0.02,
+            warm: Math.random() < 0.4, // slightly warm vs pure white
+          });
+        }
+      }
 
-            function drawFog() {
-                ctx.clearRect(0, 0, W, H);
-                for (const b of blobs) {
-                    b.ph += b.sp;
-                    b.x += b.vx + Math.sin(b.ph) * 0.22;
-                    b.y += b.vy + Math.cos(b.ph * 0.71) * 0.16;
-                    if (b.x < -b.r) b.x = W + b.r;
-                    if (b.x > W + b.r) b.x = -b.r;
-                    if (b.y < -b.r) b.y = H + b.r;
-                    if (b.y > H + b.r) b.y = -b.r;
+      function drawFog() {
+        ctx.clearRect(0, 0, W, H);
+        for (const b of blobs) {
+          b.ph += b.sp;
+          b.x += b.vx + Math.sin(b.ph) * 0.22;
+          b.y += b.vy + Math.cos(b.ph * 0.71) * 0.16;
+          if (b.x < -b.r) b.x = W + b.r;
+          if (b.x > W + b.r) b.x = -b.r;
+          if (b.y < -b.r) b.y = H + b.r;
+          if (b.y > H + b.r) b.y = -b.r;
 
-                    const pulse = 0.5 + 0.5 * Math.sin(b.ph * 0.5);
-                    const a = b.alpha * (0.65 + 0.35 * pulse);
+          const pulse = 0.5 + 0.5 * Math.sin(b.ph * 0.5);
+          const a = b.alpha * (0.65 + 0.35 * pulse);
 
-                    const g = ctx.createRadialGradient(
-                        b.x,
-                        b.y,
-                        0,
-                        b.x,
-                        b.y,
-                        b.r,
-                    );
-                    if (b.warm) {
-                        g.addColorStop(0, `rgba(255, 252, 235, ${a})`);
-                        g.addColorStop(0.5, `rgba(255, 250, 230, ${a * 0.35})`);
-                    } else {
-                        g.addColorStop(0, `rgba(255, 255, 252, ${a})`);
-                        g.addColorStop(0.5, `rgba(252, 250, 248, ${a * 0.35})`);
-                    }
-                    g.addColorStop(1, "rgba(251, 241, 199, 0)");
+          const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+          if (b.warm) {
+            g.addColorStop(0, `rgba(255, 252, 235, ${a})`);
+            g.addColorStop(0.5, `rgba(255, 250, 230, ${a * 0.35})`);
+          } else {
+            g.addColorStop(0, `rgba(255, 255, 252, ${a})`);
+            g.addColorStop(0.5, `rgba(252, 250, 248, ${a * 0.35})`);
+          }
+          g.addColorStop(1, "rgba(251, 241, 199, 0)");
 
-                    ctx.fillStyle = g;
-                    ctx.beginPath();
-                    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
 
-            /* ================================================================
+      /* ================================================================
                 AUDIO ENGINE
             ================================================================ */
-            let actx, masterGain;
+      let actx, masterGain;
 
-            function buildDrone(freq, gain) {
-                const osc = actx.createOscillator();
-                const filt = actx.createBiquadFilter();
-                const gn = actx.createGain();
-                osc.type = "sine";
-                osc.frequency.value = freq;
-                filt.type = "lowpass";
-                filt.frequency.value = 300;
-                gn.gain.value = gain;
-                osc.connect(filt);
-                filt.connect(gn);
-                gn.connect(masterGain);
-                osc.start();
-            }
+      function buildDrone(freq, gain) {
+        const osc = actx.createOscillator();
+        const filt = actx.createBiquadFilter();
+        const gn = actx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        filt.type = "lowpass";
+        filt.frequency.value = 300;
+        gn.gain.value = gain;
+        osc.connect(filt);
+        filt.connect(gn);
+        gn.connect(masterGain);
+        osc.start();
+      }
 
-            function initAudio() {
-                actx = new (window.AudioContext || window.webkitAudioContext)();
-                masterGain = actx.createGain();
-                masterGain.gain.value = 0.5;
-                masterGain.connect(actx.destination);
+      function initAudio() {
+        actx = new (window.AudioContext || window.webkitAudioContext)();
+        masterGain = actx.createGain();
+        masterGain.gain.value = 0.5;
+        masterGain.connect(actx.destination);
 
-                buildDrone(55.0, 0.65); // A1 — anchor
-                buildDrone(55.5, 0.65); // A1 + 1 Hz difference → 1 beat/sec, very slow pulse
-                buildDrone(82.5, 0.35); // E2 — perfect fifth above, adds depth, quieter
-                buildDrone(41.2, 0.65);
+        buildDrone(55.0, 0.65); // A1 — anchor
+        buildDrone(55.5, 0.65); // A1 + 1 Hz difference → 1 beat/sec, very slow pulse
+        buildDrone(82.5, 0.35); // E2 — perfect fifth above, adds depth, quieter
+        buildDrone(41.2, 0.65);
 
-                // Resume AudioContext on any interaction if browser blocked autoplay
-                if (actx.state === "suspended") {
-                    const resume = () => {
-                        actx.resume();
-                        document.removeEventListener("click", resume);
-                        document.removeEventListener("keydown", resume);
-                        document.removeEventListener("touchstart", resume);
-                    };
-                    document.addEventListener("click", resume);
-                    document.addEventListener("keydown", resume);
-                    document.addEventListener("touchstart", resume, {
-                        passive: true,
-                    });
-                }
-            }
+        // Resume AudioContext on any interaction if browser blocked autoplay
+        if (actx.state === "suspended") {
+          const resume = () => {
+            actx.resume();
+            document.removeEventListener("click", resume);
+            document.removeEventListener("keydown", resume);
+            document.removeEventListener("touchstart", resume);
+          };
+          document.addEventListener("click", resume);
+          document.addEventListener("keydown", resume);
+          document.addEventListener("touchstart", resume, {
+            passive: true,
+          });
+        }
+      }
 
-            /* ================================================================
+      /* ================================================================
                 SECRET MESSAGE ENGINE
             ================================================================ */
 
-            let SECRET_AUDIO_BUF = null;
-            const SECRET_HASH =
-                "ab0e191645d2e0530bc95835c49fdb48615590b2272a1efc9636dbda12f175f2";
-            let keyBuffer = "";
+      let SECRET_AUDIO_BUF = null;
+      const SECRET_HASH =
+        "ab0e191645d2e0530bc95835c49fdb48615590b2272a1efc9636dbda12f175f2";
+      let keyBuffer = "";
 
-            async function fetchSecretAudio(url) {
-                const response = await fetch(url);
-                SECRET_AUDIO_BUF = await response.arrayBuffer();
-            }
+      async function fetchSecretAudio(url) {
+        const response = await fetch(url);
+        SECRET_AUDIO_BUF = await response.arrayBuffer();
+      }
 
-            async function hashString(str) {
-                const encoded = new TextEncoder().encode(str);
-                const hashBuf = await crypto.subtle.digest("SHA-256", encoded);
-                return Array.from(new Uint8Array(hashBuf))
-                    .map((b) => b.toString(16).padStart(2, "0"))
-                    .join("");
-            }
+      async function hashString(str) {
+        const encoded = new TextEncoder().encode(str);
+        const hashBuf = await crypto.subtle.digest("SHA-256", encoded);
+        return Array.from(new Uint8Array(hashBuf))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+      }
 
-            async function playSecret() {
-                if (!SECRET_AUDIO_BUF || !actx) return;
-                const audioBuf = await actx.decodeAudioData(
-                    SECRET_AUDIO_BUF.slice(0),
-                ); // .slice(0) because decodeAudioData detaches the buffer
-                const src = actx.createBufferSource();
-                src.buffer = audioBuf;
-                const gain = actx.createGain();
-                gain.gain.value = 0.25;
-                src.connect(gain);
-                gain.connect(masterGain);
-                src.start();
-            }
+      async function playSecret() {
+        if (!SECRET_AUDIO_BUF || !actx) return;
+        const audioBuf = await actx.decodeAudioData(SECRET_AUDIO_BUF.slice(0)); // .slice(0) because decodeAudioData detaches the buffer
+        const src = actx.createBufferSource();
+        src.buffer = audioBuf;
+        const gain = actx.createGain();
+        gain.gain.value = 0.25;
+        src.connect(gain);
+        gain.connect(masterGain);
+        src.start();
+      }
 
-            document.addEventListener("keypress", async (e) => {
-                keyBuffer += e.key;
-                if (keyBuffer.length > 128) keyBuffer = keyBuffer.slice(-128);
+      document.addEventListener("keypress", async (e) => {
+        keyBuffer += e.key;
+        if (keyBuffer.length > 128) keyBuffer = keyBuffer.slice(-128);
 
-                // Check every trailing substring from 1 char up to buffer length
-                for (let len = 1; len <= keyBuffer.length; len++) {
-                    const candidate = keyBuffer.slice(-len);
-                    const hash = await hashString(candidate);
-                    if (hash === SECRET_HASH) {
-                        keyBuffer = "";
+        // Check every trailing substring from 1 char up to buffer length
+        for (let len = 1; len <= keyBuffer.length; len++) {
+          const candidate = keyBuffer.slice(-len);
+          const hash = await hashString(candidate);
+          if (hash === SECRET_HASH) {
+            keyBuffer = "";
 
-                        await fetchSecretAudio(`./${candidate}.opus`).catch(
-                            (e) => console.warn("Failed:", e),
-                        );
-                        playSecret();
-                        return;
-                    }
-                }
-            });
+            await fetchSecretAudio(`./${candidate}.opus`).catch((e) =>
+              console.warn("Failed:", e),
+            );
+            playSecret();
+            return;
+          }
+        }
+      });
 
-            /* ================================================================
+      /* ================================================================
                 GLITCH ENGINE
             ================================================================ */
-            const title = document.getElementById("title");
-            const ghostR = document.getElementById("ghost-r");
-            const ghostB = document.getElementById("ghost-b");
-            const flash = document.getElementById("glitch-flash");
-            let glitching = false;
+      const title = document.getElementById("title");
+      const ghostR = document.getElementById("ghost-r");
+      const ghostB = document.getElementById("ghost-b");
+      const flash = document.getElementById("glitch-flash");
+      let glitching = false;
 
-            function rchar() {
-                return GLITCH_CHARS[
-                    Math.floor(Math.random() * GLITCH_CHARS.length)
-                ];
-            }
+      function rchar() {
+        return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+      }
 
-            function scrambleText(el, frames, interval, restore = true) {
-                let f = 0;
-                const t = setInterval(() => {
-                    const chars = ORIGINAL.split("").map((c) =>
-                        c !== " " && Math.random() < 0.5 ? rchar() : c,
-                    );
-                    el.textContent = chars.join("");
-                    if (++f >= frames) {
-                        clearInterval(t);
-                        if (restore) el.textContent = ORIGINAL;
-                    }
-                }, interval);
-            }
+      function scrambleText(el, frames, interval, restore = true) {
+        let f = 0;
+        const t = setInterval(() => {
+          const chars = ORIGINAL.split("").map((c) =>
+            c !== " " && Math.random() < 0.5 ? rchar() : c,
+          );
+          el.textContent = chars.join("");
+          if (++f >= frames) {
+            clearInterval(t);
+            if (restore) el.textContent = ORIGINAL;
+          }
+        }, interval);
+      }
 
-            function glitchFlash(color, dur) {
-                flash.style.opacity = "1";
-                flash.style.background = `repeating-linear-gradient(0deg, ${color} 0px, ${color} 1px, transparent 1px, transparent 4px)`;
-                setTimeout(() => {
-                    flash.style.opacity = "0";
-                }, dur);
-            }
+      function glitchFlash(color, dur) {
+        flash.style.opacity = "1";
+        flash.style.background = `repeating-linear-gradient(0deg, ${color} 0px, ${color} 1px, transparent 1px, transparent 4px)`;
+        setTimeout(() => {
+          flash.style.opacity = "0";
+        }, dur);
+      }
 
-            function triggerGlitch() {
-                if (glitching) return;
-                glitching = true;
+      function triggerGlitch() {
+        if (glitching) return;
+        glitching = true;
 
-                const mode = Math.random();
+        const mode = Math.random();
 
-                if (mode < 0.35) {
-                    // Chromatic slice + text scramble
-                    ghostR.classList.add("active");
-                    ghostB.classList.add("active");
-                    scrambleText(title, 8, 35);
-                    setTimeout(() => {
-                        ghostR.classList.remove("active");
-                        ghostB.classList.remove("active");
-                        glitching = false;
-                    }, 300);
-                } else if (mode < 0.6) {
-                    // Shake + scramble
-                    title.classList.add("shaking");
-                    scrambleText(title, 10, 28);
-                    setTimeout(() => {
-                        title.classList.remove("shaking");
-                        glitching = false;
-                    }, 250);
-                } else if (mode < 0.78) {
-                    // Full combo: slice + shake + flash
-                    ghostR.classList.add("active");
-                    ghostB.classList.add("active");
-                    title.classList.add("shaking");
-                    scrambleText(title, 14, 25);
-                    glitchFlash("rgba(204,36,29,0.06)", 280);
+        if (mode < 0.35) {
+          // Chromatic slice + text scramble
+          ghostR.classList.add("active");
+          ghostB.classList.add("active");
+          scrambleText(title, 8, 35);
+          setTimeout(() => {
+            ghostR.classList.remove("active");
+            ghostB.classList.remove("active");
+            glitching = false;
+          }, 300);
+        } else if (mode < 0.6) {
+          // Shake + scramble
+          title.classList.add("shaking");
+          scrambleText(title, 10, 28);
+          setTimeout(() => {
+            title.classList.remove("shaking");
+            glitching = false;
+          }, 250);
+        } else if (mode < 0.78) {
+          // Full combo: slice + shake + flash
+          ghostR.classList.add("active");
+          ghostB.classList.add("active");
+          title.classList.add("shaking");
+          scrambleText(title, 14, 25);
+          glitchFlash("rgba(204,36,29,0.06)", 280);
 
-                    setTimeout(() => {
-                        ghostR.classList.remove("active");
-                        ghostB.classList.remove("active");
-                        title.classList.remove("shaking");
-                        glitching = false;
-                    }, 380);
-                } else if (mode < 0.9) {
-                    // Text stays scrambled longer — partial recovery
-                    let restored = false;
-                    scrambleText(title, 20, 30, false);
-                    setTimeout(() => {
-                        title.textContent = ORIGINAL;
-                        restored = true;
-                        glitching = false;
-                    }, 650);
-                } else {
-                    // Screen-wide desync flash
-                    glitchFlash("rgba(69,133,136,0.08)", 200);
-                    ghostR.classList.add("active");
-                    ghostB.classList.add("active");
-                    setTimeout(() => {
-                        ghostR.classList.remove("active");
-                        ghostB.classList.remove("active");
-                        glitching = false;
-                    }, 220);
-                }
-            }
+          setTimeout(() => {
+            ghostR.classList.remove("active");
+            ghostB.classList.remove("active");
+            title.classList.remove("shaking");
+            glitching = false;
+          }, 380);
+        } else if (mode < 0.9) {
+          // Text stays scrambled longer — partial recovery
+          let restored = false;
+          scrambleText(title, 20, 30, false);
+          setTimeout(() => {
+            title.textContent = ORIGINAL;
+            restored = true;
+            glitching = false;
+          }, 650);
+        } else {
+          // Screen-wide desync flash
+          glitchFlash("rgba(69,133,136,0.08)", 200);
+          ghostR.classList.add("active");
+          ghostB.classList.add("active");
+          setTimeout(() => {
+            ghostR.classList.remove("active");
+            ghostB.classList.remove("active");
+            glitching = false;
+          }, 220);
+        }
+      }
 
-            function scheduleGlitch() {
-                const delay = Math.random() * 3800 + 1200;
-                setTimeout(() => {
-                    triggerGlitch();
-                    scheduleGlitch();
-                }, delay);
-            }
+      function scheduleGlitch() {
+        const delay = Math.random() * 3800 + 1200;
+        setTimeout(() => {
+          triggerGlitch();
+          scheduleGlitch();
+        }, delay);
+      }
 
-            /* ================================================================
+      /* ================================================================
                 LOADER
             ================================================================ */
-            const fill = document.getElementById("loader-fill");
-            const labelEl = document.getElementById("loader-label");
-            const errorEl = document.getElementById("loader-error");
+      const fill = document.getElementById("loader-fill");
+      const labelEl = document.getElementById("loader-label");
+      const errorEl = document.getElementById("loader-error");
 
-            let progress = 0,
-                stallAt = 0,
-                phase = "loading";
+      let progress = 0,
+        stallAt = 0,
+        phase = "loading";
 
-            function resetLoader() {
-                phase = "loading";
-                progress = 0;
-                stallAt = 75 + Math.floor(Math.random() * 23);
-                fill.style.width = "0%";
-                fill.style.transition = "width 0.35s ease";
-                errorEl.classList.remove("show");
-                errorEl.textContent = "";
-                labelEl.style.opacity = "1";
-                labelEl.textContent = LOAD_LABELS[0];
-                tickLoader();
-            }
+      function resetLoader() {
+        phase = "loading";
+        progress = 0;
+        stallAt = 75 + Math.floor(Math.random() * 23);
+        fill.style.width = "0%";
+        fill.style.transition = "width 0.35s ease";
+        errorEl.classList.remove("show");
+        errorEl.textContent = "";
+        labelEl.style.opacity = "1";
+        labelEl.textContent = LOAD_LABELS[0];
+        tickLoader();
+      }
 
-            function tickLoader() {
-                if (phase !== "loading") return;
+      function tickLoader() {
+        if (phase !== "loading") return;
 
-                const step = Math.random() * 2.0 + 0.15;
-                progress = Math.min(progress + step, stallAt);
-                fill.style.width = progress + "%";
+        const step = Math.random() * 2.0 + 0.15;
+        progress = Math.min(progress + step, stallAt);
+        fill.style.width = progress + "%";
 
-                // Drift labels
-                if (Math.random() < 0.07) {
-                    const idx = Math.floor(Math.random() * LOAD_LABELS.length);
-                    labelEl.textContent = LOAD_LABELS[idx];
+        // Drift labels
+        if (Math.random() < 0.07) {
+          const idx = Math.floor(Math.random() * LOAD_LABELS.length);
+          labelEl.textContent = LOAD_LABELS[idx];
+        }
+
+        if (progress >= stallAt) {
+          phase = "stalled";
+          labelEl.textContent = "awaiting response...";
+
+          // Stall pause, then show error
+          const stallWait = Math.random() * 3500 + 1500;
+          setTimeout(() => {
+            if (phase !== "stalled") return;
+            phase = "error";
+            labelEl.style.opacity = "0";
+            errorEl.textContent =
+              ERRORS[Math.floor(Math.random() * ERRORS.length)];
+            errorEl.classList.add("show");
+
+            // Trigger title glitch on error
+            setTimeout(triggerGlitch, 200);
+
+            // Reset after pause
+            setTimeout(() => {
+              errorEl.classList.remove("show");
+              phase = "draining";
+
+              // Drain bar
+              fill.style.transition = "width 0.08s linear";
+              const drain = setInterval(() => {
+                progress -= 1.8;
+                fill.style.width = Math.max(0, progress) + "%";
+                if (progress <= 0) {
+                  clearInterval(drain);
+                  setTimeout(resetLoader, 700);
                 }
+              }, 22);
+            }, 3800);
+          }, stallWait);
+        } else {
+          setTimeout(tickLoader, Math.random() * 260 + 60);
+        }
+      }
 
-                if (progress >= stallAt) {
-                    phase = "stalled";
-                    labelEl.textContent = "awaiting response...";
-
-                    // Stall pause, then show error
-                    const stallWait = Math.random() * 3500 + 1500;
-                    setTimeout(() => {
-                        if (phase !== "stalled") return;
-                        phase = "error";
-                        labelEl.style.opacity = "0";
-                        errorEl.textContent =
-                            ERRORS[Math.floor(Math.random() * ERRORS.length)];
-                        errorEl.classList.add("show");
-
-                        // Trigger title glitch on error
-                        setTimeout(triggerGlitch, 200);
-
-                        // Reset after pause
-                        setTimeout(() => {
-                            errorEl.classList.remove("show");
-                            phase = "draining";
-
-                            // Drain bar
-                            fill.style.transition = "width 0.08s linear";
-                            const drain = setInterval(() => {
-                                progress -= 1.8;
-                                fill.style.width = Math.max(0, progress) + "%";
-                                if (progress <= 0) {
-                                    clearInterval(drain);
-                                    setTimeout(resetLoader, 700);
-                                }
-                            }, 22);
-                        }, 3800);
-                    }, stallWait);
-                } else {
-                    setTimeout(tickLoader, Math.random() * 260 + 60);
-                }
-            }
-
-            /* ================================================================
+      /* ================================================================
                 FLOATING PALE FRAGMENTS
             ================================================================ */
-            function spawnFragment() {
-                if (document.querySelectorAll(".fragment").length >= 6) return;
+      function spawnFragment() {
+        if (document.querySelectorAll(".fragment").length >= 6) return;
 
-                const el = document.createElement("div");
-                el.className = "fragment";
-                el.textContent =
-                    FRAGMENTS[Math.floor(Math.random() * FRAGMENTS.length)];
+        const el = document.createElement("div");
+        el.className = "fragment";
+        el.textContent =
+          FRAGMENTS[Math.floor(Math.random() * FRAGMENTS.length)];
 
-                // Place in peripheral zones
-                const zone = Math.floor(Math.random() * 4);
-                let x, y;
-                if (zone === 0) {
-                    x = Math.random() * 65 + 3;
-                    y = Math.random() * 15 + 3;
-                } // top
-                if (zone === 1) {
-                    x = Math.random() * 65 + 3;
-                    y = Math.random() * 15 + 78;
-                } // bottom
-                if (zone === 2) {
-                    x = Math.random() * 12 + 1;
-                    y = Math.random() * 50 + 25;
-                } // left
-                if (zone === 3) {
-                    x = Math.random() * 12 + 80;
-                    y = Math.random() * 50 + 25;
-                } // right
+        // Place in peripheral zones
+        const zone = Math.floor(Math.random() * 4);
+        let x, y;
+        if (zone === 0) {
+          x = Math.random() * 65 + 3;
+          y = Math.random() * 15 + 3;
+        } // top
+        if (zone === 1) {
+          x = Math.random() * 65 + 3;
+          y = Math.random() * 15 + 78;
+        } // bottom
+        if (zone === 2) {
+          x = Math.random() * 12 + 1;
+          y = Math.random() * 50 + 25;
+        } // left
+        if (zone === 3) {
+          x = Math.random() * 12 + 80;
+          y = Math.random() * 50 + 25;
+        } // right
 
-                el.style.left = x + "%";
-                el.style.top = y + "%";
-                el.style.fontSize = Math.random() * 0.22 + 0.58 + "rem";
+        el.style.left = x + "%";
+        el.style.top = y + "%";
+        el.style.fontSize = Math.random() * 0.22 + 0.58 + "rem";
 
-                document.body.appendChild(el);
-                setTimeout(() => el.classList.add("visible"), 80);
+        document.body.appendChild(el);
+        setTimeout(() => el.classList.add("visible"), 80);
 
-                const life = Math.random() * 9000 + 5000;
-                setTimeout(() => {
-                    el.classList.remove("visible");
-                    setTimeout(() => el.remove(), 2500);
-                }, life);
-            }
+        const life = Math.random() * 9000 + 5000;
+        setTimeout(() => {
+          el.classList.remove("visible");
+          setTimeout(() => el.remove(), 2500);
+        }, life);
+      }
 
-            function scheduleFragment() {
-                setTimeout(
-                    () => {
-                        spawnFragment();
-                        scheduleFragment();
-                    },
-                    Math.random() * 4500 + 1800,
-                );
-            }
+      function scheduleFragment() {
+        setTimeout(
+          () => {
+            spawnFragment();
+            scheduleFragment();
+          },
+          Math.random() * 4500 + 1800,
+        );
+      }
 
-            /* ================================================================
+      /* ================================================================
                 HORIZONTAL INTERFERENCE LINES
             ================================================================ */
-            function fireInterference() {
-                const count = Math.floor(Math.random() * 4) + 1;
-                for (let i = 0; i < count; i++) {
-                    setTimeout(() => {
-                        const ln = document.createElement("div");
-                        ln.className = "hline";
-                        ln.style.top = Math.random() * 100 + "%";
-                        ln.style.width = Math.random() * 55 + 35 + "%";
-                        ln.style.left = Math.random() * 30 + "%";
-                        const r = Math.random();
-                        if (r < 0.45)
-                            ln.style.background = "rgba(215,153,33,0.3)";
-                        else if (r < 0.75)
-                            ln.style.background = "rgba(204,36,29,0.22)";
-                        else ln.style.background = "rgba(69,133,136,0.22)";
-                        document.body.appendChild(ln);
-                        ln.style.opacity = "1";
-                        const dur = Math.random() * 180 + 40;
-                        setTimeout(() => {
-                            ln.style.opacity = "0";
-                            setTimeout(() => ln.remove(), 100);
-                        }, dur);
-                    }, i * 25);
-                }
-            }
+      function fireInterference() {
+        const count = Math.floor(Math.random() * 4) + 1;
+        for (let i = 0; i < count; i++) {
+          setTimeout(() => {
+            const ln = document.createElement("div");
+            ln.className = "hline";
+            ln.style.top = Math.random() * 100 + "%";
+            ln.style.width = Math.random() * 55 + 35 + "%";
+            ln.style.left = Math.random() * 30 + "%";
+            const r = Math.random();
+            if (r < 0.45) ln.style.background = "rgba(215,153,33,0.3)";
+            else if (r < 0.75) ln.style.background = "rgba(204,36,29,0.22)";
+            else ln.style.background = "rgba(69,133,136,0.22)";
+            document.body.appendChild(ln);
+            ln.style.opacity = "1";
+            const dur = Math.random() * 180 + 40;
+            setTimeout(() => {
+              ln.style.opacity = "0";
+              setTimeout(() => ln.remove(), 100);
+            }, dur);
+          }, i * 25);
+        }
+      }
 
-            function scheduleInterference() {
-                setTimeout(
-                    () => {
-                        fireInterference();
-                        scheduleInterference();
-                    },
-                    Math.random() * 3200 + 900,
-                );
-            }
+      function scheduleInterference() {
+        setTimeout(
+          () => {
+            fireInterference();
+            scheduleInterference();
+          },
+          Math.random() * 3200 + 900,
+        );
+      }
 
-            /* ================================================================
+      /* ================================================================
                 ENTRY GATE
             ================================================================ */
-            const enterEl = document.getElementById("enter");
-            let started = false;
+      const enterEl = document.getElementById("enter");
+      let started = false;
 
-            function startExperience() {
-                if (started) return;
-                started = true;
+      function startExperience() {
+        if (started) return;
+        started = true;
 
-                enterEl.classList.add("gone");
-                setTimeout(() => enterEl.remove(), 2200);
+        enterEl.classList.add("gone");
+        setTimeout(() => enterEl.remove(), 2200);
 
-                initAudio();
-                resetLoader();
-                scheduleGlitch();
-                scheduleFragment();
-                scheduleInterference();
-            }
+        initAudio();
+        resetLoader();
+        scheduleGlitch();
+        scheduleFragment();
+        scheduleInterference();
+      }
 
-            enterEl.addEventListener("click", startExperience);
-            enterEl.addEventListener("touchstart", startExperience, {
-                passive: true,
-            });
+      enterEl.addEventListener("click", startExperience);
+      enterEl.addEventListener("touchstart", startExperience, {
+        passive: true,
+      });
 
-            /* ================================================================
+      /* ================================================================
                 MAIN LOOP
             ================================================================ */
-            resizeCanvas();
-            initBlobs();
-            window.addEventListener("resize", () => {
-                resizeCanvas();
-                initBlobs();
-            });
+      resizeCanvas();
+      initBlobs();
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        initBlobs();
+      });
 
-            (function loop() {
-                drawFog();
-                requestAnimationFrame(loop);
-            })();
-        </script>
-    </body>
+      (function loop() {
+        drawFog();
+        requestAnimationFrame(loop);
+      })();
+    </script>
+  </body>
 </html>
