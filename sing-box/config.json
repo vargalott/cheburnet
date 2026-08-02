@@ -61,6 +61,20 @@
           "max_time_difference": "1m"
         }
       }
+    },
+    {
+      "type": "anytls",
+      "tag": "anytls-in",
+      "listen": "0.0.0.0",
+      "listen_port": 443,
+      "users": [
+        { "name": "USER", "password": "PASSWORD" }
+      ],
+      "tls": {
+        "enabled": true,
+        "certificate_path": "/etc/letsencrypt/live/.../fullchain.pem",
+        "key_path": "/etc/letsencrypt/live/.../privkey.pem"
+      }
     }
   ],
   "outbounds": [
