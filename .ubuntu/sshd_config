@@ -3,6 +3,10 @@
 ListenAddress 0.0.0.0
 Port 8080
 
+TCPKeepAlive yes
+ClientAliveInterval 30
+ClientAliveCountMax 2
+
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
 KexAlgorithms sntrup761x25519-sha512@openssh.com
 
