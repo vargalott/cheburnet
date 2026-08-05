@@ -1,0 +1,167 @@
+#
+# Core settings
+#
+# see more: https://wiki.metacubex.one/en/config/general/
+#
+log-level: warning
+ipv6: false
+udp: true
+tcp-concurrent: true
+
+#
+# NTP settings
+#
+# see more: https://wiki.metacubex.one/en/config/ntp/
+#
+ntp:
+  enable: true
+  server: time.cloudflare.com
+  port: 123
+  interval: 1800
+
+#
+# SNIFFING settings
+#
+# see more: https://wiki.metacubex.one/en/config/sniff/
+#
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+
+#
+# DNS settings
+#
+# see more: https://wiki.metacubex.one/en/config/dns/
+#           https://wiki.metacubex.one/en/config/dns/diagram/
+#
+dns:
+  enable: true
+  cache-algorithm: arc
+  listen: 127.0.0.1:53
+  ipv6: false
+
+  default-nameserver:
+    - 1.1.1.1
+    - 1.0.0.1
+  nameserver:
+    - https://1.1.1.1/dns-query#DIRECT
+    - https://1.0.0.1/dns-query#DIRECT
+
+#
+# LISTENERS settings
+#
+# see more: https://wiki.metacubex.one/en/config/listeners/
+#
+listeners:
+  - name: VLESS-IN
+    type: vless
+    port: 443
+    listen: 0.0.0.0
+    users:
+      - username: USERNAME
+        uuid: UUID
+    decryption: none
+    allow-insecure: true
+    xhttp-config:
+      path: /XHTTP-SUBPATH
+      host: HOSTNAME
+      mode: auto
+      no-sse-header: false
+      x-padding-bytes: "100-1000"
+
+#
+# RULE PROVIDERS settings
+# x-rule-providers-defaults - common fields
+#
+# see more: https://wiki.metacubex.one/en/config/rule-providers/
+#
+x-rule-providers-defaults: &rp-defaults
+  type: http
+  interval: 86400
+  proxy: DIRECT
+
+rule-providers:
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geoip-private:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs
+    path: ./rules/geoip-private.mrs
+    format: mrs
+    behavior: ipcidr
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geoip-ru:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/ru.mrs
+    path: ./rules/geoip-ru.mrs
+    format: mrs
+    behavior: ipcidr
+
+  # ---
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-category-ru:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ru.mrs
+    path: ./rules/geosite-category-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-tld-ru:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tld-ru.mrs
+    path: ./rules/geosite-tld-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-gov-ru:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-gov-ru.mrs
+    path: ./rules/geosite-gov-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-bank-ru:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-bank-ru.mrs
+    path: ./rules/geosite-bank-ru.mrs
+    format: mrs
+    behavior: domain
+
+  # source: https://github.com/MetaCubeX/meta-rules-dat/tree/meta
+  geosite-yandex:
+    <<: [*rp-defaults]
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/yandex.mrs
+    path: ./rules/geosite-yandex.mrs
+    format: mrs
+    behavior: domain
+
+#
+# RULES settings
+#
+# see more: https://wiki.metacubex.one/en/config/rules/
+#
+rules:
+  - IP-CIDR6,::/0,REJECT
+  - AND,((NETWORK,udp),(DST-PORT,443)),REJECT
+  - RULE-SET,geoip-private,DIRECT,no-resolve
+
+  - RULE-SET,geosite-bank-ru,REJECT
+  - RULE-SET,geosite-yandex,REJECT
+  - RULE-SET,geosite-gov-ru,REJECT
+  - RULE-SET,geosite-category-ru,REJECT
+  - RULE-SET,geosite-tld-ru,REJECT
+  - RULE-SET,geoip-ru,REJECT,no-resolve
+
+  - MATCH,DIRECT

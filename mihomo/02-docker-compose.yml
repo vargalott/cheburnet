@@ -1,0 +1,27 @@
+name: mihomo
+
+networks:
+  localnet:
+    external: true
+
+services:
+  mihomo:
+    container_name: mihomo
+    image: docker.io/metacubex/mihomo:latest
+    restart: always
+    pid: host
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.20
+    volumes:
+      - type: bind
+        source: ./data
+        target: /root/.config/mihomo
+      - type: bind
+        source: ./config.yaml
+        target: /root/.config/mihomo/config.yaml
+
+    logging:
+      driver: "local"
+      options:
+        max-size: "100m"
