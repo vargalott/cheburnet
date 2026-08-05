@@ -1,0 +1,32 @@
+name: nginx
+
+networks:
+  localnet:
+    external: true
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.10
+    ports:
+      - 443:443
+    volumes:
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
+        read_only: true
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+
+    logging:
+      driver: "local"
+      options:
+        max-size: "100m"
