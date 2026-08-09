@@ -60,6 +60,8 @@ rsync -avz --include='db_*.sqlite3' --exclude='*' pale:/root/vaultwarden/data/ $
 
 ##### flowchart
 
+###### 01
+
 ```mermaid
 flowchart TD
   classDef wide padding:100px
@@ -67,30 +69,62 @@ flowchart TD
   %% Blocks
   CLIENT["Client Device\nScanners\nCensor"]:::wide
 
-  TCP443["VLESS-REALITY\n172.20.0.10\nTCP:443"]:::wide
-  UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
+  PROXY-CORE-TCP443["VLESS-TCP-REALITY\n172.20.0.10\nTCP:443"]:::wide
+  HYSTERIA-UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
 
   NGINX["Nginx Reverse Proxy\n172.20.0.20"]:::wide
   MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
   CONFIG["Proxy client config\n(mihomo)"]:::wide
-  VAULT["Vaultwarden\n172.20.0.40"]:::wide
+  
+  TUNNEL["Proxy tunnel"]:::wide
+  INTERNET["Internet"]:::wide
+
+  %% Flows
+  CLIENT -->|:443/tcp| PROXY-CORE-TCP443
+  CLIENT -->|:443/udp| HYSTERIA-UDP443
+
+  PROXY-CORE-TCP443 -->|auth successful\nvalid shortid/uuid| TUNNEL
+  HYSTERIA-UDP443 -->|auth successful\nvalid userpass| TUNNEL
+
+  PROXY-CORE-TCP443 -->|reality destination\nfailed auth| NGINX
+  HYSTERIA-UDP443 -->|hysteria masquerade\nfailed auth| PROXY-CORE-TCP443
+
+  NGINX -->|https://website/| MASQ
+  NGINX -->|https://website/secretpath/config.yaml| CONFIG
+
+  TUNNEL --> INTERNET
+```
+
+###### 02
+
+```mermaid
+flowchart TD
+  classDef wide padding:100px
+
+  %% Blocks
+  CLIENT["Client Device\nScanners\nCensor"]:::wide
+
+  NGINX-TCP443["NGINX\n172.20.0.10\nTCP:443"]:::wide
+  HYSTERIA-UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
+  PROXY-CORE["VLESS-XHTTP-RAW\n172.20.0.20"]:::wide
+
+  MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
+  CONFIG["Proxy client config\n(mihomo)"]:::wide
 
   TUNNEL["Proxy tunnel"]:::wide
   INTERNET["Internet"]:::wide
 
   %% Flows
-  CLIENT -->|:443/tcp| TCP443
-  CLIENT -->|:443/udp| UDP443
+  CLIENT -->|:443/tcp| NGINX-TCP443
+  CLIENT -->|:443/udp| HYSTERIA-UDP443
 
-  TCP443 -->|auth successful\nvalid shortid/uuid| TUNNEL
-  UDP443 -->|auth successful\nvalid userpass| TUNNEL
+  NGINX-TCP443 -->|https://website/XHTTP-SUBPATH\nauth successful\nvalid shortid/uuid| PROXY-CORE
+  PROXY-CORE -->|XHTTP grpc| TUNNEL
+  HYSTERIA-UDP443 -->|auth successful\nvalid userpass| TUNNEL
+  HYSTERIA-UDP443 -->|hysteria masquerade\nfailed auth| NGINX-TCP443
 
-  TCP443 -->|reality destination\nfailed auth| NGINX
-  UDP443 -->|hysteria masquerade\nfailed auth| TCP443
-
-  NGINX -->|https://website/| MASQ
-  NGINX -->|https://website/secretpath/config.yaml| CONFIG
-  NGINX -->|https://website/vault| VAULT
+  NGINX-TCP443 -->|https://website/| MASQ
+  NGINX-TCP443 -->|https://website/secretpath/config.yaml| CONFIG
 
   TUNNEL --> INTERNET
 ```
