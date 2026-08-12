@@ -7,6 +7,11 @@ security:
     username: "USERNAME"
     password-bcrypt-base64: "PASSWORD"
 
+ui:
+  title: "Gatus"
+  dashboard-heading: "Dashboard"
+  dashboard-subheading: "Don't you dare go Hollow"
+
 alerting:
   telegram:
     token: "TOKEN"
