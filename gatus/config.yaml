@@ -49,16 +49,19 @@ x-endpoints-common: &x-endpoints-common
     - type: custom
 
 x-endpoints-https: &x-endpoints-https
+  interval: 30s
   conditions:
     - "[STATUS] == 200"
     - "[RESPONSE_TIME] < 5000"
     - "[CERTIFICATE_EXPIRATION] > 72h"
 
 x-endpoints-domain: &x-endpoints-domain
+  interval: 1h
   conditions:
     - "[DOMAIN_EXPIRATION] > 168h"
 
 x-endpoints-ssh: &x-endpoints-ssh
+  interval: 1m
   body: '{ "command": "/bin/true" }'
   conditions:
     - "[CONNECTED] == true"
@@ -70,7 +73,6 @@ endpoints:
   - name: "HTTPS"
     <<: [*x-endpoints-common, *x-endpoints-https]
     url: "https://ENDPOINT"
-    interval: 30s
 
   #
   # domain expiration monitors
@@ -78,7 +80,6 @@ endpoints:
   - name: "DOMAIN"
     <<: [*x-endpoints-common, *x-endpoints-domain]
     url: "https://ENDPOINT"
-    interval: 1h
 
   #
   # ssh monitors
@@ -88,7 +89,6 @@ endpoints:
   - name: "SSH"
     <<: [*x-endpoints-common, *x-endpoints-ssh]
     url: "ssh://ENDPOINT"
-    interval: 1m
     ssh:
       username: "USERNAME"
       private-key: |
