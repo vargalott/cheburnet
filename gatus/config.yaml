@@ -1,0 +1,72 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+security:
+  basic:
+    username: "USERNAME"
+    password-bcrypt-base64: "PASSWORD"
+
+alerting:
+  telegram:
+    token: "TOKEN"
+    id: "CHAT_ID"
+    default-alert:
+      enabled: true
+      failure-threshold: 3
+      success-threshold: 2
+      send-on-resolved: true
+
+x-endpoints-common: &x-endpoints-common
+  alerts:
+    - type: telegram
+      send-on-resolved: true
+
+x-endpoints-https: &x-endpoints-https
+  conditions:
+    - "[STATUS] == 200"
+    - "[RESPONSE_TIME] < 5000"
+    - "[CERTIFICATE_EXPIRATION] > 72h"
+
+x-endpoints-domain: &x-endpoints-domain
+  conditions:
+    - "[DOMAIN_EXPIRATION] > 168h"
+
+x-endpoints-ssh: &x-endpoints-ssh
+  body: '{ "command": "/bin/true" }'
+  conditions:
+    - "[CONNECTED] == true"
+    - "[STATUS] == 0"
+
+endpoints:
+  #
+  # https monitors
+  #
+  - name: "HTTPS"
+    <<: [*x-endpoints-common, *x-endpoints-https]
+    url: "https://ENDPOINT"
+    interval: 30s
+
+  #
+  # domain expiration monitors
+  #
+  - name: "DOMAIN"
+    <<: [*x-endpoints-common, *x-endpoints-domain]
+    url: "https://ENDPOINT"
+    interval: 1h
+
+  #
+  # ssh monitors
+  #
+  # > .ssh/authorized_keys
+  # restrict,command="/bin/true" SSH_PUB_KEY
+  - name: "SSH"
+    <<: [*x-endpoints-common, *x-endpoints-ssh]
+    url: "ssh://ENDPOINT"
+    interval: 1m
+    ssh:
+      username: "USERNAME"
+      private-key: |
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        KEY
+        -----END OPENSSH PRIVATE KEY-----

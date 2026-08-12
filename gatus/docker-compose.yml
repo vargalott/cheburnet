@@ -1,0 +1,29 @@
+name: gatus
+
+networks:
+  localnet:
+    external: true
+
+services:
+  gatus:
+    image: ghcr.io/twin/gatus:stable
+    container_name: gatus
+    restart: always
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.60
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+      - type: bind
+        source: ./config.yaml
+        target: /config/config.yaml
+    environment:
+      - TZ=UTC
+      - GATUS_CONFIG_PATH=/config
+
+    logging:
+      driver: "local"
+      options:
+        max-size: "100m"
