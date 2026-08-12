@@ -13,14 +13,35 @@ alerting:
     id: "CHAT_ID"
     default-alert:
       enabled: true
+      send-on-resolved: true
       failure-threshold: 3
       success-threshold: 2
+
+  custom:
+    url: "https://api.telegram.org/bot${TOKEN}/sendMessage"
+    method: "POST"
+    headers:
+      Content-Type: "application/json"
+    placeholders:
+      ALERT_TRIGGERED_OR_RESOLVED:
+        TRIGGERED: "🟥 *ACHTUNG*\n\n*State:*       `Down`"
+        RESOLVED: "🟩 *WIEDERHERGESTELLT*\n\n*State:*       `Up`"
+    body: |
+      {
+        "chat_id": "CHAT_ID",
+        "parse_mode": "MarkdownV2",
+        "text": "[ALERT_TRIGGERED_OR_RESOLVED]\n*Service:*    `[ENDPOINT_NAME]`\n*Target:*     `[ENDPOINT_URL]`"
+      }
+    default-alert:
+      enabled: true
       send-on-resolved: true
+      failure-threshold: 3
+      success-threshold: 2
 
 x-endpoints-common: &x-endpoints-common
   alerts:
-    - type: telegram
-      send-on-resolved: true
+    # - type: telegram
+    - type: custom
 
 x-endpoints-https: &x-endpoints-https
   conditions:
@@ -36,7 +57,6 @@ x-endpoints-ssh: &x-endpoints-ssh
   body: '{ "command": "/bin/true" }'
   conditions:
     - "[CONNECTED] == true"
-    - "[STATUS] == 0"
 
 endpoints:
   #
