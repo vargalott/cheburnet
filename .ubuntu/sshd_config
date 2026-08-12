@@ -3,10 +3,15 @@
 AddressFamily inet
 ListenAddress 0.0.0.0
 Port 8080
+# GatewayPorts yes
+# AllowTcpForwarding yes
 
 TCPKeepAlive yes
 ClientAliveInterval 30
 ClientAliveCountMax 2
+
+# HostKey /etc/ssh/ssh_host_ed25519_key
+# HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
 
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
 KexAlgorithms mlkem768x25519-sha256
@@ -17,7 +22,7 @@ PubkeyAuthentication yes
 PasswordAuthentication no
 PermitEmptyPasswords no
 KbdInteractiveAuthentication no
-UsePAM yes
+UsePAM no
 
 X11Forwarding yes
 PrintMotd no
