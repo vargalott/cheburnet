@@ -9,7 +9,8 @@ ClientAliveInterval 30
 ClientAliveCountMax 2
 
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
-KexAlgorithms sntrup761x25519-sha512@openssh.com
+KexAlgorithms mlkem768x25519-sha256
+# KexAlgorithms sntrup761x25519-sha512@openssh.com
 
 PermitRootLogin prohibit-password
 PubkeyAuthentication yes
