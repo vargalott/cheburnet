@@ -1,0 +1,25 @@
+name: pocket-id
+
+networks:
+  localnet:
+    external: true
+
+services:
+  pocket-id:
+    image: ghcr.io/pocket-id/pocket-id:v2
+    restart: unless-stopped
+    networks:
+      localnet:
+        ipv4_address: 172.20.0.70
+    environment:
+      APP_URL: URL
+      ENCRYPTION_KEY: KEY # openssl rand -base64 32
+      ANALYTICS_DISABLED: true
+      PUID: 1000
+      PGID: 1000
+      TRUST_PROXY: 172.20.0.0/24
+      MAXMIND_LICENSE_KEY: MAXMIND_KEY
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
