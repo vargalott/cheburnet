@@ -6,6 +6,12 @@ security:
   basic:
     username: "USERNAME"
     password-bcrypt-base64: "PASSWORD"
+  oidc:
+    issuer-url: "OIDC_URL"
+    redirect-url: "GATUS_URL/authorization-code/callback"
+    client-id: "ID"
+    client-secret: "SECRET"
+    scopes: ["openid"]
 
 ui:
   title: "Gatus"
@@ -19,7 +25,7 @@ alerting:
     default-alert:
       enabled: true
       send-on-resolved: true
-      failure-threshold: 3
+      failure-threshold: 4
       success-threshold: 2
 
   custom:
