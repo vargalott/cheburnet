@@ -1,3 +1,5 @@
+<!-- fully vibecoded with Claude -->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,7 +16,6 @@
         --rust: #a13a2b;
         --teal: #2f5b57;
         --ochre: #a9822f;
-        --mist: #8fa094;
         --glow: #d9b46a;
         --line: rgba(36, 31, 26, 0.18);
       }
@@ -34,6 +35,9 @@
         font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
+        transition:
+          background-color 0.6s ease,
+          color 0.6s ease;
       }
 
       ::selection {
@@ -43,6 +47,25 @@
 
       a {
         color: var(--rust);
+      }
+
+      /* ---------- reality-shift flash, fired on palette/background switches ---------- */
+      @keyframes realityShift {
+        0% {
+          filter: none;
+        }
+        30% {
+          filter: invert(0.08) hue-rotate(20deg) contrast(1.15);
+        }
+        60% {
+          filter: invert(0.03) hue-rotate(-12deg);
+        }
+        100% {
+          filter: none;
+        }
+      }
+      body.shifting {
+        animation: realityShift 0.4s ease;
       }
 
       /* ---------- background mist canvas ---------- */
@@ -143,7 +166,6 @@
         display: flex;
         align-items: flex-end;
         gap: 3px;
-        font-family: "Courier New", ui-monospace, monospace;
       }
       .signal span {
         width: 4px;
@@ -175,6 +197,56 @@
         50% {
           opacity: 0.75;
         }
+      }
+
+      /* ---------- control console ---------- */
+      .console {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid var(--line);
+        background: rgba(127, 127, 127, 0.08);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      .mode-btn {
+        font-family: "Courier New", ui-monospace, monospace;
+        background: transparent;
+        border: 1px solid var(--ink-soft);
+        color: var(--ink);
+        padding: 6px 10px;
+        cursor: pointer;
+        text-align: left;
+        min-width: 128px;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          border-color 0.6s ease;
+      }
+      .mode-btn:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .mode-btn:focus-visible {
+        outline: 2px solid var(--rust);
+        outline-offset: 2px;
+      }
+      .mode-btn .mode-name {
+        display: block;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+      }
+      .mode-btn small {
+        display: block;
+        opacity: 0.6;
+        font-size: 0.58rem;
+        letter-spacing: 0.3em;
+        margin-top: 3px;
       }
 
       /* ---------- hero ---------- */
@@ -222,7 +294,6 @@
       .elysium-title span {
         display: inline-block;
         position: relative;
-        animation: chroma 5.5s ease-in-out infinite;
       }
       .elysium-title span:nth-child(3n) {
         animation-delay: -1.2s;
@@ -237,14 +308,86 @@
           text-shadow:
             -2px 0 var(--rust),
             2px 0 var(--teal);
-          transform: translate(0, 0);
+          transform: translate(var(--gx, 0px), var(--gy, 0px))
+            skew(var(--grot, 0deg));
         }
         50% {
           text-shadow:
             2px 0 var(--rust),
             -2px 0 var(--teal);
-          transform: translate(0, 0);
+          transform: translate(var(--gx, 0px), var(--gy, 0px))
+            skew(var(--grot, 0deg));
         }
+      }
+      @keyframes flickerFast {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        45% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        55% {
+          opacity: 1;
+        }
+        78% {
+          opacity: 0.7;
+        }
+      }
+      @keyframes shatterJitter {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        15% {
+          transform: translate(-5px, 3px) rotate(-3deg);
+        }
+        30% {
+          transform: translate(4px, -4px) rotate(2deg);
+        }
+        45% {
+          transform: translate(-3px, -2px) rotate(-2deg);
+        }
+        60% {
+          transform: translate(5px, 2px) rotate(3deg);
+        }
+        75% {
+          transform: translate(-2px, 4px) rotate(-1deg);
+        }
+        90% {
+          transform: translate(3px, -1px) rotate(1deg);
+        }
+      }
+      @keyframes monoBreath {
+        0%,
+        100% {
+          color: var(--ink);
+          text-shadow: none;
+          transform: translate(var(--gx, 0px), var(--gy, 0px));
+        }
+        50% {
+          color: var(--rust);
+          text-shadow: 0 0 22px var(--rust);
+          transform: translate(var(--gx, 0px), var(--gy, 0px));
+        }
+      }
+
+      .elysium-title.mode-drift span {
+        animation: chroma 5.5s ease-in-out infinite;
+      }
+      .elysium-title.mode-strobe span {
+        animation:
+          chroma 2s ease-in-out infinite,
+          flickerFast 0.5s steps(1) infinite;
+      }
+      .elysium-title.mode-shatter span {
+        animation: shatterJitter 2.6s ease-in-out infinite;
+      }
+      .elysium-title.mode-mono span {
+        animation: monoBreath 6s ease-in-out infinite;
       }
 
       .elysium-title span.rainbow {
@@ -262,23 +405,13 @@
         background-clip: text;
         color: transparent;
         -webkit-text-fill-color: transparent;
-        animation: rainbowshift 7s linear infinite;
+        animation: rainbowshift 7s linear infinite !important;
         text-shadow: none;
       }
       @keyframes rainbowshift {
         to {
           background-position: -300% 0;
         }
-      }
-
-      .elysium-title.glitching span {
-        animation: none;
-      }
-      .elysium-title.glitching span:nth-child(odd) {
-        transform: translate(-6px, 2px) skewX(6deg);
-      }
-      .elysium-title.glitching span:nth-child(even) {
-        transform: translate(5px, -3px) skewX(-4deg);
       }
 
       .subtitle {
@@ -309,7 +442,8 @@
         transition:
           background 0.25s ease,
           color 0.25s ease,
-          transform 0.15s ease;
+          transform 0.15s ease,
+          border-color 0.6s ease;
       }
       .tune-btn:hover {
         background: var(--ink);
@@ -350,7 +484,8 @@
         transform: translateY(24px);
         transition:
           opacity 1s ease,
-          transform 1s ease;
+          transform 1s ease,
+          background-color 0.6s ease;
       }
       .entry.visible {
         opacity: 1;
@@ -389,18 +524,33 @@
         margin-bottom: 0;
       }
 
-      /* ---------- dial widget ---------- */
+      /* ---------- dial console (static section) ---------- */
       .dial-wrap {
-        margin-top: 2.6rem;
+        margin-top: 2.2rem;
+      }
+      .dial-wrap .flavor {
+        font-style: italic;
+        color: var(--ink-soft);
+        margin: 0 0 1.6rem;
+        font-size: 0.95rem;
+      }
+
+      .dial-grid {
         display: flex;
-        align-items: center;
-        gap: 2rem;
         flex-wrap: wrap;
+        gap: 2rem 2.6rem;
+      }
+
+      .dial-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
       }
 
       .dial {
-        width: 92px;
-        height: 92px;
+        width: 84px;
+        height: 84px;
         border-radius: 50%;
         border: 2px solid var(--ink);
         position: relative;
@@ -412,6 +562,9 @@
         );
         touch-action: none;
         flex-shrink: 0;
+        transition:
+          border-color 0.6s ease,
+          background 0.6s ease;
       }
       .dial:active {
         cursor: grabbing;
@@ -423,27 +576,38 @@
       .dial::after {
         content: "";
         position: absolute;
-        top: 8px;
+        top: 7px;
         left: 50%;
         width: 3px;
-        height: 30px;
+        height: 28px;
         background: var(--rust);
-        transform-origin: 50% 38px;
+        transform-origin: 50% 35px;
         transform: translateX(-50%) rotate(var(--angle, -120deg));
       }
 
-      .dial-readout {
+      .dial-caption {
         font-family: "Courier New", ui-monospace, monospace;
-        font-size: 1.6rem;
-        letter-spacing: 0.05em;
-        color: var(--ink);
-      }
-      .dial-readout .hz {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.25em;
         color: var(--ink-soft);
+        text-align: center;
+      }
+      .dial-caption .dial-value {
         display: block;
-        letter-spacing: 0.3em;
+        font-size: 1.15rem;
+        letter-spacing: 0.04em;
+        color: var(--ink);
         margin-top: 0.3rem;
+      }
+      .dial-caption small {
+        display: block;
+        font-size: 0.56rem;
+        opacity: 0.65;
+        letter-spacing: 0.3em;
+        margin-top: 0.15rem;
+      }
+      .dial-unit.primary .dial-value {
+        font-size: 1.5rem;
       }
 
       .closing {
@@ -484,6 +648,18 @@
 
     <div class="signal" aria-hidden="true">
       <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="console" role="group" aria-label="Display controls">
+      <button class="mode-btn" id="bgBtn" type="button">
+        <span class="mode-name">MIST</span><small>background</small>
+      </button>
+      <button class="mode-btn" id="paletteBtn" type="button">
+        <span class="mode-name">REVACHOL RUST</span><small>palette</small>
+      </button>
+      <button class="mode-btn" id="glitchBtn" type="button">
+        <span class="mode-name">DRIFT</span><small>signage</small>
+      </button>
     </div>
 
     <header class="hero" id="hero">
@@ -544,19 +720,71 @@
           listening anyway.
         </p>
         <div class="dial-wrap">
-          <div
-            class="dial"
-            id="dial"
-            tabindex="0"
-            role="slider"
-            aria-label="Tuning dial"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            aria-valuenow="50"
-          ></div>
-          <div class="dial-readout">
-            <span id="freqNum">88.4</span>
-            <span class="hz">MHz · DRIFTING</span>
+          <p class="flavor">
+            Four hands on the same tired machine. They rarely agree.
+          </p>
+          <div class="dial-grid">
+            <div class="dial-unit primary">
+              <div
+                class="dial"
+                id="dial"
+                tabindex="0"
+                role="slider"
+                aria-label="Tuning dial"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              ></div>
+              <div class="dial-caption">
+                TUNE<span class="dial-value" id="freqNum">88.4</span
+                ><small>MHz</small>
+              </div>
+            </div>
+            <div class="dial-unit">
+              <div
+                class="dial"
+                id="crushDial"
+                tabindex="0"
+                role="slider"
+                aria-label="Crush amount"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              ></div>
+              <div class="dial-caption">
+                CRUSH<span class="dial-value" id="crushVal">0</span>
+              </div>
+            </div>
+            <div class="dial-unit">
+              <div
+                class="dial"
+                id="desyncDial"
+                tabindex="0"
+                role="slider"
+                aria-label="Desync amount"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              ></div>
+              <div class="dial-caption">
+                DESYNC<span class="dial-value" id="desyncVal">0</span>
+              </div>
+            </div>
+            <div class="dial-unit">
+              <div
+                class="dial"
+                id="echoDial"
+                tabindex="0"
+                role="slider"
+                aria-label="Echo amount"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              ></div>
+              <div class="dial-caption">
+                ECHO<span class="dial-value" id="echoVal">0</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -580,6 +808,103 @@
       (() => {
         "use strict";
 
+        /* ---------------- palette system ---------------- */
+        const palettes = [
+          {
+            name: "REVACHOL RUST",
+            paper: "#e8ddc4",
+            paperDim: "#dccdaa",
+            paperAlt: "#ddd0b6",
+            ink: "#241f1a",
+            inkSoft: "#4a4038",
+            rust: "#a13a2b",
+            teal: "#2f5b57",
+            ochre: "#a9822f",
+            glow: "#d9b46a",
+          },
+          {
+            name: "MARTINAISE GREY",
+            paper: "#d8d6cd",
+            paperDim: "#c9c6ba",
+            paperAlt: "#cfcdc0",
+            ink: "#201f1d",
+            inkSoft: "#4c4a45",
+            rust: "#6e5a52",
+            teal: "#4a5a56",
+            ochre: "#8d8567",
+            glow: "#a8a58f",
+          },
+          {
+            name: "COMMUNIST GLOW",
+            paper: "#1c1410",
+            paperDim: "#150e0b",
+            paperAlt: "#241a15",
+            ink: "#e8ddc4",
+            inkSoft: "#c9b98f",
+            rust: "#d1452e",
+            teal: "#3f8f86",
+            ochre: "#d1a13a",
+            glow: "#f0c46a",
+          },
+          {
+            name: "STATIC VIOLET",
+            paper: "#e3dbe8",
+            paperDim: "#d3c5db",
+            paperAlt: "#d9cbe0",
+            ink: "#241522",
+            inkSoft: "#4a3a48",
+            rust: "#7c3a8e",
+            teal: "#3a5a7c",
+            ochre: "#8e5a8e",
+            glow: "#b98ed9",
+          },
+          {
+            name: "ISOLA TEAL",
+            paper: "#dbe4dc",
+            paperDim: "#c7d4c8",
+            paperAlt: "#cddad0",
+            ink: "#16211c",
+            inkSoft: "#3a4a40",
+            rust: "#b0563a",
+            teal: "#1f6b5c",
+            ochre: "#6a8a4a",
+            glow: "#7fbfa0",
+          },
+        ];
+        let currentPalette = palettes[0];
+
+        function hexToRgba(hex, a) {
+          const c = hex.replace("#", "");
+          const full =
+            c.length === 3
+              ? c
+                  .split("")
+                  .map((ch) => ch + ch)
+                  .join("")
+              : c;
+          const bigint = parseInt(full, 16);
+          const r = (bigint >> 16) & 255,
+            g = (bigint >> 8) & 255,
+            b = bigint & 255;
+          return `rgba(${r},${g},${b},${a})`;
+        }
+
+        function applyPalette(p) {
+          const root = document.documentElement.style;
+          root.setProperty("--paper", p.paper);
+          root.setProperty("--paper-dim", p.paperDim);
+          root.setProperty("--paper-alt", p.paperAlt);
+          root.setProperty("--ink", p.ink);
+          root.setProperty("--ink-soft", p.inkSoft);
+          root.setProperty("--rust", p.rust);
+          root.setProperty("--teal", p.teal);
+          root.setProperty("--ochre", p.ochre);
+          root.setProperty("--glow", p.glow);
+          root.setProperty("--line", hexToRgba(p.ink, 0.18));
+          currentPalette = p;
+        }
+        applyPalette(palettes[0]);
+
         /* ---------------- mist background ---------------- */
         const mistCanvas = document.getElementById("mist-canvas");
         const mctx = mistCanvas.getContext("2d");
@@ -598,7 +923,8 @@
             r: 0.55,
             speed: 0.00011,
             phase: 0,
-            color: "rgba(143,160,148,0.55)",
+            key: "inkSoft",
+            alpha: 0.5,
           },
           {
             rx: 0.7,
@@ -606,7 +932,8 @@
             r: 0.5,
             speed: 0.00015,
             phase: 2.1,
-            color: "rgba(169,130,47,0.18)",
+            key: "ochre",
+            alpha: 0.18,
           },
           {
             rx: 0.5,
@@ -614,7 +941,8 @@
             r: 0.6,
             speed: 0.00009,
             phase: 4.2,
-            color: "rgba(47,91,87,0.20)",
+            key: "teal",
+            alpha: 0.2,
           },
           {
             rx: 0.85,
@@ -622,24 +950,99 @@
             r: 0.4,
             speed: 0.00013,
             phase: 1.3,
-            color: "rgba(161,58,43,0.10)",
+            key: "rust",
+            alpha: 0.12,
           },
         ];
 
+        const bgModes = ["MIST", "STORM", "ISOLA", "SIGNAL"];
+        let bgMode = bgModes[0];
+        let blobSeed = 0;
+
         function paintMist(t) {
-          mctx.fillStyle = "rgba(232,221,196,0.10)";
-          mctx.fillRect(0, 0, w, h);
-          for (const b of blobs) {
-            const cx = (b.rx + 0.12 * Math.sin(t * b.speed + b.phase)) * w;
-            const cy = (b.ry + 0.1 * Math.cos(t * b.speed * 1.3 + b.phase)) * h;
-            const r = b.r * Math.max(w, h) * 0.5;
-            const grad = mctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-            grad.addColorStop(0, b.color);
-            grad.addColorStop(1, "rgba(0,0,0,0)");
-            mctx.fillStyle = grad;
-            mctx.beginPath();
-            mctx.arc(cx, cy, r, 0, Math.PI * 2);
-            mctx.fill();
+          const p = currentPalette;
+
+          if (bgMode === "SIGNAL") {
+            mctx.fillStyle = hexToRgba(p.ink, 0.1);
+            mctx.fillRect(0, 0, w, h);
+            mctx.fillStyle = hexToRgba(p.paper, 0.5);
+            const barY = ((t * 0.05) % (h + 120)) - 60;
+            mctx.fillRect(0, barY, w, 70);
+            if (Math.random() < 0.02) {
+              const ny = Math.random() * h;
+              mctx.fillStyle = hexToRgba(p.ink, 0.5);
+              mctx.fillRect(0, ny, w, 2 + Math.random() * 6);
+            }
+          } else if (bgMode === "STORM") {
+            mctx.fillStyle = hexToRgba(p.paper, 0.16);
+            mctx.fillRect(0, 0, w, h);
+            for (const b of blobs) {
+              const speed = b.speed * 2.4;
+              const jitter = 16;
+              const cx =
+                (b.rx + 0.14 * Math.sin(t * speed + b.phase + blobSeed)) * w +
+                (Math.random() * jitter - jitter / 2);
+              const cy =
+                (b.ry + 0.12 * Math.cos(t * speed * 1.3 + b.phase + blobSeed)) *
+                  h +
+                (Math.random() * jitter - jitter / 2);
+              const r = b.r * Math.max(w, h) * 0.5;
+              const grad = mctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+              grad.addColorStop(0, hexToRgba(p[b.key], b.alpha * 1.3));
+              grad.addColorStop(1, "rgba(0,0,0,0)");
+              mctx.fillStyle = grad;
+              mctx.beginPath();
+              mctx.arc(cx, cy, r, 0, Math.PI * 2);
+              mctx.fill();
+            }
+            if (Math.random() < 0.025) {
+              mctx.fillStyle = hexToRgba(p.paper, 0.4);
+              mctx.fillRect(0, Math.random() * h, w, 3 + Math.random() * 10);
+            }
+          } else if (bgMode === "ISOLA") {
+            mctx.fillStyle = hexToRgba(p.paper, 0.06);
+            mctx.fillRect(0, 0, w, h);
+            for (const b of blobs) {
+              const breathe = 0.85 + 0.15 * Math.sin(t * 0.0004 + b.phase);
+              const cx = b.rx * w;
+              const cy = b.ry * h;
+              const r = b.r * Math.max(w, h) * 0.5 * breathe;
+              const grad = mctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+              grad.addColorStop(0, hexToRgba(p[b.key], b.alpha * 0.9));
+              grad.addColorStop(1, "rgba(0,0,0,0)");
+              mctx.fillStyle = grad;
+              mctx.beginPath();
+              mctx.arc(cx, cy, r, 0, Math.PI * 2);
+              mctx.fill();
+            }
+            const vg = mctx.createRadialGradient(
+              w / 2,
+              h / 2,
+              Math.min(w, h) * 0.3,
+              w / 2,
+              h / 2,
+              Math.max(w, h) * 0.75,
+            );
+            vg.addColorStop(0, "rgba(0,0,0,0)");
+            vg.addColorStop(1, hexToRgba(p.ink, 0.18));
+            mctx.fillStyle = vg;
+            mctx.fillRect(0, 0, w, h);
+          } else {
+            mctx.fillStyle = hexToRgba(p.paper, 0.1);
+            mctx.fillRect(0, 0, w, h);
+            for (const b of blobs) {
+              const cx = (b.rx + 0.12 * Math.sin(t * b.speed + b.phase)) * w;
+              const cy =
+                (b.ry + 0.1 * Math.cos(t * b.speed * 1.3 + b.phase)) * h;
+              const r = b.r * Math.max(w, h) * 0.5;
+              const grad = mctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+              grad.addColorStop(0, hexToRgba(p[b.key], b.alpha));
+              grad.addColorStop(1, "rgba(0,0,0,0)");
+              mctx.fillStyle = grad;
+              mctx.beginPath();
+              mctx.arc(cx, cy, r, 0, Math.PI * 2);
+              mctx.fill();
+            }
           }
           requestAnimationFrame(paintMist);
         }
@@ -665,9 +1068,20 @@
           motesEl.appendChild(m);
         }
 
-        /* ---------------- title glitch + rainbow letters ---------------- */
+        /* ---------------- reality-shift flourish ---------------- */
+        function triggerRealityShift() {
+          document.body.classList.remove("shifting");
+          void document.body.offsetWidth;
+          document.body.classList.add("shifting");
+          setTimeout(() => document.body.classList.remove("shifting"), 450);
+        }
+
+        /* ---------------- title: glitch modes + rainbow letters ---------------- */
         const title = document.getElementById("title");
         const letters = Array.from(title.querySelectorAll("span"));
+
+        const glitchModes = ["drift", "strobe", "shatter", "mono"];
+        let glitchMode = glitchModes[0];
 
         function pickRainbowLetters() {
           letters.forEach((l) => l.classList.remove("rainbow"));
@@ -678,18 +1092,60 @@
             pool.splice(idx, 1)[0].classList.add("rainbow");
           }
         }
-        pickRainbowLetters();
-        setInterval(pickRainbowLetters, 9000);
 
-        function fireGlitch() {
-          title.classList.add("glitching");
-          setTimeout(
-            () => title.classList.remove("glitching"),
-            140 + Math.random() * 120,
+        function applyGlitchMode() {
+          title.classList.remove(
+            "mode-drift",
+            "mode-strobe",
+            "mode-shatter",
+            "mode-mono",
           );
-          setTimeout(fireGlitch, 3500 + Math.random() * 5500);
+          title.classList.add("mode-" + glitchMode);
+          if (glitchMode === "drift") {
+            pickRainbowLetters();
+          } else {
+            letters.forEach((l) => l.classList.remove("rainbow"));
+          }
         }
-        setTimeout(fireGlitch, 2200);
+        applyGlitchMode();
+
+        setInterval(() => {
+          if (glitchMode === "drift") pickRainbowLetters();
+        }, 9000);
+
+        function glitchPulse() {
+          if (glitchMode === "drift" || glitchMode === "mono") {
+            letters.forEach((l) => {
+              l.style.setProperty(
+                "--gx",
+                (Math.random() * 14 - 7).toFixed(1) + "px",
+              );
+              l.style.setProperty(
+                "--gy",
+                (Math.random() * 10 - 5).toFixed(1) + "px",
+              );
+              l.style.setProperty(
+                "--grot",
+                (Math.random() * 10 - 5).toFixed(1) + "deg",
+              );
+            });
+            setTimeout(
+              () => {
+                letters.forEach((l) => {
+                  l.style.setProperty("--gx", "0px");
+                  l.style.setProperty("--gy", "0px");
+                  l.style.setProperty("--grot", "0deg");
+                });
+              },
+              140 + Math.random() * 120,
+            );
+          }
+        }
+        function scheduleGlitch() {
+          glitchPulse();
+          setTimeout(scheduleGlitch, 3200 + Math.random() * 5000);
+        }
+        setTimeout(scheduleGlitch, 2200);
 
         /* ---------------- scroll reveal ---------------- */
         const io = new IntersectionObserver(
@@ -702,13 +1158,89 @@
         );
         document.querySelectorAll(".entry").forEach((el) => io.observe(el));
 
-        /* ---------------- audio: generative ambient drone ---------------- */
-        let actx = null;
-        let master,
-          noiseFilter,
+        /* ---------------- generic dial widget ---------------- */
+        function makeDial(el, { initialAngle = -140, onChange, onNotch } = {}) {
+          let angle = initialAngle;
+          let dragging = false;
+          let lastNotch = null;
+
+          function apply(a) {
+            angle = Math.max(-140, Math.min(140, a));
+            el.style.setProperty("--angle", angle + "deg");
+            const pct = (angle + 140) / 280;
+            el.setAttribute("aria-valuenow", Math.round(pct * 100));
+            if (onChange) onChange(pct, angle);
+            if (onNotch) {
+              const notch = Math.round(angle / 12);
+              if (notch !== lastNotch) {
+                lastNotch = notch;
+                onNotch(notch);
+              }
+            }
+          }
+
+          function angleFromEvent(e) {
+            const rect = el.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const rad = Math.atan2(clientX - cx, -(clientY - cy));
+            return rad * (180 / Math.PI);
+          }
+
+          el.addEventListener("pointerdown", (e) => {
+            dragging = true;
+            el.setPointerCapture(e.pointerId);
+          });
+          el.addEventListener("pointerup", () => (dragging = false));
+          el.addEventListener("pointercancel", () => (dragging = false));
+          el.addEventListener("pointermove", (e) => {
+            if (!dragging) return;
+            apply(angleFromEvent(e));
+          });
+          el.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+              apply(angle + 6);
+              e.preventDefault();
+            }
+            if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+              apply(angle - 6);
+              e.preventDefault();
+            }
+          });
+
+          apply(angle);
+          return {
+            get angle() {
+              return angle;
+            },
+            setAngle: apply,
+          };
+        }
+
+        /* ---------------- audio engine ---------------- */
+        let actx = null,
           playing = false;
-        let analyser, scopeData;
+        let master, mixBus, analyser, scopeData;
+        let noiseFilter;
+        let crushShaper, crushDry, crushWet, crushOut;
+        let driftDelay, driftLfo, driftLfoGain, driftDry, driftWet, driftOut;
+        let echoDelay, echoFilter, echoFeedback, echoDry, echoWet;
+        let droneLfoGains = [];
         const oscBank = [];
+
+        function makeDistortionCurve(amount) {
+          const k = amount,
+            n = 8192,
+            curve = new Float32Array(n),
+            deg = Math.PI / 180;
+          for (let i = 0; i < n; i++) {
+            const x = (i * 2) / n - 1;
+            curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+          }
+          return curve;
+        }
 
         function buildAudio() {
           actx = new (window.AudioContext || window.webkitAudioContext)();
@@ -716,14 +1248,16 @@
           master = actx.createGain();
           master.gain.value = 0;
           master.connect(actx.destination);
-
           analyser = actx.createAnalyser();
           analyser.fftSize = 1024;
           scopeData = new Uint8Array(analyser.fftSize);
           master.connect(analyser);
 
-          // drone chord: root + fifth + soft major-ish colour tone, slow detune LFOs
-          const freqs = [98, 146.83, 174.61, 246.94]; // G2 D3 F3 B3 - open, slightly unresolved
+          mixBus = actx.createGain();
+          mixBus.gain.value = 1;
+
+          // drone chord: root + fifth + colour tones, slow detune LFOs per voice
+          const freqs = [98, 146.83, 174.61, 246.94];
           freqs.forEach((f, i) => {
             const osc = actx.createOscillator();
             osc.type = i % 2 === 0 ? "sine" : "triangle";
@@ -735,18 +1269,21 @@
             const lfo = actx.createOscillator();
             lfo.frequency.value = 0.05 + Math.random() * 0.08;
             const lfoGain = actx.createGain();
-            lfoGain.gain.value = 2 + i;
+            const base = 2 + i;
+            lfoGain.gain.value = base;
+            lfoGain._base = base;
             lfo.connect(lfoGain);
             lfoGain.connect(osc.detune);
             lfo.start();
 
             osc.connect(g);
-            g.connect(master);
+            g.connect(mixBus);
             osc.start();
             oscBank.push(osc, lfo);
+            droneLfoGains.push(lfoGain);
           });
 
-          // filtered noise layer, the "static" of the Pale
+          // filtered noise, the "static" of the Pale
           const bufSize = actx.sampleRate * 2;
           const buffer = actx.createBuffer(1, bufSize, actx.sampleRate);
           const data = buffer.getChannelData(0);
@@ -767,7 +1304,7 @@
 
           noise.connect(noiseFilter);
           noiseFilter.connect(noiseGain);
-          noiseGain.connect(master);
+          noiseGain.connect(mixBus);
           noise.start();
 
           const nLfo = actx.createOscillator();
@@ -778,6 +1315,83 @@
           nLfoGain.connect(noiseFilter.frequency);
           nLfo.start();
           oscBank.push(nLfo);
+
+          // ---- CRUSH: waveshaper distortion, wet/dry set by dial ----
+          crushShaper = actx.createWaveShaper();
+          crushShaper.curve = makeDistortionCurve(45);
+          crushShaper.oversample = "4x";
+          crushDry = actx.createGain();
+          crushDry.gain.value = 1;
+          crushWet = actx.createGain();
+          crushWet.gain.value = 0;
+          crushOut = actx.createGain();
+          mixBus.connect(crushDry);
+          crushDry.connect(crushOut);
+          mixBus.connect(crushShaper);
+          crushShaper.connect(crushWet);
+          crushWet.connect(crushOut);
+
+          // ---- DESYNC: short modulated delay (chorus / phase smear) ----
+          driftDelay = actx.createDelay(0.05);
+          driftDelay.delayTime.value = 0.015;
+          driftLfo = actx.createOscillator();
+          driftLfo.frequency.value = 0.17;
+          driftLfoGain = actx.createGain();
+          driftLfoGain.gain.value = 0;
+          driftLfo.connect(driftLfoGain);
+          driftLfoGain.connect(driftDelay.delayTime);
+          driftLfo.start();
+          driftDry = actx.createGain();
+          driftDry.gain.value = 1;
+          driftWet = actx.createGain();
+          driftWet.gain.value = 0;
+          driftOut = actx.createGain();
+          crushOut.connect(driftDry);
+          driftDry.connect(driftOut);
+          crushOut.connect(driftDelay);
+          driftDelay.connect(driftWet);
+          driftWet.connect(driftOut);
+
+          // ---- ECHO: feedback delay ----
+          echoDelay = actx.createDelay(1.0);
+          echoDelay.delayTime.value = 0.19;
+          echoFilter = actx.createBiquadFilter();
+          echoFilter.type = "lowpass";
+          echoFilter.frequency.value = 2200;
+          echoFeedback = actx.createGain();
+          echoFeedback.gain.value = 0;
+          echoDelay.connect(echoFilter);
+          echoFilter.connect(echoFeedback);
+          echoFeedback.connect(echoDelay);
+          echoDry = actx.createGain();
+          echoDry.gain.value = 1;
+          echoWet = actx.createGain();
+          echoWet.gain.value = 0;
+          driftOut.connect(echoDry);
+          echoDry.connect(master);
+          driftOut.connect(echoDelay);
+          echoFilter.connect(echoWet);
+          echoWet.connect(master);
+
+          // sync effect levels to whatever the dials are already set to
+          const crushPct = (crushDial.angle + 140) / 280;
+          crushWet.gain.value = crushPct * 0.9;
+          crushDry.gain.value = 1 - crushPct * 0.5;
+
+          const desyncPct = (desyncDial.angle + 140) / 280;
+          driftWet.gain.value = desyncPct * 0.9;
+          driftDry.gain.value = 1 - desyncPct * 0.3;
+          driftLfoGain.gain.value = desyncPct * 0.01;
+          droneLfoGains.forEach(
+            (g) => (g.gain.value = g._base * (1 + desyncPct * 6)),
+          );
+
+          const echoPct = (echoDial.angle + 140) / 280;
+          echoFeedback.gain.value = echoPct * 0.75;
+          echoWet.gain.value = echoPct * 0.8;
+
+          const tunePct = (tuneDial.angle + 140) / 280;
+          noiseFilter.frequency.value = 300 + tunePct * 3200;
         }
 
         function tick(freq) {
@@ -831,7 +1445,7 @@
           sctx.clearRect(0, 0, cw, ch);
           sctx.beginPath();
           sctx.lineWidth = 1.5 * devicePixelRatio;
-          sctx.strokeStyle = "#a13a2b";
+          sctx.strokeStyle = currentPalette.rust;
 
           if (analyser && playing) {
             analyser.getByteTimeDomainData(scopeData);
@@ -853,79 +1467,124 @@
         }
         requestAnimationFrame(drawScope);
 
-        /* ---------------- tuning dial ---------------- */
-        const dial = document.getElementById("dial");
+        /* ---------------- dial instances ---------------- */
         const freqNum = document.getElementById("freqNum");
-        let angle = -120;
-        let dragging = false;
+        const crushVal = document.getElementById("crushVal");
+        const desyncVal = document.getElementById("desyncVal");
+        const echoVal = document.getElementById("echoVal");
 
-        function setAngle(a) {
-          angle = Math.max(-140, Math.min(140, a));
-          dial.style.setProperty("--angle", angle + "deg");
-          const pct = (angle + 140) / 280;
-          const mhz = (87.5 + pct * (108 - 87.5)).toFixed(1);
-          freqNum.textContent = mhz;
-          dial.setAttribute("aria-valuenow", Math.round(pct * 100));
-          if (noiseFilter) {
-            noiseFilter.frequency.setTargetAtTime(
-              300 + pct * 3200,
-              actx.currentTime,
-              0.05,
-            );
-          }
-        }
-        setAngle(angle);
-
-        function angleFromEvent(e) {
-          const rect = dial.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-          const rad = Math.atan2(clientX - cx, -(clientY - cy));
-          return rad * (180 / Math.PI);
-        }
-
-        let lastNotch = 0;
-        function maybeTick(newAngle) {
-          const notch = Math.round(newAngle / 12);
-          if (notch !== lastNotch) {
-            lastNotch = notch;
+        const tuneDial = makeDial(document.getElementById("dial"), {
+          initialAngle: -120,
+          onChange: (pct) => {
+            const mhz = (87.5 + pct * (108 - 87.5)).toFixed(1);
+            freqNum.textContent = mhz;
+            if (noiseFilter)
+              noiseFilter.frequency.setTargetAtTime(
+                300 + pct * 3200,
+                actx.currentTime,
+                0.05,
+              );
+          },
+          onNotch: () => {
             if (playing) tick(300 + Math.random() * 500);
-          }
-        }
-
-        dial.addEventListener("pointerdown", (e) => {
-          dragging = true;
-          dial.setPointerCapture(e.pointerId);
-        });
-        dial.addEventListener("pointerup", () => (dragging = false));
-        dial.addEventListener("pointercancel", () => (dragging = false));
-        dial.addEventListener("pointermove", (e) => {
-          if (!dragging) return;
-          const a = angleFromEvent(e);
-          setAngle(a);
-          maybeTick(a);
-        });
-        dial.addEventListener("keydown", (e) => {
-          if (e.key === "ArrowRight" || e.key === "ArrowUp") {
-            setAngle(angle + 6);
-            maybeTick(angle);
-            e.preventDefault();
-          }
-          if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-            setAngle(angle - 6);
-            maybeTick(angle);
-            e.preventDefault();
-          }
+          },
         });
 
-        // gentle idle drift on the readout, evoking a dial that never quite holds still
+        const crushDial = makeDial(document.getElementById("crushDial"), {
+          onChange: (pct) => {
+            crushVal.textContent = Math.round(pct * 100);
+            if (crushWet) {
+              crushWet.gain.setTargetAtTime(pct * 0.9, actx.currentTime, 0.05);
+              crushDry.gain.setTargetAtTime(
+                1 - pct * 0.5,
+                actx.currentTime,
+                0.05,
+              );
+            }
+          },
+        });
+
+        const desyncDial = makeDial(document.getElementById("desyncDial"), {
+          onChange: (pct) => {
+            desyncVal.textContent = Math.round(pct * 100);
+            if (driftWet) {
+              driftWet.gain.setTargetAtTime(pct * 0.9, actx.currentTime, 0.05);
+              driftDry.gain.setTargetAtTime(
+                1 - pct * 0.3,
+                actx.currentTime,
+                0.05,
+              );
+              driftLfoGain.gain.setTargetAtTime(
+                pct * 0.01,
+                actx.currentTime,
+                0.05,
+              );
+              droneLfoGains.forEach((g) =>
+                g.gain.setTargetAtTime(
+                  g._base * (1 + pct * 6),
+                  actx.currentTime,
+                  0.05,
+                ),
+              );
+            }
+          },
+        });
+
+        const echoDial = makeDial(document.getElementById("echoDial"), {
+          onChange: (pct) => {
+            echoVal.textContent = Math.round(pct * 100);
+            if (echoFeedback) {
+              echoFeedback.gain.setTargetAtTime(
+                pct * 0.75,
+                actx.currentTime,
+                0.05,
+              );
+              echoWet.gain.setTargetAtTime(pct * 0.8, actx.currentTime, 0.05);
+            }
+          },
+        });
+
+        // gentle idle drift on the tuning readout, as if it never quite holds still
         setInterval(() => {
-          if (!dragging && Math.random() < 0.4) {
-            setAngle(angle + (Math.random() * 4 - 2));
+          if (Math.random() < 0.4) {
+            tuneDial.setAngle(tuneDial.angle + (Math.random() * 4 - 2));
           }
         }, 2200);
+
+        /* ---------------- console buttons ---------------- */
+        const bgBtn = document.getElementById("bgBtn");
+        const bgNameEl = bgBtn.querySelector(".mode-name");
+        let bgModeIndex = 0;
+        bgBtn.addEventListener("click", () => {
+          bgModeIndex = (bgModeIndex + 1) % bgModes.length;
+          bgMode = bgModes[bgModeIndex];
+          bgNameEl.textContent = bgMode;
+          blobSeed = Math.random() * 100;
+          glitchPulse();
+          triggerRealityShift();
+        });
+
+        const paletteBtn = document.getElementById("paletteBtn");
+        const paletteNameEl = paletteBtn.querySelector(".mode-name");
+        let paletteIndex = 0;
+        paletteBtn.addEventListener("click", () => {
+          paletteIndex = (paletteIndex + 1) % palettes.length;
+          const p = palettes[paletteIndex];
+          applyPalette(p);
+          paletteNameEl.textContent = p.name;
+          glitchPulse();
+          triggerRealityShift();
+        });
+
+        const glitchBtn = document.getElementById("glitchBtn");
+        const glitchNameEl = glitchBtn.querySelector(".mode-name");
+        let glitchModeIndex = 0;
+        glitchBtn.addEventListener("click", () => {
+          glitchModeIndex = (glitchModeIndex + 1) % glitchModes.length;
+          glitchMode = glitchModes[glitchModeIndex];
+          glitchNameEl.textContent = glitchMode.toUpperCase();
+          applyGlitchMode();
+        });
       })();
     </script>
   </body>
