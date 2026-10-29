@@ -1,0 +1,92 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "dns": {
+    "servers": [
+      "https://cloudflare-dns.com/dns-query",
+      "tls://1.1.1.1",
+      "1.1.1.1"
+    ],
+    "queryStrategy": "UseIPv4"
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "email": "USER",
+            "id": "UUID"
+          }
+        ],
+        "decryption": "VLESSENC/decryption"
+      },
+      "sniffing": {
+        "enabled": true,
+        "routeOnly": true,
+        "destOverride": ["http", "tls", "quic"]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "xhttpSettings": {
+          "path": "/XHTTP-SUBPATH",
+          "mode": "auto"
+        },
+        "security": "none"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "reject"
+    }
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "protocol": ["bittorrent"],
+        "outboundTag": "reject"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:private", "geoip:ru"],
+        "outboundTag": "reject"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:category-gov-ru"],
+        "outboundTag": "reject"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:ru",
+          "domain:su",
+          "domain:ru.com",
+          "domain:ru.net",
+          "domain:xn--c1avg",
+          "domain:xn--d1acj3b",
+          "domain:xn--e1afmapc",
+          "domain:xn--j1aef",
+          "domain:xn--p1acf",
+          "domain:xn--p1ai",
+          "domain:xn--80aswg",
+          "domain:xn--80asehdb",
+          "domain:xn--80adxhks",
+          "domain:xn--90ais"
+        ],
+        "outboundTag": "reject"
+      }
+    ]
+  }
+}
