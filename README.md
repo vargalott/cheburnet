@@ -38,8 +38,9 @@ bash <(wget -qO- https://raw.githubusercontent.com/vernette/ipregion/master/ipre
 ##### misc
 ```sh
 # uuid, PVT+PBK
-docker run --rm ghcr.io/xtls/xray-core uuid
-docker run --rm ghcr.io/xtls/xray-core x25519
+docker run --rm ghcr.io/xtls/xray-core:26.6.27 uuid
+docker run --rm ghcr.io/xtls/xray-core:26.6.27 x25519
+docker run --rm ghcr.io/xtls/xray-core:26.6.27 vlessenc
 # OR
 docker run --rm docker.io/metacubex/mihomo:latest generate uuid
 docker run --rm docker.io/metacubex/mihomo:latest generate reality-keypair
@@ -106,7 +107,7 @@ flowchart TD
 
   NGINX-TCP443["NGINX\n172.20.0.10\nTCP:443"]:::wide
   HYSTERIA-UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
-  PROXY-CORE["VLESS-XHTTP-RAW\n172.20.0.20"]:::wide
+  PROXY-CORE["VLESS-XHTTP-VLESSENC\n172.20.0.20"]:::wide
 
   MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
   CONFIG["Proxy client config\n(mihomo)"]:::wide
