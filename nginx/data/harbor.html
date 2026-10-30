@@ -1,0 +1,1986 @@
+<!-- fully vibecoded with Claude -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Harbor</title>
+    <meta name="description" content="Harbor" />
+    <meta name="theme-color" content="#e6dccb" />
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        --fs: clamp(3.2rem, 12.5vw, 10rem);
+        --ink: #4d463f;
+        --red: #a8594e;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        background: #d9d0bf;
+        color: var(--ink);
+        font-family:
+          "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+          Georgia, serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        animation: in 2.4s ease-out both;
+      }
+      @keyframes in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      #sea {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 0;
+        filter: blur(0.6px);
+      }
+
+      .mist {
+        position: fixed;
+        left: -30%;
+        width: 160%;
+        pointer-events: none;
+        z-index: 2;
+        background:
+          radial-gradient(
+            ellipse at 30% 50%,
+            rgba(250, 244, 232, 0.5),
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse at 75% 40%,
+            rgba(246, 238, 224, 0.4),
+            transparent 55%
+          );
+      }
+      .m1 {
+        top: 26%;
+        height: 32%;
+        opacity: 0.55;
+        animation: drift 90s ease-in-out infinite alternate;
+      }
+      .m2 {
+        top: 46%;
+        height: 24%;
+        opacity: 0.35;
+        animation: drift 140s ease-in-out infinite alternate-reverse;
+      }
+      @keyframes drift {
+        from {
+          transform: translateX(-9%);
+        }
+        to {
+          transform: translateX(9%);
+        }
+      }
+
+      #ghosts {
+        position: fixed;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .ghost {
+        position: fixed;
+        left: 0;
+        top: 0;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        color: rgba(74, 66, 58, 0.8);
+        font-style: italic;
+        text-shadow:
+          0 0 7px var(--gc, rgba(255, 244, 222, 0.9)),
+          0 0 2px rgba(255, 255, 255, 0.7);
+        transition: opacity 1.5s ease;
+        animation:
+          gjit var(--gd, 4s) steps(1, end) infinite var(--dl, 0s),
+          gglow var(--gg, 5s) ease-in-out infinite alternate var(--dl2, 0s);
+      }
+      .ghost.on {
+        opacity: var(--o, 0.6);
+      }
+      @keyframes gjit {
+        0%,
+        84%,
+        100% {
+          transform: none;
+          clip-path: none;
+          filter: none;
+        }
+        86% {
+          transform: translate(2px, -1px) skewX(-7deg);
+          filter: drop-shadow(2px 0 0 rgba(190, 95, 95, 0.55))
+            drop-shadow(-2px 0 0 rgba(85, 150, 160, 0.55));
+        }
+        89% {
+          transform: translate(-3px, 1px);
+          clip-path: inset(0 0 55% 0);
+          filter: drop-shadow(-2px 0 0 rgba(190, 95, 95, 0.5));
+        }
+        92% {
+          transform: translate(3px, 0);
+          clip-path: inset(46% 0 0 0);
+          filter: drop-shadow(2px 0 0 rgba(85, 150, 160, 0.5));
+        }
+        95% {
+          transform: translate(-1px, 1px) skewX(5deg);
+          clip-path: none;
+          filter: drop-shadow(1px 0 0 rgba(190, 95, 95, 0.4));
+        }
+      }
+      @keyframes gglow {
+        from {
+          text-shadow:
+            0 0 4px var(--gc, rgba(255, 244, 222, 0.8)),
+            0 0 1px rgba(255, 255, 255, 0.5);
+        }
+        to {
+          text-shadow:
+            0 0 12px var(--gc, rgba(255, 244, 222, 0.95)),
+            0 0 22px var(--gc, rgba(255, 244, 222, 0.5)),
+            0 0 2px rgba(255, 255, 255, 0.8);
+        }
+      }
+
+      .stage {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+      }
+      #title {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 0.1em;
+        font-size: var(--fs);
+        font-weight: 400;
+        line-height: 1;
+        white-space: nowrap;
+        user-select: none;
+        animation: glow 26s ease-in-out infinite;
+      }
+      #title span {
+        display: inline-block;
+        text-align: center;
+        background: linear-gradient(
+          100deg,
+          #7a5c8e 0%,
+          #4c8a8c 14%,
+          #8f9a52 28%,
+          #b8864f 42%,
+          #a8587a 56%,
+          #5b66a8 70%,
+          #3f8c88 84%,
+          #7a5c8e 100%
+        );
+        background-size: 200% 100%;
+        background-repeat: repeat-x;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: oil 48s linear infinite;
+        animation-delay: calc(var(--i) * -4.3s);
+      }
+      #title span.g {
+        filter: drop-shadow(3px 0 0 rgba(176, 84, 96, 0.6))
+          drop-shadow(-3px 0 0 rgba(70, 150, 160, 0.6));
+        transform: translate(var(--gx, 0), var(--gy, 0)) skewX(var(--gs, 0deg));
+      }
+      @keyframes oil {
+        to {
+          background-position: 200% 0;
+        }
+      }
+      @keyframes glow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 16px rgba(160, 110, 200, 0.42))
+            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
+        }
+        25% {
+          filter: drop-shadow(0 0 18px rgba(80, 170, 170, 0.48))
+            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
+        }
+        50% {
+          filter: drop-shadow(0 0 17px rgba(205, 160, 80, 0.5))
+            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
+        }
+        75% {
+          filter: drop-shadow(0 0 18px rgba(205, 100, 145, 0.44))
+            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
+        }
+      }
+
+      .loader {
+        position: absolute;
+        left: 50%;
+        top: calc(50% + var(--fs) * 0.62 + 1.3rem);
+        transform: translateX(-50%);
+        width: clamp(190px, 36vw, 380px);
+        text-align: center;
+        font-size: 12.5px;
+        letter-spacing: 0.12em;
+        color: rgba(77, 70, 63, 0.75);
+        text-shadow: 0 0 6px rgba(255, 244, 222, 0.8);
+      }
+      .track {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .bar {
+        flex: 1;
+        height: 2px;
+        background: rgba(77, 70, 63, 0.16);
+        position: relative;
+        overflow: hidden;
+      }
+      .bar i {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(130, 118, 100, 0.55),
+          rgba(77, 70, 63, 0.88)
+        );
+        box-shadow: 0 0 8px rgba(255, 244, 222, 0.8);
+        transition: width 0.25s linear;
+      }
+      .pct {
+        width: 3.6ch;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        opacity: 0.8;
+      }
+      .msg {
+        display: block;
+        margin-top: 13px;
+        min-height: 1.7em;
+        line-height: 1.5;
+        opacity: 0.85;
+        transition: opacity 0.45s;
+      }
+      .loader.bad {
+        color: var(--red);
+      }
+      .loader.bad .bar {
+        background: rgba(168, 89, 78, 0.18);
+      }
+      .loader.bad .bar i {
+        background: var(--red);
+        box-shadow: 0 0 10px rgba(168, 89, 78, 0.55);
+      }
+      .loader.bad .msg {
+        animation: errj 0.9s steps(1, end) infinite;
+      }
+      @keyframes errj {
+        0%,
+        70%,
+        100% {
+          transform: none;
+        }
+        74% {
+          transform: translateX(2px) skewX(-6deg);
+        }
+        80% {
+          transform: translateX(-2px);
+        }
+        86% {
+          transform: none;
+        }
+      }
+
+      #dirt {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 30;
+        pointer-events: none;
+        animation: breathe 19s ease-in-out infinite alternate;
+      }
+      @keyframes breathe {
+        from {
+          opacity: 0.78;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .veil {
+        position: fixed;
+        inset: 0;
+        z-index: 31;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            circle at 78% 26%,
+            rgba(255, 246, 228, 0.34),
+            transparent 46%
+          ),
+          rgba(214, 196, 164, 0.09);
+        mix-blend-mode: screen;
+      }
+      .tone {
+        position: fixed;
+        inset: 0;
+        z-index: 31;
+        pointer-events: none;
+        background: rgba(206, 184, 148, 0.12);
+        mix-blend-mode: multiply;
+      }
+      .vig {
+        position: fixed;
+        inset: 0;
+        z-index: 32;
+        pointer-events: none;
+        background: radial-gradient(
+          ellipse at 50% 46%,
+          transparent 52%,
+          rgba(96, 82, 62, 0.2) 82%,
+          rgba(70, 58, 44, 0.38) 100%
+        );
+      }
+      .grain {
+        position: fixed;
+        inset: -50%;
+        width: 200%;
+        height: 200%;
+        z-index: 33;
+        pointer-events: none;
+        opacity: 0.17;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .28 0 0 0 0 .24 0 0 0 0 .18 0 0 0 .9 -.15'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: grain 1.1s steps(1) infinite;
+      }
+      @keyframes grain {
+        0% {
+          transform: translate(0, 0);
+        }
+        15% {
+          transform: translate(-7%, 4%);
+        }
+        30% {
+          transform: translate(5%, -8%);
+        }
+        45% {
+          transform: translate(-3%, 9%);
+        }
+        60% {
+          transform: translate(8%, 3%);
+        }
+        75% {
+          transform: translate(-9%, -4%);
+        }
+        90% {
+          transform: translate(2%, 7%);
+        }
+      }
+
+      #snd {
+        position: fixed;
+        left: 50%;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        z-index: 50;
+        width: 38px;
+        height: 30px;
+        border: 0;
+        background: transparent;
+        color: #4d463f;
+        opacity: 0.2;
+        cursor: pointer;
+        padding: 0;
+        transition: opacity 0.6s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #snd:hover,
+      #snd:focus-visible {
+        opacity: 0.6;
+        outline: none;
+      }
+      #snd.on {
+        opacity: 0.5;
+      }
+      #snd svg {
+        width: 20px;
+        height: 14px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.3;
+        stroke-linecap: round;
+      }
+      #snd.on svg path {
+        stroke-dasharray: 6 3;
+        animation: dash 3s linear infinite;
+      }
+      #snd:not(.on) svg path:nth-child(2) {
+        opacity: 0.35;
+      }
+      @keyframes dash {
+        to {
+          stroke-dashoffset: -27;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="sea"></canvas>
+    <div class="mist m1"></div>
+    <div class="mist m2"></div>
+    <div id="ghosts"></div>
+    <main class="stage">
+      <h1 id="title" aria-label="Harbor">
+        <span style="--i: 0">H</span><span style="--i: 1">A</span
+        ><span style="--i: 2">R</span><span style="--i: 3">B</span
+        ><span style="--i: 4">O</span><span style="--i: 5">R</span>
+      </h1>
+      <div class="loader" aria-hidden="true">
+        <div class="track">
+          <div class="bar"><i></i></div>
+          <span class="pct">0%</span>
+        </div>
+        <span class="msg"></span>
+      </div>
+    </main>
+    <canvas id="dirt"></canvas>
+    <div class="veil"></div>
+    <div class="tone"></div>
+    <div class="vig"></div>
+    <div class="grain"></div>
+    <button
+      id="snd"
+      type="button"
+      aria-label="toggle wave sound"
+      aria-pressed="false"
+      title=""
+    >
+      <svg viewBox="0 0 20 14">
+        <path d="M1 4c2-2 3.5-2 5.5 0s3.5 2 5.5 0 3.5-2 5.5 0" />
+        <path d="M1 10c2-2 3.5-2 5.5 0s3.5 2 5.5 0 3.5-2 5.5 0" />
+      </svg>
+    </button>
+
+    <script>
+      (() => {
+        "use strict";
+        const TAU = Math.PI * 2;
+        const $ = (s) => document.querySelector(s);
+        const rnd = (a, b) => a + Math.random() * (b - a);
+        const pick = (a) => a[(Math.random() * a.length) | 0];
+        const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
+        const sstep = (a, b, x) => {
+          const t = clamp((x - a) / (b - a), 0, 1);
+          return t * t * (3 - 2 * t);
+        };
+        const frac = (x) => x - Math.floor(x);
+        function bag(arr) {
+          let q = [];
+          return () => {
+            if (!q.length) {
+              q = arr.slice();
+              for (let i = q.length - 1; i > 0; i--) {
+                const j = (Math.random() * (i + 1)) | 0;
+                const t = q[i];
+                q[i] = q[j];
+                q[j] = t;
+              }
+            }
+            return q.pop();
+          };
+        }
+        function mulberry32(a) {
+          return function () {
+            a |= 0;
+            a = (a + 0x6d2b79f5) | 0;
+            let t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+
+        /* ---------- tables & noise ---------- */
+        const ST = new Float32Array(4096);
+        for (let i = 0; i < 4096; i++) ST[i] = Math.sin((i / 4096) * TAU);
+        const sc = (c) => ST[(c * 4096) & 4095]; // sin, argument in cycles
+        const sr = (r) => ST[(r * 651.8986469) & 4095]; // sin, argument in radians
+        const NZ = new Float32Array(65536);
+        {
+          const r = mulberry32(1337);
+          for (let i = 0; i < 65536; i++) NZ[i] = r();
+        }
+        function vn(x, y) {
+          const xi = Math.floor(x),
+            yi = Math.floor(y);
+          let xf = x - xi,
+            yf = y - yi;
+          xf = xf * xf * (3 - 2 * xf);
+          yf = yf * yf * (3 - 2 * yf);
+          const x0 = xi & 255,
+            y0 = (yi & 255) << 8,
+            x1 = (xi + 1) & 255,
+            y1 = ((yi + 1) & 255) << 8;
+          const a = NZ[y0 | x0],
+            b = NZ[y0 | x1],
+            c = NZ[y1 | x0],
+            d = NZ[y1 | x1];
+          return a + (b - a) * xf + (c - a) * yf + (a - b - c + d) * xf * yf;
+        }
+        function fbm(x, y) {
+          return (
+            vn(x, y) * 0.5 +
+            vn(x * 2.03 + 5.2, y * 2.03 + 1.3) * 0.3 +
+            vn(x * 4.1 + 9.1, y * 4.1 + 3.7) * 0.2
+          );
+        }
+
+        /* ---------- text pools ---------- */
+        const GHOST = [
+          // english
+          "the tide remembers what you forgot",
+          "nobody moored here tonight",
+          "salt, salt, salt, and then a door",
+          "the third wave is not a wave",
+          "someone is counting you",
+          "low water. high silence.",
+          "the lamp does not belong to the lighthouse",
+          "under the pier, a second pier",
+          "do not answer the bell",
+          "your shadow arrived early",
+          "the horizon is thinner today",
+          "a ship passed through itself",
+          "fog has a pulse",
+          "the sand keeps minutes",
+          "there are more gulls than sky",
+          "the water is reading over your shoulder",
+          "it was always low tide somewhere in you",
+          "seven knots, none of them yours",
+          "the moon forgot its password",
+          "harbor is a verb",
+          "a rope sinks upward",
+          "listen: the dock is breathing in reverse",
+          "whatever you left here has grown",
+          "the sea signs in lowercase",
+          "echo (unattended)",
+          "north is a rumour",
+          "an anchor dreaming of ground",
+          "the reflection arrived late",
+          "static in the shells",
+          "tomorrow's foam, yesterday's weather",
+          "the tide table has a hidden page",
+          "someone rowed here without a boat",
+          "kelp writes in cursive",
+          "the lighthouse is looking the other way",
+          "wet footprints, dry floor",
+          "the bottle was empty on purpose",
+          "count the waves backwards",
+          "you are the third tide",
+          "the harbour will not be photographed",
+          "a bell under the water has your birthday",
+          "lost: one horizon, slightly used",
+          "found: a quiet that fits no one",
+          "do not trust the reflection of the moon",
+          "the net holds only wind",
+          "a door is open in the surf",
+          "no vessel, only wake",
+          "it is raining upward in the north cove",
+          "the water kept your place",
+          "somebody erased the far shore",
+          "blue is just a rumour told by the deep",
+          "salt-lamp, salt-lamp, who goes there",
+          "tide in, thought out",
+          "seagull.exe has stopped being a bird",
+          "the gap between waves is inhabited",
+          "another harbor underneath, upside down",
+          "you were here before the water",
+          "the fog is a letter, unread",
+          "mind the step that isn't there",
+          "the buoy hums a number",
+          "nothing is moored. everything is held.",
+          "the past is shallow here",
+          "hold still, the sea is drawing you",
+          "a lighthouse inside a lighthouse inside",
+          "ask the foam",
+          "stones remember being water",
+          "the wind is carrying someone's name",
+          "white noise, white noise, white sail",
+          "the quay is longer at night",
+          "you cannot leave the way you came",
+          "shhh - the kelp is dreaming",
+          "all ships here are called Tomorrow",
+          "drift is a kind of address",
+          "the morning arrives in pieces",
+          "the water counts to eleven",
+          "a coin on the seabed, face up, still warm",
+          "every wave is a draft",
+          "the map folded itself",
+          "leave the lantern, take the dark",
+          "what the harbor swallows it keeps in tune",
+          "glass tide / glass hour",
+          "the reef has opinions",
+          "somewhere a clock is full of sand",
+          "a whisper docked at pier nine",
+          "do not whistle at the sea",
+          "the rain wrote this",
+          "the second moon is on loan",
+          "pier 0 does not exist, but it is crowded",
+          "the sea is a very slow door",
+          "gulls file their reports at dusk",
+          "one more wave than yesterday",
+          // ukrainian
+          "припливу байдуже, хто ти",
+          "хтось залишив світло під водою",
+          "туман пам'ятає твоє ім'я",
+          "берег порожній, але зайнятий",
+          "море мовчить лише вдень",
+          "третя хвиля — вже не хвиля",
+          "чайки рахують твої кроки",
+          "маяк дивиться всередину",
+          "сіль шепоче в кишенях",
+          "човен без імені чекає",
+          "глибина відповідає із запізненням",
+          "дзвін під водою не твій",
+          "не відповідай на хвилю",
+          "горизонт сьогодні тонший",
+          "піском пишуть листи без адреси",
+          // russian
+          "прилив помнит больше, чем ты",
+          "чайки считают твои шаги",
+          "туман знает твоё имя",
+          "в порту никого — но шумно",
+          "третья волна не волна",
+          "не отвечай колоколу",
+          "маяк смотрит внутрь",
+          "соль шепчет в карманах",
+          "лодка без имени ждёт",
+          "глубина отвечает с опозданием",
+          "тень пришла раньше тебя",
+          "горизонт сегодня тоньше",
+          "пирс длиннее ночью",
+          "вода читает через плечо",
+          "здесь всегда немного отлив",
+          // german
+          "das Meer hat deinen Namen vergessen",
+          "Nebel, der sich erinnert",
+          "die dritte Welle gehört niemandem",
+          "Salz im Gedächtnis",
+          "der Hafen atmet rückwärts",
+          "niemand legt heute Nacht an",
+          "die Tiefe antwortet später",
+          "ein Anker träumt vom Boden",
+          "leise, die Flut hört mit",
+          "der Leuchtturm schaut weg",
+          // french
+          "la marée se souvient de toi",
+          "le brouillard a un pouls",
+          "personne n'accoste ce soir",
+          "le phare regarde ailleurs",
+          "sel sur la langue, silence dans l'os",
+          "la troisième vague n'existe pas",
+          "l'eau lit par-dessus ton épaule",
+          "un quai sous le quai",
+          "ne réponds pas à la cloche",
+          "l'horizon est plus mince aujourd'hui",
+          // spanish / italian / portuguese
+          "la marea sabe tu nombre",
+          "nadie amarra esta noche",
+          "la niebla late",
+          "el faro mira hacia adentro",
+          "sal en la memoria",
+          "la tercera ola no es una ola",
+          "un ancla sueña con el suelo",
+          "el agua lee por encima de tu hombro",
+          "la marea non dimentica",
+          "nessuno approda stanotte",
+          "la nebbia ha un battito",
+          "il faro guarda altrove",
+          "un molo sotto il molo",
+          "sale nella memoria dell'acqua",
+          "a maré lembra-se de ti",
+          "ninguém atraca hoje",
+          "o nevoeiro tem pulso",
+          // latin
+          "mare tacet, sed audit",
+          "portus nomen tuum scit",
+          "sal in memoria manet",
+          "tertia unda non est unda",
+          "umbra ante te venit",
+          "lumen sub aqua ardet",
+          "nemo hic navigat",
+          "aestus redit, tu non",
+          "nebula cor habet",
+          "quis numerat fluctus?",
+          // japanese
+          "潮は名前を覚えている",
+          "霧には脈がある",
+          "今夜、誰も着岸しない",
+          "三番目の波は波ではない",
+          "灯台は内側を見ている",
+          "水底の鐘が鳴っている",
+          "砂は時間を数えている",
+          "港は後ろ向きに息をする",
+          "影が先に着いた",
+          "水平線が薄くなる",
+          "海は小文字で署名する",
+          "波の隙間に誰かいる",
+          "塩の記憶",
+          "帰り道は存在しない",
+          // chinese
+          "潮水记得你的名字",
+          "雾有脉搏",
+          "今夜无人靠岸",
+          "第三个浪不是浪",
+          "灯塔望向内部",
+          "海底的钟在响",
+          "沙子在数分钟",
+          "影子比你先到",
+          "港口倒着呼吸",
+          "地平线今天更薄",
+          // korean
+          "조수는 네 이름을 기억한다",
+          "안개에는 맥박이 있다",
+          "오늘 밤 아무도 정박하지 않는다",
+          "세 번째 파도는 파도가 아니다",
+          "등대는 안쪽을 본다",
+          "모래는 시간을 센다",
+          "그림자가 먼저 도착했다",
+          "항구는 거꾸로 숨 쉰다",
+          // arabic / hebrew
+          "المد يتذكر اسمك",
+          "للضباب نبض",
+          "لا أحد يرسو هذه الليلة",
+          "الموجة الثالثة ليست موجة",
+          "الفنار ينظر إلى الداخل",
+          "الرمل يعدّ الدقائق",
+          "ظلك وصل قبلك",
+          "الميناء يتنفس إلى الوراء",
+          "הגאות זוכרת את שמך",
+          "לערפל יש דופק",
+          "איש לא עוגן הלילה",
+          "הגל השלישי אינו גל",
+          "המגדלור מביט פנימה",
+          "הצל הגיע לפניך",
+          // greek
+          "η παλίρροια θυμάται το όνομά σου",
+          "η ομίχλη έχει σφυγμό",
+          "κανείς δεν δένει απόψε",
+          "το τρίτο κύμα δεν είναι κύμα",
+          "ο φάρος κοιτάζει μέσα",
+          "η σκιά σου έφτασε πρώτη",
+          // polish / turkish / finnish / swedish / dutch / icelandic
+          "przypływ pamięta twoje imię",
+          "mgła ma puls",
+          "nikt dziś nie cumuje",
+          "trzecia fala nie jest falą",
+          "latarnia patrzy do środka",
+          "piasek liczy minuty",
+          "gelgit adını hatırlıyor",
+          "sisin bir nabzı var",
+          "bu gece kimse demirlemiyor",
+          "üçüncü dalga dalga değil",
+          "vuorovesi muistaa nimesi",
+          "sumulla on pulssi",
+          "kukaan ei laiturille tänä yönä",
+          "kolmas aalto ei ole aalto",
+          "tidvattnet minns ditt namn",
+          "dimman har puls",
+          "ingen lägger till i natt",
+          "fyren ser inåt",
+          "het getij onthoudt je naam",
+          "de mist heeft een hartslag",
+          "niemand meert vannacht af",
+          "sjávarfallið man nafnið þitt",
+          "þokan hefur púls",
+          "enginn leggst að bryggju í nótt",
+          // hindi / welsh / irish / esperanto
+          "ज्वार तुम्हारा नाम याद रखता है",
+          "कोहरे की अपनी धड़कन है",
+          "आज रात कोई नाव नहीं लगती",
+          "तीसरी लहर लहर नहीं है",
+          "mae'r llanw'n cofio dy enw",
+          "mae gan y niwl guriad",
+          "cuimhníonn an taoide ar d'ainm",
+          "níl aon duine ag duga anocht",
+          "la tajdo memoras vian nomon",
+          "la maro aŭskultas",
+          // glyph noise
+          "∴ ∵ ∴ ∵ ∴",
+          "░▒▓ low tide ▓▒░",
+          "⌬ ⌬ ⌬",
+          "◬ no signal ◬",
+          "≈≈≈ ≋≋≋ ≈≈≈",
+          "0 1 1 0 tide",
+          "ᚺᚨᚱᛒᛟᚱ",
+          "ᛋᚨᛚᛏ ᛗᛖᛗᛟᚱᛁ",
+          "⟁ ⟁ ⟁ ⟁",
+          "Δ drift Δ",
+        ];
+
+        const LOAD = [
+          "winding the tide back onto its spool",
+          "counting the gulls that were never here",
+          "asking the pier for its name",
+          "indexing the salt",
+          "unfolding the horizon, one crease at a time",
+          "listening for the bell beneath the water",
+          "rinsing the fog",
+          "mooring unlit boats to nothing",
+          "calibrating the moon's low tide",
+          "mapping footprints that arrive before you",
+          "drying the harbor map",
+          "feeding lanterns to the dark",
+          "untying the knots in the rope",
+          "borrowing silence from the lighthouse",
+          "polishing the sound of distance",
+          "negotiating with the undertow",
+          "re-teaching sand to remember",
+          "translating wind into rope",
+          "assembling a shore from loose minutes",
+          "sorting bottles by what they almost said",
+          "weighing the weight of fog",
+          "stitching reflections to their owners",
+          "adjusting the lamp that isn't lit",
+          "waiting for permission from the tide",
+          "tracing the outline of a missing ship",
+          "sanding the edges of the horizon",
+          "rehearsing low tide",
+          "dissolving the last receipt of the sea",
+          "checking if the water is still listening",
+          "aligning anchors with forgotten stars",
+          "indexing the noise between waves",
+          "folding the evening into the cove",
+          "reading the sea's handwriting",
+          "boiling the harbor down to its name",
+          "teaching the buoy to count",
+          "retrieving the third wave",
+          "combing the kelp for messages",
+          "warming the stones for the night shift",
+          "hanging the mist out to dry",
+          "tuning the foghorn to your breathing",
+          "приручаем морской туман",
+          "считаем волны, которых нет",
+          "прислушиваемся ко дну",
+          "розплітаємо вузли припливу",
+          "збираємо берег із уламків хвилин",
+          "wir ordnen das Salz alphabetisch",
+          "les marées apprennent ton nom",
+          "el ancla busca un fondo",
+          "ricuciamo l'orizzonte",
+          "mare cogitat, portus exspectat",
+          "港の記憶を読み込み中",
+          "潮の満ち引きを数えています",
+          "正在打捞海底的回声",
+          "항구의 숨소리를 맞추는 중",
+          "جارٍ تسريح الضباب",
+          "מסדרים את הגלים לפי גודל",
+          "μετράμε τα αστέρια του λιμανιού",
+          "satamaa kehrätään hiljaa",
+          "höfnin man þig",
+          "liman seni hatırlıyor",
+          "pelabuhan sedang mengingat ombak",
+          "sal in memoria ligatur",
+          "portus nomen tuum discit",
+          "⌬ syncing with something below ⌬",
+          "░░░ buffering the undertow ░░░",
+          "unpacking the sea, layer by layer",
+          "waiting for a wave to finish its sentence",
+        ];
+
+        const ERR = [
+          "ERR 0x7F3A: the tide declined",
+          "tide.sig ≠ moon.sig",
+          "SIGSALT — salt signal lost",
+          "handshake with the deep: no answer",
+          "lighthouse returned null (it blinked)",
+          "checksum mismatch: footprints.dat",
+          "anchor not found in this reality",
+          "E_FOG_OVERFLOW",
+          "buffer of gulls exhausted",
+          "unexpected end of horizon",
+          "the pier replied in a language you don't have",
+          "permission denied by the sea",
+          "ERR_REFLECTION_UNPAIRED",
+          "stack of waves: underflow",
+          "tide table is on fire (quietly)",
+          "кто-то уже здесь",
+          "ошибка: глубина занята",
+          "помилка: берег не відповідає",
+          "ошибка 404: горизонт не найден",
+          "Fehler: das Meer ist besetzt",
+          "erreur : la marée a changé d'avis",
+          "error: el faro respondió con un sueño",
+          "errore: l'ombra non coincide con il molo",
+          "エラー：海が応答しません",
+          "接続が潮に拒否されました",
+          "错误：海没有回答",
+          "오류: 항구가 기억나지 않음",
+          "خطأ: الميناء لا يتذكر",
+          "שגיאה: הים לא עונה",
+          "σφάλμα: ο ωκεανός δεν υπογράφει",
+          "virhe: aalto ei tunne sinua",
+          "villa: sjórinn svarar ekki",
+          "hata: dalga bulunamadı",
+          "0xDEAD·TIDE",
+          "segfault in the undertow",
+          "unhandled exception: moonlight",
+          "NaN% of the sea",
+          "recursive reflection detected",
+          "connection reset by horizon",
+          "cert expired: the stars are 3 minutes late",
+          "rope.length = -1",
+          "socket closed by someone below",
+          "timeout: the wave never arrived",
+          "invalid sand",
+          "kernel panic: gulls in ring 0",
+          "ERR_NAME_NOT_RESOLVED: you",
+          "who left the lamp on",
+          "do not trust the second lighthouse",
+          "the loading was already finished — somewhere else",
+          "no route to the shore",
+          "Δ drift: anchor dragging",
+          "buoy.dll missing",
+          "ENOTIDE",
+          "EBADHARBOR",
+          "ECONNREFUSED: by the water",
+          "stack smashing detected: waves",
+          "the sea has revoked your read access",
+          "fatal: salt in the database",
+          "assert(horizon != horizon)",
+          "out of tide: swap exhausted",
+          "it is not loading. it is being loaded.",
+          "ошибка: корабль вернулся без вас",
+          "помилка: хвиля вже була",
+        ];
+
+        const SYM = [..."ᚺᚨᚱᛒᛟ◬⍙⌬⧖⟁⏃ꓧꓮꓣꓐꓳⴰⵔⴱꙮ҂∆ΩЖ░▒▓☍⊘⌖⍉⌿⎔⏁Ħ₳ɌɃ◯Ꝋ⟡⚶ʘ¤¶§Ӂ"];
+        const GLOW = [
+          "rgba(255,244,222,.95)",
+          "rgba(205,235,232,.9)",
+          "rgba(240,205,205,.85)",
+          "rgba(245,228,170,.9)",
+          "rgba(214,205,240,.85)",
+        ];
+
+        /* ---------- scene ---------- */
+        const sea = $("#sea"),
+          sctx = sea.getContext("2d");
+        const HY = 0.4,
+          SB = 0.8,
+          TS = 11,
+          LS = 1.6,
+          TC = 4.7,
+          LC = 0.6;
+        const ZS = 1 / (SB - HY + 0.012);
+        let scaleLong = 640,
+          W = 0,
+          H = 0,
+          A = 1,
+          invW = 1,
+          px = 1,
+          ew = 8,
+          img,
+          bg,
+          hyRow = 0,
+          eL,
+          eR,
+          frontV,
+          wetV,
+          colWf,
+          colTau,
+          colG,
+          sunCol;
+        const LAY = [
+          {
+            extL: 0.52,
+            aL: 0.1,
+            extR: 0.46,
+            aR: 0.085,
+            s: 11,
+            isl: 1,
+            col: [203, 197, 183],
+          },
+          {
+            extL: 0.4,
+            aL: 0.155,
+            extR: 0.34,
+            aR: 0.12,
+            s: 23,
+            isl: 0,
+            col: [180, 173, 158],
+          },
+        ];
+        function layerH(u, L) {
+          let h = 0;
+          const sL = (L.extL - u) / L.extL;
+          if (sL > 0)
+            h = L.aL * Math.pow(sL, 0.8) * (0.65 + 0.7 * fbm(u * 5 + L.s, 4.2));
+          const sR = (u - (1 - L.extR)) / L.extR;
+          if (sR > 0) {
+            const h2 =
+              L.aR *
+              Math.pow(sR, 0.8) *
+              (0.65 + 0.7 * fbm(u * 5 + L.s + 20, 7.7));
+            if (h2 > h) h = h2;
+          }
+          if (L.isl) {
+            const d = (u - 0.585) / 0.045;
+            const h3 = 0.022 * Math.exp(-d * d) * (0.7 + 0.6 * fbm(u * 30, 9));
+            if (h3 > h) h = h3;
+          }
+          return h;
+        }
+        function nearH(u) {
+          const e0L = 0.3,
+            e0R = 0.23;
+          let h = 0;
+          const sL = (e0L - u) / e0L;
+          if (sL > 0)
+            h =
+              0.235 *
+              Math.pow(sL, 0.85) *
+              (0.7 + 0.6 * fbm(u * 7 + 3, 2.2)) *
+              (0.92 + 0.16 * vn(u * 70, 1.5));
+          const sR = (u - (1 - e0R)) / e0R;
+          if (sR > 0) {
+            let h2 =
+              0.15 *
+              Math.pow(sR, 0.85) *
+              (0.7 + 0.6 * fbm(u * 7 + 13, 5.2)) *
+              (0.92 + 0.16 * vn(u * 70 + 9, 1.5));
+            h2 += 0.05 * Math.exp(-Math.pow((u - 0.94) / 0.035, 2));
+            if (h2 > h) h = h2;
+          }
+          return h;
+        }
+        let CR = 0,
+          CG = 0,
+          CB = 0;
+        function nearRock(u, v) {
+          const n1 = fbm(u * A * 9 + 2, v * 16 + 5),
+            n2 = fbm(u * A * 26 + 7, v * 40 + 3),
+            n3 = vn(u * A * 4 + 1, v * 9 + 8);
+          const sh = clamp(n1 * 1.15 - 0.08 + (n2 - 0.5) * 0.45, 0, 1);
+          let r = 98 + 72 * sh,
+            g = 92 + 68 * sh,
+            b = 82 + 60 * sh;
+          const tn = sstep(0.62, 0.82, n3) * 0.35;
+          r += (128 - r) * tn;
+          g += (134 - g) * tn;
+          b += (112 - b) * tn;
+          const up = 1 - sstep(HY - 0.2, HY + 0.12, v);
+          r += (206 - r) * up * 0.18;
+          g += (198 - g) * up * 0.18;
+          b += (180 - b) * up * 0.18;
+          const fa = (1 - sstep(0, 0.07, Math.abs(v - HY))) * 0.5;
+          r += (228 - r) * fa;
+          g += (218 - g) * fa;
+          b += (200 - b) * fa;
+          const dk = 1 - sstep(HY, SB, v) * 0.2;
+          CR = r * dk;
+          CG = g * dk;
+          CB = b * dk;
+        }
+
+        function setup() {
+          const vw = innerWidth,
+            vh = innerHeight,
+            k = Math.min(1, scaleLong / Math.max(vw, vh));
+          W = Math.max(120, Math.round(vw * k));
+          H = Math.max(120, Math.round(vh * k));
+          A = W / H;
+          invW = 1 / W;
+          px = W / 640;
+          ew = 0.012 * W;
+          sea.width = W;
+          sea.height = H;
+          img = sctx.createImageData(W, H);
+          frontV = new Float32Array(W);
+          wetV = new Float32Array(W);
+          colWf = new Float32Array(W);
+          colTau = new Float32Array(W);
+          colG = new Float32Array(W);
+          sunCol = new Float32Array(W);
+          for (let x = 0; x < W; x++) {
+            const d = (x * invW - 0.62) * 3;
+            sunCol[x] = Math.exp(-d * d);
+          }
+          buildStatic();
+        }
+        function buildStatic() {
+          bg = new Uint8ClampedArray(W * H * 4);
+          hyRow = Math.round(HY * H);
+          eL = new Float32Array(H);
+          eR = new Float32Array(H);
+          for (let y = hyRow; y < H; y++) {
+            const t = (y / H - HY) / (SB - HY);
+            if (t < 1) {
+              const k = Math.pow(1 - t, 1.6),
+                j = (vn(y * 0.5, 3.3) - 0.5) * 0.014 * W * (1 - t);
+              eL[y] = Math.max(0, 0.3 * W * k + j);
+              eR[y] = Math.max(
+                0,
+                0.23 * W * k + (vn(y * 0.5, 8.1) - 0.5) * 0.014 * W * (1 - t),
+              );
+            }
+          }
+          for (let x = 0; x < W; x++) {
+            const u = x / W,
+              h0 = layerH(u, LAY[0]),
+              h1 = layerH(u, LAY[1]),
+              hn = nearH(u);
+            for (let y = 0; y < H; y++) {
+              const v = y / H;
+              let r, g, b;
+              if (y < hyRow) {
+                const s = v / HY,
+                  t1 = sstep(0, 0.75, s),
+                  t2 = sstep(0.6, 1, s);
+                r = 206 + 20 * t1;
+                g = 203 + 15 * t1;
+                b = 194 + 9 * t1;
+                r += (240 - r) * t2;
+                g += (229 - g) * t2;
+                b += (210 - b) * t2;
+                const c1 = sstep(0.5, 0.8, fbm(u * A * 2.6 + 3, v * 7 + 1)),
+                  c2 = sstep(0.5, 0.8, fbm(u * A * 2.6 + 3.15, v * 7 + 1.12));
+                const lt = c1 * (1 - 0.7 * s) * 0.5;
+                r += (247 - r) * lt;
+                g += (242 - g) * lt;
+                b += (231 - b) * lt;
+                const shd = Math.max(0, c1 - c2) * (1 - s) * 14;
+                r -= shd;
+                g -= shd;
+                b -= shd * 0.8;
+                const gx = (u - 0.62) * A,
+                  gy = (v - (HY - 0.03)) * 1.4,
+                  gl = Math.exp(-(gx * gx + gy * gy) * 10) * 0.6;
+                r += (255 - r) * gl;
+                g += (241 - g) * gl;
+                b += (216 - b) * gl;
+                if (h0 > 0 && v >= HY - h0) {
+                  const d = (v - (HY - h0)) / h0,
+                    n = fbm(u * A * 8 + LAY[0].s, v * 18) - 0.5,
+                    L = LAY[0].col,
+                    hz = 0.55 * d * d;
+                  r = L[0] + n * 16;
+                  g = L[1] + n * 15;
+                  b = L[2] + n * 14;
+                  r += (240 - r) * hz;
+                  g += (229 - g) * hz;
+                  b += (210 - b) * hz;
+                }
+                if (h1 > 0 && v >= HY - h1) {
+                  const d = (v - (HY - h1)) / h1,
+                    n = fbm(u * A * 8 + LAY[1].s, v * 18) - 0.5,
+                    L = LAY[1].col,
+                    hz = 0.5 * d * d;
+                  r = L[0] + n * 20;
+                  g = L[1] + n * 19;
+                  b = L[2] + n * 17;
+                  r += (238 - r) * hz;
+                  g += (227 - g) * hz;
+                  b += (208 - b) * hz;
+                }
+                if (hn > 0 && v >= HY - hn) {
+                  nearRock(u, v);
+                  r = CR;
+                  g = CG;
+                  b = CB;
+                  const top = y - (HY - hn) * H;
+                  if (top < 2.5) {
+                    const k = (1 - top / 2.5) * 18;
+                    r += k;
+                    g += k;
+                    b += k * 0.9;
+                  }
+                }
+              } else {
+                if (x < eL[y] || x > W - 1 - eR[y]) {
+                  nearRock(u, v);
+                  r = CR;
+                  g = CG;
+                  b = CB;
+                  const dist = x < eL[y] ? eL[y] - x : x - (W - 1 - eR[y]);
+                  if (dist < 3) {
+                    const k = (1 - dist / 3) * 20;
+                    r += k;
+                    g += k;
+                    b += k * 0.9;
+                  }
+                } else {
+                  r = 232;
+                  g = 222;
+                  b = 204;
+                }
+              }
+              const i = (y * W + x) << 2;
+              bg[i] = r;
+              bg[i + 1] = g;
+              bg[i + 2] = b;
+              bg[i + 3] = 255;
+            }
+          }
+          img.data.set(bg);
+        }
+
+        function swash(t) {
+          if (t < 0.2) {
+            const k = 1 - t / 0.2;
+            return 1 - k * k * k;
+          }
+          if (t < 0.88) {
+            const k = (t - 0.2) / 0.68;
+            return 0.5 + 0.5 * Math.cos(Math.PI * k);
+          }
+          return 0;
+        }
+
+        function render(t, dt) {
+          const d = img.data;
+          const tS = t / TS,
+            tC = t / TC,
+            t17 = t * 0.17;
+          const alpha = 0.55 * sr(t * 0.045) + 0.2,
+            cosA = Math.cos(alpha),
+            sinA = Math.sin(alpha);
+          const pS0 = ZS / LS + tS,
+            dry = 0.0065 * dt;
+          for (let x = 0; x < W; x++) {
+            const u = x * invW;
+            const wf =
+              0.2 * sr(u * 5.3 + 1) +
+              0.1 * sr(u * 11.7 + 2.2) +
+              0.18 * u +
+              0.07 * sr(u * 9 + t * 0.13) +
+              0.05 * sr(u * 3.7 - t * 0.09 + 1);
+            colWf[x] = wf;
+            const P = pS0 + wf + 0.07 * sr((u - 0.5) * A * ZS * 0.9 + t17);
+            const g = 0.5 + 0.5 * vn(P * 0.8 + 7, 3.1);
+            const tau = P - Math.floor(P);
+            const w = swash(tau),
+              w2 = swash(frac(t / 6.7 + 0.3 * u + 0.2 * sr(u * 6 + 1)));
+            let D = Math.max(0.05 * g * w, 0.022 * w2);
+            if (w > 0.02) D += 0.003 * (vn(u * 30, t * 0.2) - 0.5);
+            const fv =
+              SB + 0.02 * sr(u * 3.1 + 0.7) + 0.012 * sr(u * 8.3 + 2) + D;
+            frontV[x] = fv;
+            wetV[x] = Math.max(fv, wetV[x] - dry);
+            colTau[x] = tau;
+            colG[x] = g;
+          }
+          for (let y = hyRow; y < H; y++) {
+            const v = y / H,
+              q = v - HY,
+              z = 1 / (q + 0.012);
+            const Pb = z / LS + tS,
+              Pcb = (z * cosA) / LC + tC;
+            const Asw = sstep(0.05, 0.22, q),
+              Ach = sstep(0.1, 0.26, q) * 0.9,
+              Ar = sstep(0.12, 0.3, q) * 0.8,
+              brk = sstep(0.06, 0.26, q);
+            const fres = 0.42 + 0.43 * (1 - sstep(0, 0.4, q));
+            const bt = sstep(0, 0.4, q),
+              bwr = 198 - 56 * bt,
+              bwg = 206 - 46 * bt,
+              bwb = 198 - 41 * bt;
+            const yr = Math.max(0, (hyRow - (y - hyRow) * 0.9 - 2) | 0);
+            const xl = Math.ceil(eL[y]),
+              xr = Math.floor(W - 1 - eR[y]);
+            const eLy = eL[y],
+              eRy = eR[y];
+            for (let x = xl; x <= xr; x++) {
+              const i = (y * W + x) << 2,
+                fv = frontV[x];
+              let cr, cg, cb;
+              if (v < fv) {
+                const d0 = fv - v,
+                  u = x * invW,
+                  xw = (u - 0.5) * A * z;
+                const P = Pb + colWf[x] + 0.07 * sr(xw * 0.9 + t17);
+                const cS = sc(P + 0.25),
+                  sS = sc(P);
+                const gg = 0.5 + 0.5 * vn(P * 0.8 + 7, 3.1);
+                const sC = sc(Pcb + (xw * sinA) / LC);
+                const n3 = vn(xw * 2.2 + t * 0.11, z * 1.7 + t * 0.35);
+                const dx =
+                  ((cS * Asw * gg * 2.2 +
+                    sC * Ach * 1.4 +
+                    (n3 - 0.5) * Ar * 2) *
+                    px) |
+                  0;
+                let sx = x + dx;
+                sx = sx < 0 ? 0 : sx >= W ? W - 1 : sx;
+                const ri = (yr * W + sx) << 2;
+                cr = bwr + (bg[ri] - bwr) * fres;
+                cg = bwg + (bg[ri + 1] - bwg) * fres;
+                cb = bwb + (bg[ri + 2] - bwb) * fres;
+                const add =
+                  (0.5 * cS - 0.22 * sS) * Asw * gg * 44 +
+                  sC * Ach * 15 +
+                  (n3 - 0.5) * Ar * 22;
+                cr += add;
+                cg += add;
+                cb += add * 0.9;
+                // breaking crest + trailing foam
+                const cs = cS > 0 ? cS : 0;
+                let cr4 = cs * cs;
+                cr4 *= cr4;
+                const fP = P - Math.floor(P);
+                let tr = fP < 0.38 ? 1 - fP / 0.38 : 0;
+                tr *= tr;
+                const lace = clamp(
+                  (vn(xw * 2.6 + 3.1, P * 5) - 0.33) * 3,
+                  0,
+                  1,
+                );
+                let foam =
+                  brk *
+                  (0.55 + 0.45 * gg) *
+                  (0.9 * cr4 + 0.42 * tr) *
+                  (0.3 + 0.7 * lace);
+                if (foam > 0) {
+                  foam = clamp(foam, 0, 1) * 0.92;
+                  cr += (244 - cr) * foam;
+                  cg += (240 - cg) * foam;
+                  cb += (228 - cb) * foam;
+                }
+                // sun glints
+                const sp = sC * Ach + (n3 - 0.5) * Ar * 2.4 + cS * 0.25 * Asw;
+                if (sp > 0.42) {
+                  const k = Math.min(
+                    90,
+                    (sp - 0.42) * sunCol[x] * (1 - 0.6 * q) * 170,
+                  );
+                  cr += k;
+                  cg += k * 0.97;
+                  cb += k * 0.9;
+                }
+                // land-edge foam
+                const dm = Math.min(x - eLy, W - 1 - eRy - x);
+                if (dm < ew * 3.2) {
+                  const ef =
+                    Math.exp(-dm / ew) *
+                    (0.35 + 0.65 * (0.5 + 0.5 * cS)) *
+                    (0.45 + 0.55 * vn(x * 0.4 + t * 0.25, y * 0.5)) *
+                    sstep(0.01, 0.08, q) *
+                    0.85;
+                  cr += (244 - cr) * ef;
+                  cg += (240 - cg) * ef;
+                  cb += (228 - cb) * ef;
+                }
+                // shallow water over wet sand + rim foam
+                if (d0 < 0.06) {
+                  const tt = (1 - sstep(0, 0.06, d0)) * 0.7;
+                  cr += (150 - cr) * tt;
+                  cg += (140 - cg) * tt;
+                  cb += (121 - cb) * tt;
+                  const rim = 1 - sstep(0, 0.014, d0);
+                  if (rim > 0) {
+                    const l2 = clamp(
+                        (vn(x * 0.35 + t * 0.1, y * 0.6) - 0.3) * 2.5,
+                        0,
+                        1,
+                      ),
+                      fa =
+                        rim * (0.55 + 0.45 * l2) * (0.6 + 0.4 * colG[x]) * 0.95;
+                    cr += (244 - cr) * fa;
+                    cg += (240 - cg) * fa;
+                    cb += (228 - cb) * fa;
+                  }
+                }
+                // horizon haze
+                const hz = (1 - sstep(0, 0.075, q)) * 0.9;
+                if (hz > 0) {
+                  const fi = ((hyRow - 1) * W + x) << 2;
+                  cr += (bg[fi] - cr) * hz;
+                  cg += (bg[fi + 1] - cg) * hz;
+                  cb += (bg[fi + 2] - cb) * hz;
+                }
+              } else {
+                const wv = wetV[x],
+                  span = wv - fv,
+                  f = span > 0.0005 ? clamp((v - fv) / span, 0, 1) : 1;
+                const dk = sstep(0.8, 1, v);
+                cr = 216 - 40 * dk;
+                cg = 202 - 42 * dk;
+                cb = 176 - 42 * dk;
+                const tex =
+                  (vn(x * 0.16, y * 0.3) - 0.5) * 20 +
+                  (vn(x * 0.7 + 9, y * 1.1 + 3) - 0.5) * 8;
+                cr += tex;
+                cg += tex;
+                cb += tex * 0.9;
+                const peb =
+                  sstep(0.74, 0.82, vn(x * 0.3 + 31, y * 0.5 + 17)) *
+                  (0.25 + 0.75 * dk);
+                cr -= peb * 22;
+                cg -= peb * 24;
+                cb -= peb * 24;
+                if (v < wv) {
+                  const wet = 1 - sstep(0.5, 1, f);
+                  if (wet > 0) {
+                    cr *= 1 - 0.28 * wet;
+                    cg *= 1 - 0.27 * wet;
+                    cb *= 1 - 0.34 * wet;
+                    const sh = wet * (1 - f) * 0.4 * (1 - dk * 0.5);
+                    cr += (232 - cr) * sh;
+                    cg += (226 - cg) * sh;
+                    cb += (212 - cb) * sh;
+                  }
+                }
+                const rf = clamp(span * 70, 0, 1) * (1 - f);
+                if (rf > 0) {
+                  const lc = clamp(
+                      (vn(x * 0.28 + t * 0.015, y * 0.55) - (0.36 + 0.42 * f)) *
+                        5,
+                      0,
+                      1,
+                    ),
+                    fa = rf * lc * 0.9;
+                  cr += (244 - cr) * fa;
+                  cg += (240 - cg) * fa;
+                  cb += (228 - cb) * fa;
+                }
+              }
+              d[i] = cr;
+              d[i + 1] = cg;
+              d[i + 2] = cb;
+            }
+          }
+        }
+
+        /* ---------- main loop ---------- */
+        const t0 = performance.now();
+        let lastFrame = 0,
+          avgMs = 16,
+          slow = 0;
+        function loop(now) {
+          requestAnimationFrame(loop);
+          if (now - lastFrame < 32) return;
+          const dt = Math.min(0.1, (now - lastFrame) / 1000);
+          lastFrame = now;
+          const t = (now - t0) / 1000,
+            s0 = performance.now();
+          render(t, dt);
+          sctx.putImageData(img, 0, 0);
+          const ms = performance.now() - s0;
+          avgMs = avgMs * 0.9 + ms * 0.1;
+          if (avgMs > 26 && scaleLong > 360) {
+            if (++slow > 20) {
+              slow = 0;
+              scaleLong *= 0.82;
+              setup();
+            }
+          } else slow = 0;
+          audioUpdate();
+        }
+
+        /* ---------- lens dirt ---------- */
+        const dirt = $("#dirt");
+        function buildDirt() {
+          const w = (dirt.width = Math.ceil(innerWidth / 2)),
+            h = (dirt.height = Math.ceil(innerHeight / 2)),
+            c = dirt.getContext("2d");
+          c.clearRect(0, 0, w, h);
+          const R = mulberry32(7),
+            r = (a, b) => a + R() * (b - a),
+            s = Math.sqrt(w * h) / 620,
+            M = Math.max(w, h);
+          for (let i = 0; i < 14; i++) {
+            const x = r(0, w),
+              y = r(0, h),
+              rad = r(0.08, 0.32) * M,
+              a = r(0.04, 0.14),
+              gr = c.createRadialGradient(x, y, 0, x, y, rad);
+            gr.addColorStop(0, `rgba(255,248,232,${a})`);
+            gr.addColorStop(1, "rgba(255,248,232,0)");
+            c.fillStyle = gr;
+            c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+          }
+          for (let i = 0; i < 12; i++) {
+            const x = R() < 0.5 ? r(-0.05, 0.22) * w : r(0.78, 1.05) * w,
+              y = r(-0.05, 1.05) * h,
+              rad = r(0.06, 0.2) * M,
+              a = r(0.05, 0.13),
+              gr = c.createRadialGradient(x, y, 0, x, y, rad);
+            gr.addColorStop(0, `rgba(118,100,76,${a})`);
+            gr.addColorStop(1, "rgba(118,100,76,0)");
+            c.fillStyle = gr;
+            c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+          }
+          c.lineCap = "round";
+          for (let i = 0; i < 8; i++) {
+            c.strokeStyle = `rgba(255,250,238,${r(0.03, 0.08)})`;
+            c.lineWidth = r(10, 38) * s;
+            c.beginPath();
+            const x0 = r(0, w),
+              y0 = r(0, h);
+            c.moveTo(x0, y0);
+            c.bezierCurveTo(
+              x0 + r(-120, 120),
+              y0 + r(-80, 80),
+              x0 + r(-200, 200),
+              y0 + r(-120, 120),
+              x0 + r(-260, 260),
+              y0 + r(-160, 160),
+            );
+            c.stroke();
+          }
+          for (let i = 0; i < 260; i++) {
+            const x = r(0, w),
+              y = r(0, h),
+              rad = Math.pow(R(), 3) * 3.2 * s + 0.4,
+              dark = R() < 0.6;
+            c.fillStyle = dark
+              ? `rgba(66,56,46,${r(0.08, 0.34)})`
+              : `rgba(255,252,244,${r(0.18, 0.5)})`;
+            c.beginPath();
+            c.arc(x, y, rad, 0, TAU);
+            c.fill();
+          }
+          for (let i = 0; i < 8; i++) {
+            c.strokeStyle = `rgba(60,52,44,${r(0.12, 0.28)})`;
+            c.lineWidth = r(0.4, 0.9);
+            c.beginPath();
+            const x0 = r(0, w),
+              y0 = r(0, h);
+            c.moveTo(x0, y0);
+            c.quadraticCurveTo(
+              x0 + r(-60, 60) * s,
+              y0 + r(-60, 60) * s,
+              x0 + r(-110, 110) * s,
+              y0 + r(-70, 70) * s,
+            );
+            c.stroke();
+          }
+          for (let i = 0; i < 6; i++) {
+            const x = r(0, w),
+              y = r(0, h),
+              rad = r(6, 26) * s;
+            c.strokeStyle = `rgba(255,250,240,${r(0.05, 0.12)})`;
+            c.lineWidth = r(1, 3);
+            c.beginPath();
+            c.arc(x, y, rad, 0, TAU);
+            c.stroke();
+            c.fillStyle = `rgba(255,250,240,${r(0.02, 0.05)})`;
+            c.fill();
+          }
+        }
+
+        /* ---------- title glitch ---------- */
+        const letters = [...document.querySelectorAll("#title span")],
+          base = letters.map((s) => s.textContent);
+        let burstUntil = 0;
+        function fixWidths() {
+          letters.forEach((s, i) => {
+            s.style.width = "";
+            s.textContent = base[i];
+          });
+          letters.forEach((s) => {
+            s.style.width = Math.ceil(s.getBoundingClientRect().width) + "px";
+          });
+        }
+        function flick(i) {
+          const s = letters[i];
+          if (s._b) return;
+          s._b = true;
+          let k = 0;
+          const steps = 1 + ((Math.random() * 3) | 0);
+          (function step() {
+            if (k < steps) {
+              s.textContent = pick(SYM);
+              s.classList.add("g");
+              s.style.setProperty("--gx", rnd(-4, 4) + "px");
+              s.style.setProperty("--gy", rnd(-3, 3) + "px");
+              s.style.setProperty("--gs", rnd(-9, 9) + "deg");
+              k++;
+              setTimeout(step, rnd(40, 140));
+            } else {
+              s.textContent = base[i];
+              s.classList.remove("g");
+              s._b = false;
+            }
+          })();
+        }
+        function glitchTick() {
+          const burst = performance.now() < burstUntil,
+            n = burst
+              ? 1 + ((Math.random() * 3) | 0)
+              : Math.random() < 0.25
+                ? 2
+                : 1;
+          for (let k = 0; k < n; k++)
+            flick((Math.random() * letters.length) | 0);
+          setTimeout(glitchTick, burst ? rnd(70, 260) : rnd(800, 2800));
+        }
+
+        /* ---------- loader ---------- */
+        const loader = $(".loader"),
+          fill = $(".bar i"),
+          pctEl = $(".pct"),
+          msgEl = $(".msg");
+        const nextLoad = bag(LOAD),
+          nextErr = bag(ERR);
+        let st = "load",
+          p = 0,
+          failAt = rnd(7, 96),
+          baseSpeed = rnd(1.3, 2.6),
+          seed = rnd(0, 100),
+          msgAt = 0,
+          phaseEnd = 0,
+          flickNext = 0,
+          lastUi = performance.now();
+        function setMsg(txt, instant) {
+          if (instant) {
+            msgEl.textContent = txt;
+            msgEl.style.opacity = 0.85;
+            return;
+          }
+          msgEl.style.opacity = 0;
+          setTimeout(() => {
+            msgEl.textContent = txt;
+            msgEl.style.opacity = 0.85;
+          }, 460);
+        }
+        function showP() {
+          fill.style.width = p.toFixed(2) + "%";
+          pctEl.textContent = Math.floor(p) + "%";
+        }
+        function uiLoop(now) {
+          requestAnimationFrame(uiLoop);
+          const dt = Math.min(0.1, (now - lastUi) / 1000);
+          lastUi = now;
+          if (st === "load") {
+            const f = vn(now * 0.00035 + seed, 2),
+              sp = baseSpeed * Math.pow(clamp(f * 2, 0.08, 1.8), 1.5);
+            p += sp * dt;
+            if (now > msgAt) {
+              setMsg(nextLoad());
+              msgAt = now + rnd(2800, 5200);
+            }
+            if (p >= failAt) {
+              p = failAt;
+              st = "flick";
+              phaseEnd = now + rnd(700, 1100);
+              flickNext = now;
+              burstUntil = now + 1500;
+              setMsg(nextErr());
+            }
+            showP();
+          } else if (st === "flick") {
+            if (now >= flickNext) {
+              loader.classList.toggle("bad");
+              flickNext = now + rnd(50, 150);
+            }
+            if (now >= phaseEnd) {
+              loader.classList.add("bad");
+              st = "err";
+              phaseEnd = now + rnd(2800, 4200);
+            }
+          } else if (st === "err") {
+            if (now >= phaseEnd) {
+              st = "reset";
+              phaseEnd = now + 1100;
+              msgEl.style.opacity = 0;
+              fill.style.transition = "width .9s ease";
+              p = 0;
+              showP();
+            }
+          } else if (st === "reset") {
+            if (now >= phaseEnd) {
+              loader.classList.remove("bad");
+              fill.style.transition = "";
+              st = "load";
+              failAt = rnd(7, 96);
+              baseSpeed = rnd(1.3, 2.6);
+              seed = rnd(0, 100);
+              msgAt = 0;
+            }
+          }
+        }
+
+        /* ---------- ghosts ---------- */
+        const ghostsEl = $("#ghosts"),
+          nextGhost = bag(GHOST);
+        let active = 0;
+        const maxGhosts = () =>
+          clamp(Math.round((innerWidth * innerHeight) / 110000), 6, 18);
+        function spawnGhost() {
+          if (document.hidden) return;
+          const el = document.createElement("div"),
+            txt = nextGhost();
+          el.className = "ghost";
+          el.textContent = txt;
+          el.dir = "auto";
+          el.style.fontSize = rnd(11, 20).toFixed(1) + "px";
+          el.style.letterSpacing = rnd(0.02, 0.2).toFixed(3) + "em";
+          if (Math.random() < 0.35) el.style.fontStyle = "normal";
+          el.style.setProperty("--o", rnd(0.38, 0.78).toFixed(2));
+          el.style.setProperty("--gc", pick(GLOW));
+          el.style.setProperty("--gd", rnd(2.4, 6.5).toFixed(2) + "s");
+          el.style.setProperty("--dl", (-rnd(0, 6)).toFixed(2) + "s");
+          el.style.setProperty("--gg", rnd(3, 7).toFixed(2) + "s");
+          el.style.setProperty("--dl2", (-rnd(0, 6)).toFixed(2) + "s");
+          el.style.rotate = rnd(-2.2, 2.2).toFixed(2) + "deg";
+          ghostsEl.appendChild(el);
+          const vw = innerWidth,
+            vh = innerHeight,
+            w = el.offsetWidth,
+            h = el.offsetHeight;
+          let x = 8,
+            y = 8;
+          for (let k = 0; k < 14; k++) {
+            x = w < vw - 16 ? rnd(8, vw - w - 8) : 8;
+            y = rnd(8, Math.max(9, vh - h - 8));
+            const inC =
+              x + w > vw * 0.2 &&
+              x < vw * 0.8 &&
+              y + h > vh * 0.3 &&
+              y < vh * 0.76;
+            if (!inC) break;
+          }
+          el.style.left = x + "px";
+          el.style.top = y + "px";
+          let iv = 0;
+          if (Math.random() < 0.3) {
+            const orig = [...txt];
+            iv = setInterval(
+              () => {
+                if (!el.isConnected) return;
+                const a = orig.slice(),
+                  j = (Math.random() * a.length) | 0;
+                a[j] = pick(SYM);
+                el.textContent = a.join("");
+                setTimeout(
+                  () => {
+                    el.textContent = txt;
+                  },
+                  rnd(70, 170),
+                );
+              },
+              rnd(1400, 3200),
+            );
+          }
+          active++;
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => el.classList.add("on")),
+          );
+          setTimeout(
+            () => {
+              el.classList.remove("on");
+              setTimeout(() => {
+                clearInterval(iv);
+                el.remove();
+                active--;
+              }, 1600);
+            },
+            rnd(5000, 10000) + 1400,
+          );
+        }
+        function ghostLoop() {
+          if (active < maxGhosts()) spawnGhost();
+          setTimeout(ghostLoop, rnd(260, 780));
+        }
+
+        /* ---------- sound (synthesised, driven by the same wave state) ---------- */
+        const btn = $("#snd");
+        let ac = null,
+          master = null,
+          chans = [],
+          soundOn = false;
+        function mkBuf(type) {
+          const sr0 = ac.sampleRate,
+            len = sr0 * 8,
+            N = sr0 >> 1,
+            buf = ac.createBuffer(1, len, sr0),
+            out = buf.getChannelData(0);
+          if (type === "w") {
+            for (let i = 0; i < len; i++)
+              out[i] = (Math.random() * 2 - 1) * 0.5;
+            return buf;
+          }
+          const gen = new Float32Array(len + N);
+          let b = 0,
+            mx = 0;
+          for (let i = 0; i < len + N; i++) {
+            b = (b + 0.02 * (Math.random() * 2 - 1)) / 1.02;
+            gen[i] = b;
+            if (Math.abs(b) > mx) mx = Math.abs(b);
+          }
+          const k = 0.9 / mx;
+          for (let i = 0; i < len; i++) out[i] = gen[i] * k;
+          for (let i = 0; i < N; i++) {
+            const a = i / N;
+            out[i] = (gen[i] * a + gen[len + i] * (1 - a)) * k;
+          }
+          return buf;
+        }
+        function srcNode(buf) {
+          const s = ac.createBufferSource();
+          s.buffer = buf;
+          s.loop = true;
+          s.start(0, Math.random() * 6);
+          return s;
+        }
+        function bq(type, f, q) {
+          const n = ac.createBiquadFilter();
+          n.type = type;
+          n.frequency.value = f;
+          if (q) n.Q.value = q;
+          return n;
+        }
+        function initAudio() {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return false;
+          ac = new AC();
+          master = ac.createGain();
+          master.gain.value = 0;
+          master.connect(ac.destination);
+          const mer = ac.createChannelMerger(2);
+          mer.connect(master);
+          const bb = [mkBuf("b"), mkBuf("b"), mkBuf("b"), mkBuf("b")],
+            wb = [mkBuf("w"), mkBuf("w")];
+          for (let c = 0; c < 2; c++) {
+            const lp = bq("lowpass", 300, 0.6),
+              gr = ac.createGain();
+            gr.gain.value = 0;
+            srcNode(bb[c]).connect(lp);
+            lp.connect(gr);
+            gr.connect(mer, 0, c);
+            const hp = bq("highpass", 2400),
+              lp2 = bq("lowpass", 9000),
+              gh = ac.createGain();
+            gh.gain.value = 0;
+            srcNode(wb[c]).connect(hp);
+            hp.connect(lp2);
+            lp2.connect(gh);
+            gh.connect(mer, 0, c);
+            const lpa = bq("lowpass", 420),
+              ga = ac.createGain();
+            ga.gain.value = 0.08;
+            srcNode(bb[2 + c]).connect(lpa);
+            lpa.connect(ga);
+            ga.connect(mer, 0, c);
+            chans.push({ lp, gr, gh, ga });
+          }
+          return true;
+        }
+        const rushF = (t) =>
+          (t < 0.13
+            ? Math.sin(((t / 0.13) * Math.PI) / 2)
+            : Math.exp(-(t - 0.13) * 5)) +
+          (t > 0.78 ? Math.pow((t - 0.78) / 0.22, 2) * 0.55 : 0);
+        const fizzF = (t) =>
+          t > 0.16 && t < 0.88
+            ? Math.pow(Math.sin((Math.PI * (t - 0.16)) / 0.72), 1.5) * 0.6
+            : 0;
+        function audioUpdate() {
+          if (!ac || !soundOn) return;
+          const e = [0, 0, 0, 0];
+          for (let s = 0; s < 2; s++)
+            for (let k = 0; k < 5; k++) {
+              const x = Math.min(
+                  W - 1,
+                  (((s ? 0.55 : 0.08) + k * 0.09) * W) | 0,
+                ),
+                tau = colTau[x],
+                g = colG[x];
+              e[s * 2] += (rushF(tau) * g) / 5;
+              e[s * 2 + 1] += (fizzF(tau) * g) / 5;
+            }
+          const now = ac.currentTime;
+          for (let c = 0; c < 2; c++) {
+            const o = 1 - c;
+            const rv = clamp(0.75 * e[c * 2] + 0.25 * e[o * 2], 0, 1.2),
+              fv = clamp(0.75 * e[c * 2 + 1] + 0.25 * e[o * 2 + 1], 0, 1);
+            const ch = chans[c];
+            ch.gr.gain.setTargetAtTime(0.05 + 0.62 * rv, now, 0.08);
+            ch.lp.frequency.setTargetAtTime(
+              200 + 2600 * Math.pow(rv, 0.8),
+              now,
+              0.08,
+            );
+            ch.gh.gain.setTargetAtTime(0.01 + 0.11 * fv + 0.05 * rv, now, 0.1);
+            ch.ga.gain.setTargetAtTime(0.07 + 0.05 * rv, now, 0.3);
+          }
+        }
+        async function toggleSound() {
+          if (!ac && !initAudio()) return;
+          soundOn = !soundOn;
+          if (soundOn) {
+            try {
+              await ac.resume();
+            } catch (e) {}
+            master.gain.cancelScheduledValues(ac.currentTime);
+            master.gain.setTargetAtTime(0.85, ac.currentTime, 0.35);
+          } else {
+            master.gain.setTargetAtTime(0, ac.currentTime, 0.25);
+            setTimeout(() => {
+              if (!soundOn) ac.suspend();
+            }, 1600);
+          }
+          btn.setAttribute("aria-pressed", String(soundOn));
+          btn.classList.toggle("on", soundOn);
+        }
+        btn.addEventListener("click", toggleSound);
+        addEventListener("keydown", (e) => {
+          if (e.key === "m" || e.key === "M") toggleSound();
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (!ac || !soundOn) return;
+          if (document.hidden) ac.suspend();
+          else ac.resume();
+        });
+
+        /* ---------- boot ---------- */
+        let rt = 0;
+        addEventListener("resize", () => {
+          clearTimeout(rt);
+          rt = setTimeout(() => {
+            setup();
+            buildDirt();
+            fixWidths();
+          }, 250);
+        });
+        setup();
+        buildDirt();
+        fixWidths();
+        requestAnimationFrame(loop);
+        requestAnimationFrame(uiLoop);
+        setTimeout(glitchTick, 1800);
+        ghostLoop();
+      })();
+    </script>
+  </body>
+</html>
