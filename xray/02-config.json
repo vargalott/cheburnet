@@ -19,10 +19,11 @@
         "clients": [
           {
             "email": "USER",
-            "id": "UUID"
+            "id": "UUID",
+            "flow": "xtls-rprx-vision"
           }
         ],
-        "decryption": "VLESSENC/decryption"
+        "decryption": "vlessenc/decryption"
       },
       "sniffing": {
         "enabled": true,
