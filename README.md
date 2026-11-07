@@ -61,7 +61,7 @@ rsync -avz --include='db_*.sqlite3' --exclude='*' pale:/root/vaultwarden/data/ $
 
 ##### flowchart
 
-###### 01
+###### 01 VLESS Reality // Hysteria 2
 
 ```mermaid
 flowchart TD
@@ -96,7 +96,13 @@ flowchart TD
   TUNNEL --> INTERNET
 ```
 
-###### 02
+###### 02 VLESS Encryption + XHTTP + Vision // Hysteria 2
+
+```
+nginx on :443
+/udp Hysteria 2
+/tcp VLESS Encryption + XHTTP + Vision
+```
 
 ```mermaid
 flowchart TD
@@ -107,7 +113,7 @@ flowchart TD
 
   NGINX-TCP443["NGINX\n172.20.0.10\nTCP:443"]:::wide
   HYSTERIA-UDP443["Hysteria2\n172.20.0.15\nUDP:443"]:::wide
-  PROXY-CORE["VLESS-XHTTP-VLESSENC\n172.20.0.20"]:::wide
+  PROXY-CORE["VLESSENC-XHTTP-VISION\n172.20.0.20"]:::wide
 
   MASQ["Masquerade Webapp\n172.20.0.30"]:::wide
   CONFIG["Proxy client config\n(mihomo)"]:::wide
