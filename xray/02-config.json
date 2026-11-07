@@ -31,6 +31,9 @@
         "destOverride": ["http", "tls", "quic"]
       },
       "streamSettings": {
+        "sockopt": {
+          "trustedXForwardedFor": ["X-Forwarded-For"]
+        },
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/XHTTP-SUBPATH",
