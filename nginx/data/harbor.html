@@ -8,36 +8,27 @@
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#050404" />
     <title>Harbor</title>
-    <meta name="description" content="Harbor" />
-    <meta name="theme-color" content="#e6dccb" />
     <link rel="icon" href="data:," />
     <style>
-      :root {
-        --fs: clamp(3.2rem, 12.5vw, 10rem);
-        --ink: #4d463f;
-        --red: #a8594e;
-      }
       * {
         box-sizing: border-box;
-        margin: 0;
-        padding: 0;
       }
       html,
       body {
+        margin: 0;
         height: 100%;
+        background: #040303;
         overflow: hidden;
-        background: #d9d0bf;
-        color: var(--ink);
-        font-family:
-          "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
-          Georgia, serif;
-        -webkit-tap-highlight-color: transparent;
       }
       body {
-        animation: in 2.4s ease-out both;
+        color: #e9dccd;
+        -webkit-font-smoothing: antialiased;
+        animation: fadein 2.8s ease both;
       }
-      @keyframes in {
+      @keyframes fadein {
         from {
           opacity: 0;
         }
@@ -46,1940 +37,3076 @@
         }
       }
 
-      #sea {
+      #waves {
+        position: fixed;
+        left: -24px;
+        top: -24px;
+        width: calc(100% + 48px);
+        height: calc(100% + 48px);
+        z-index: 1;
+        filter: blur(1.8px) saturate(0.92);
+        transition: opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #cryptic {
         position: fixed;
         inset: 0;
-        width: 100%;
-        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+        overflow: hidden;
+        transition: opacity 1.4s ease;
+      }
+      .msg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        color: rgba(226, 204, 182, 0.9);
+        line-height: 1.38;
+        overflow-wrap: break-word;
+        text-shadow: 0 0 14px rgba(200, 110, 60, 0.2);
+        will-change: opacity, filter;
+      }
+      .mi,
+      .mj {
         display: block;
-        z-index: 0;
-        filter: blur(0.6px);
+      }
+      #veil {
+        position: fixed;
+        inset: 0;
+        z-index: 3;
+        background: #000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 2.6s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .mist {
+      #center {
         position: fixed;
-        left: -30%;
-        width: 160%;
+        inset: 0;
+        z-index: 4;
+        display: grid;
+        place-items: center;
         pointer-events: none;
-        z-index: 2;
-        background:
-          radial-gradient(
-            ellipse at 30% 50%,
-            rgba(250, 244, 232, 0.5),
-            transparent 60%
-          ),
-          radial-gradient(
-            ellipse at 75% 40%,
-            rgba(246, 238, 224, 0.4),
-            transparent 55%
-          );
       }
-      .m1 {
-        top: 26%;
-        height: 32%;
-        opacity: 0.55;
-        animation: drift 90s ease-in-out infinite alternate;
+      #stack {
+        position: relative;
       }
-      .m2 {
-        top: 46%;
-        height: 24%;
-        opacity: 0.35;
-        animation: drift 140s ease-in-out infinite alternate-reverse;
+      #titleFloat {
+        animation: drift 12s ease-in-out infinite;
+        filter: drop-shadow(0 0 26px rgba(214, 124, 70, 0.17));
+        transition: filter 2.4s ease;
       }
       @keyframes drift {
-        from {
-          transform: translateX(-9%);
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0);
         }
-        to {
-          transform: translateX(9%);
+        50% {
+          transform: translate3d(0, -7px, 0);
         }
       }
+      #title {
+        margin: 0;
+        font-weight: 300;
+        font-size: clamp(44px, 10.5vw, 148px);
+        line-height: 1.05;
+        white-space: nowrap;
+        text-transform: uppercase;
+        font-family:
+          "Optima", "Candara", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
+          "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        color: rgba(236, 222, 206, 0.92);
+        transition: color 2.4s ease;
+        transform-origin: 50% 50%;
+        --c1: 170, 48, 38;
+        --c2: 222, 160, 96;
+        text-shadow:
+          var(--gx, 0px) 0 0 rgba(var(--c1), var(--ga, 0)),
+          calc(var(--gx, 0px) * -1) 0 0 rgba(var(--c2), var(--ga2, 0));
+      }
+      .l {
+        display: inline-block;
+        margin: 0 0.11em;
+        text-align: center;
+        will-change: transform;
+      }
+      .l.gl {
+        color: #f6dcc2;
+      }
 
-      #ghosts {
+      #loader {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: min(52vw, 380px);
+        margin-top: clamp(20px, 3.4vh, 36px);
+        transform: translateX(-50%);
+        transition: opacity 1.2s ease;
+      }
+      #bar {
+        position: relative;
+        height: 2px;
+        background: rgba(233, 220, 205, 0.09);
+        border-radius: 2px;
+      }
+      #fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 2px;
+        transform-origin: left center;
+        transform: scaleX(0);
+        background: linear-gradient(
+          90deg,
+          rgba(150, 70, 40, 0),
+          rgba(214, 140, 86, 0.85)
+        );
+        box-shadow: 0 0 14px rgba(214, 120, 70, 0.35);
+        transition:
+          background 0.35s ease,
+          box-shadow 0.35s ease;
+      }
+      #row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        margin-top: 12px;
+        font:
+          11px/1.55 ui-monospace,
+          Menlo,
+          Consolas,
+          "DejaVu Sans Mono",
+          monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(233, 220, 205, 0.38);
+        transition: color 0.35s ease;
+      }
+      #msg {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      #pct {
+        font-variant-numeric: tabular-nums;
+        min-width: 4ch;
+        text-align: right;
+      }
+      #loader.err #fill {
+        background: linear-gradient(
+          90deg,
+          rgba(90, 18, 18, 0),
+          rgba(150, 38, 34, 0.92)
+        );
+        box-shadow: 0 0 16px rgba(150, 30, 28, 0.5);
+      }
+      #loader.err #row {
+        color: rgba(166, 52, 46, 0.88);
+      }
+
+      #vignette {
         position: fixed;
         inset: 0;
         z-index: 5;
         pointer-events: none;
-        overflow: hidden;
-      }
-      .ghost {
-        position: fixed;
-        left: 0;
-        top: 0;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        color: rgba(74, 66, 58, 0.8);
-        font-style: italic;
-        text-shadow:
-          0 0 7px var(--gc, rgba(255, 244, 222, 0.9)),
-          0 0 2px rgba(255, 255, 255, 0.7);
-        transition: opacity 1.5s ease;
-        animation:
-          gjit var(--gd, 4s) steps(1, end) infinite var(--dl, 0s),
-          gglow var(--gg, 5s) ease-in-out infinite alternate var(--dl2, 0s);
-      }
-      .ghost.on {
-        opacity: var(--o, 0.6);
-      }
-      @keyframes gjit {
-        0%,
-        84%,
-        100% {
-          transform: none;
-          clip-path: none;
-          filter: none;
-        }
-        86% {
-          transform: translate(2px, -1px) skewX(-7deg);
-          filter: drop-shadow(2px 0 0 rgba(190, 95, 95, 0.55))
-            drop-shadow(-2px 0 0 rgba(85, 150, 160, 0.55));
-        }
-        89% {
-          transform: translate(-3px, 1px);
-          clip-path: inset(0 0 55% 0);
-          filter: drop-shadow(-2px 0 0 rgba(190, 95, 95, 0.5));
-        }
-        92% {
-          transform: translate(3px, 0);
-          clip-path: inset(46% 0 0 0);
-          filter: drop-shadow(2px 0 0 rgba(85, 150, 160, 0.5));
-        }
-        95% {
-          transform: translate(-1px, 1px) skewX(5deg);
-          clip-path: none;
-          filter: drop-shadow(1px 0 0 rgba(190, 95, 95, 0.4));
-        }
-      }
-      @keyframes gglow {
-        from {
-          text-shadow:
-            0 0 4px var(--gc, rgba(255, 244, 222, 0.8)),
-            0 0 1px rgba(255, 255, 255, 0.5);
-        }
-        to {
-          text-shadow:
-            0 0 12px var(--gc, rgba(255, 244, 222, 0.95)),
-            0 0 22px var(--gc, rgba(255, 244, 222, 0.5)),
-            0 0 2px rgba(255, 255, 255, 0.8);
-        }
-      }
-
-      .stage {
-        position: fixed;
-        inset: 0;
-        z-index: 10;
-        pointer-events: none;
-      }
-      #title {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        gap: 0.1em;
-        font-size: var(--fs);
-        font-weight: 400;
-        line-height: 1;
-        white-space: nowrap;
-        user-select: none;
-        animation: glow 26s ease-in-out infinite;
-      }
-      #title span {
-        display: inline-block;
-        text-align: center;
-        background: linear-gradient(
-          100deg,
-          #7a5c8e 0%,
-          #4c8a8c 14%,
-          #8f9a52 28%,
-          #b8864f 42%,
-          #a8587a 56%,
-          #5b66a8 70%,
-          #3f8c88 84%,
-          #7a5c8e 100%
-        );
-        background-size: 200% 100%;
-        background-repeat: repeat-x;
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        -webkit-text-fill-color: transparent;
-        animation: oil 48s linear infinite;
-        animation-delay: calc(var(--i) * -4.3s);
-      }
-      #title span.g {
-        filter: drop-shadow(3px 0 0 rgba(176, 84, 96, 0.6))
-          drop-shadow(-3px 0 0 rgba(70, 150, 160, 0.6));
-        transform: translate(var(--gx, 0), var(--gy, 0)) skewX(var(--gs, 0deg));
-      }
-      @keyframes oil {
-        to {
-          background-position: 200% 0;
-        }
-      }
-      @keyframes glow {
-        0%,
-        100% {
-          filter: drop-shadow(0 0 16px rgba(160, 110, 200, 0.42))
-            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
-        }
-        25% {
-          filter: drop-shadow(0 0 18px rgba(80, 170, 170, 0.48))
-            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
-        }
-        50% {
-          filter: drop-shadow(0 0 17px rgba(205, 160, 80, 0.5))
-            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
-        }
-        75% {
-          filter: drop-shadow(0 0 18px rgba(205, 100, 145, 0.44))
-            drop-shadow(0 0 2px rgba(255, 250, 240, 0.85));
-        }
-      }
-
-      .loader {
-        position: absolute;
-        left: 50%;
-        top: calc(50% + var(--fs) * 0.62 + 1.3rem);
-        transform: translateX(-50%);
-        width: clamp(190px, 36vw, 380px);
-        text-align: center;
-        font-size: 12.5px;
-        letter-spacing: 0.12em;
-        color: rgba(77, 70, 63, 0.75);
-        text-shadow: 0 0 6px rgba(255, 244, 222, 0.8);
-      }
-      .track {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .bar {
-        flex: 1;
-        height: 2px;
-        background: rgba(77, 70, 63, 0.16);
-        position: relative;
-        overflow: hidden;
-      }
-      .bar i {
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 0;
-        background: linear-gradient(
-          90deg,
-          rgba(130, 118, 100, 0.55),
-          rgba(77, 70, 63, 0.88)
-        );
-        box-shadow: 0 0 8px rgba(255, 244, 222, 0.8);
-        transition: width 0.25s linear;
-      }
-      .pct {
-        width: 3.6ch;
-        text-align: right;
-        font-variant-numeric: tabular-nums;
-        opacity: 0.8;
-      }
-      .msg {
-        display: block;
-        margin-top: 13px;
-        min-height: 1.7em;
-        line-height: 1.5;
-        opacity: 0.85;
-        transition: opacity 0.45s;
-      }
-      .loader.bad {
-        color: var(--red);
-      }
-      .loader.bad .bar {
-        background: rgba(168, 89, 78, 0.18);
-      }
-      .loader.bad .bar i {
-        background: var(--red);
-        box-shadow: 0 0 10px rgba(168, 89, 78, 0.55);
-      }
-      .loader.bad .msg {
-        animation: errj 0.9s steps(1, end) infinite;
-      }
-      @keyframes errj {
-        0%,
-        70%,
-        100% {
-          transform: none;
-        }
-        74% {
-          transform: translateX(2px) skewX(-6deg);
-        }
-        80% {
-          transform: translateX(-2px);
-        }
-        86% {
-          transform: none;
-        }
-      }
-
-      #dirt {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 30;
-        pointer-events: none;
-        animation: breathe 19s ease-in-out infinite alternate;
-      }
-      @keyframes breathe {
-        from {
-          opacity: 0.78;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      .veil {
-        position: fixed;
-        inset: 0;
-        z-index: 31;
-        pointer-events: none;
-        background:
-          radial-gradient(
-            circle at 78% 26%,
-            rgba(255, 246, 228, 0.34),
-            transparent 46%
-          ),
-          rgba(214, 196, 164, 0.09);
-        mix-blend-mode: screen;
-      }
-      .tone {
-        position: fixed;
-        inset: 0;
-        z-index: 31;
-        pointer-events: none;
-        background: rgba(206, 184, 148, 0.12);
-        mix-blend-mode: multiply;
-      }
-      .vig {
-        position: fixed;
-        inset: 0;
-        z-index: 32;
-        pointer-events: none;
+        transition: opacity 2.4s ease;
         background: radial-gradient(
           ellipse at 50% 46%,
-          transparent 52%,
-          rgba(96, 82, 62, 0.2) 82%,
-          rgba(70, 58, 44, 0.38) 100%
+          rgba(0, 0, 0, 0) 32%,
+          rgba(0, 0, 0, 0.58) 100%
         );
       }
       .grain {
         position: fixed;
-        inset: -50%;
-        width: 200%;
-        height: 200%;
-        z-index: 33;
+        inset: -320px;
         pointer-events: none;
-        opacity: 0.17;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .28 0 0 0 0 .24 0 0 0 0 .18 0 0 0 .9 -.15'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        animation: grain 1.1s steps(1) infinite;
+        will-change: transform, opacity;
+        transition: opacity 2.4s ease;
       }
-      @keyframes grain {
-        0% {
-          transform: translate(0, 0);
-        }
-        15% {
-          transform: translate(-7%, 4%);
-        }
-        30% {
-          transform: translate(5%, -8%);
-        }
-        45% {
-          transform: translate(-3%, 9%);
-        }
-        60% {
-          transform: translate(8%, 3%);
-        }
-        75% {
-          transform: translate(-9%, -4%);
-        }
-        90% {
-          transform: translate(2%, 7%);
-        }
+      #grain {
+        z-index: 6;
+        background-size: 256px 256px;
+        opacity: 0.12;
+      }
+      #grain2 {
+        z-index: 7;
+        background-size: 320px 320px;
+        opacity: 0;
+      }
+      #redpulse {
+        position: fixed;
+        inset: 0;
+        z-index: 8;
+        pointer-events: none;
+        opacity: 0;
+        background: radial-gradient(
+          ellipse at 50% 55%,
+          rgba(120, 24, 22, 0.17),
+          rgba(60, 10, 10, 0.1) 45%,
+          rgba(0, 0, 0, 0) 76%
+        );
       }
 
       #snd {
         position: fixed;
         left: 50%;
-        bottom: calc(10px + env(safe-area-inset-bottom));
+        bottom: calc(18px + env(safe-area-inset-bottom));
         transform: translateX(-50%);
-        z-index: 50;
-        width: 38px;
-        height: 30px;
-        border: 0;
-        background: transparent;
-        color: #4d463f;
-        opacity: 0.2;
-        cursor: pointer;
+        width: 36px;
+        height: 36px;
         padding: 0;
-        transition: opacity 0.6s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1px solid rgba(233, 220, 205, 0.07);
+        background: transparent;
+        color: rgba(233, 220, 205, 0.6);
+        opacity: 0.13;
+        cursor: pointer;
+        z-index: 10;
+        transition:
+          opacity 0.5s ease,
+          border-color 0.5s ease,
+          background 0.5s ease;
+        -webkit-tap-highlight-color: transparent;
       }
       #snd:hover,
       #snd:focus-visible {
         opacity: 0.6;
+        border-color: rgba(233, 220, 205, 0.18);
         outline: none;
       }
       #snd.on {
-        opacity: 0.5;
+        opacity: 0.3;
+      }
+      #snd.on:hover {
+        opacity: 0.7;
       }
       #snd svg {
-        width: 20px;
-        height: 14px;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 1.3;
-        stroke-linecap: round;
+        display: block;
       }
-      #snd.on svg path {
-        stroke-dasharray: 6 3;
-        animation: dash 3s linear infinite;
+      #snd rect {
+        transform-box: fill-box;
+        transform-origin: center;
+        transform: scaleY(0.14);
+        transition: transform 0.6s ease;
       }
-      #snd:not(.on) svg path:nth-child(2) {
-        opacity: 0.35;
+      #snd.on rect {
+        animation: eq 2.2s ease-in-out infinite;
       }
-      @keyframes dash {
-        to {
-          stroke-dashoffset: -27;
+      #snd.on rect:nth-child(2) {
+        animation-delay: -0.5s;
+        animation-duration: 1.8s;
+      }
+      #snd.on rect:nth-child(3) {
+        animation-delay: -1.1s;
+        animation-duration: 2.6s;
+      }
+      #snd.on rect:nth-child(4) {
+        animation-delay: -0.3s;
+        animation-duration: 2s;
+      }
+      #snd.on rect:nth-child(5) {
+        animation-delay: -1.5s;
+        animation-duration: 2.4s;
+      }
+      @keyframes eq {
+        0%,
+        100% {
+          transform: scaleY(0.25);
         }
+        50% {
+          transform: scaleY(1);
+        }
+      }
+
+      html.void #waves {
+        opacity: 0;
+      }
+      html.void #cryptic {
+        opacity: 0;
+      }
+      html.void #veil {
+        opacity: 1;
+      }
+      html.void #vignette {
+        opacity: 0;
+      }
+      html.void #loader {
+        opacity: 0;
+      }
+      html.void #grain {
+        opacity: 0.46;
+      }
+      html.void #grain2 {
+        opacity: 0.34;
+      }
+      html.void #title {
+        color: #fff;
+        --c1: 255, 255, 255;
+        --c2: 255, 255, 255;
+      }
+      html.void #titleFloat {
+        filter: drop-shadow(0 0 0 rgba(214, 124, 70, 0));
+      }
+      html.void .l.gl {
+        color: #fff;
       }
     </style>
   </head>
   <body>
-    <canvas id="sea"></canvas>
-    <div class="mist m1"></div>
-    <div class="mist m2"></div>
-    <div id="ghosts"></div>
-    <main class="stage">
-      <h1 id="title" aria-label="Harbor">
-        <span style="--i: 0">H</span><span style="--i: 1">A</span
-        ><span style="--i: 2">R</span><span style="--i: 3">B</span
-        ><span style="--i: 4">O</span><span style="--i: 5">R</span>
-      </h1>
-      <div class="loader" aria-hidden="true">
-        <div class="track">
-          <div class="bar"><i></i></div>
-          <span class="pct">0%</span>
+    <canvas id="waves" aria-hidden="true"></canvas>
+    <div id="cryptic" aria-hidden="true"></div>
+    <div id="veil"></div>
+    <main id="center">
+      <div id="stack">
+        <div id="titleFloat"><h1 id="title" aria-label="Harbor"></h1></div>
+        <div id="loader" aria-hidden="true">
+          <div id="bar"><i id="fill"></i></div>
+          <div id="row"><span id="msg"></span><span id="pct">0%</span></div>
         </div>
-        <span class="msg"></span>
       </div>
     </main>
-    <canvas id="dirt"></canvas>
-    <div class="veil"></div>
-    <div class="tone"></div>
-    <div class="vig"></div>
-    <div class="grain"></div>
+    <div id="vignette"></div>
+    <div class="grain" id="grain"></div>
+    <div class="grain" id="grain2"></div>
+    <div id="redpulse"></div>
     <button
       id="snd"
       type="button"
-      aria-label="toggle wave sound"
+      aria-label="Toggle sound"
       aria-pressed="false"
-      title=""
     >
-      <svg viewBox="0 0 20 14">
-        <path d="M1 4c2-2 3.5-2 5.5 0s3.5 2 5.5 0 3.5-2 5.5 0" />
-        <path d="M1 10c2-2 3.5-2 5.5 0s3.5 2 5.5 0 3.5-2 5.5 0" />
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <rect x="2.2" y="4" width="1.6" height="12" rx=".8" />
+        <rect x="6.1" y="4" width="1.6" height="12" rx=".8" />
+        <rect x="10" y="4" width="1.6" height="12" rx=".8" />
+        <rect x="13.9" y="4" width="1.6" height="12" rx=".8" />
+        <rect
+          x="17.8"
+          y="4"
+          width="1.6"
+          height="12"
+          rx=".8"
+          style="display: none"
+        />
       </svg>
     </button>
 
     <script>
+      /* ================= DATA ================= */
+      const HD = (() => {
+        const LANGS = [];
+        const RTL = new Set(["he", "ar", "fa", "ur", "yi", "ps"]);
+        const L = (c, h, t, s) =>
+          LANGS.push({
+            c,
+            rtl: RTL.has(c),
+            h: h.split("|"),
+            t: t.split("|"),
+            s,
+          });
+        L(
+          "en",
+          "The tide remembers what the shore forgot|Someone is counting the harbor lights|Every wave carries a name that is not yours|The signal arrived before it was sent",
+          "do not answer when the water speaks|the deep is not empty, it listens|the last ship has not yet left",
+          "Silence has a pulse here",
+        );
+        L(
+          "ru",
+          "Прилив помнит то, что берег забыл|Кто-то считает огни гавани|Каждая волна несёт имя, которое не твоё|Сигнал пришёл раньше, чем был отправлен",
+          "не отвечай, когда говорит вода|глубина не пуста — она слушает|последний корабль ещё не ушёл",
+          "У тишины здесь есть пульс",
+        );
+        L(
+          "uk",
+          "Приплив пам’ятає те, що берег забув|Хтось рахує вогні гавані|Кожна хвиля несе ім’я, що не твоє|Сигнал прийшов раніше, ніж його надіслали",
+          "не відповідай, коли говорить вода|глибина не порожня — вона слухає|останній корабель ще не відплив",
+          "У тиші тут є пульс",
+        );
+        L(
+          "be",
+          "Прылiў памятае тое, што бераг забыў|Нехта лічыць агні гавані|Кожная хваля нясе імя, якое не тваё|Сігнал прыйшоў раней, чым яго адправілі",
+          "не адказвай, калі гаворыць вада|глыбіня не пустая — яна слухае|апошні карабель яшчэ не адплыў",
+          "У цішыні тут ёсць пульс",
+        );
+        L(
+          "pl",
+          "Przypływ pamięta to, co brzeg zapomniał|Ktoś liczy światła portu|Każda fala niesie imię, które nie jest twoje|Sygnał dotarł, zanim został wysłany",
+          "nie odpowiadaj, gdy przemawia woda|głębia nie jest pusta — ona słucha|ostatni statek jeszcze nie odpłynął",
+          "Cisza ma tu puls",
+        );
+        L(
+          "cs",
+          "Příliv si pamatuje, co břeh zapomněl|Někdo počítá světla přístavu|Každá vlna nese jméno, které není tvé|Signál dorazil dřív, než byl odeslán",
+          "neodpovídej, když mluví voda|hlubina není prázdná — naslouchá|poslední loď ještě neodplula",
+          "Ticho tu má puls",
+        );
+        L(
+          "sk",
+          "Príliv si pamätá, čo breh zabudol|Niekto počíta svetlá prístavu|Každá vlna nesie meno, ktoré nie je tvoje|Signál dorazil skôr, než bol odoslaný",
+          "neodpovedaj, keď hovorí voda|hlbina nie je prázdna — počúva|posledná loď ešte neodplávala",
+          "Ticho tu má tep",
+        );
+        L(
+          "sl",
+          "Plima se spominja, kar je obala pozabila|Nekdo šteje luči pristanišča|Vsak val nosi ime, ki ni tvoje|Signal je prispel, preden je bil poslan",
+          "ne odgovarjaj, ko govori voda|globina ni prazna — posluša|zadnja ladja še ni odplula",
+          "Tišina ima tu utrip",
+        );
+        L(
+          "hr",
+          "Plima pamti ono što je obala zaboravila|Netko broji svjetla luke|Svaki val nosi ime koje nije tvoje|Signal je stigao prije nego što je poslan",
+          "ne odgovaraj kad voda govori|dubina nije prazna — ona sluša|posljednji brod još nije otplovio",
+          "Tišina ovdje ima puls",
+        );
+        L(
+          "sr",
+          "Плима памти оно што је обала заборавила|Неко броји светла луке|Сваки талас носи име које није твоје|Сигнал је стигао пре него што је послат",
+          "не одговарај кад вода говори|дубина није празна — она слуша|последњи брод још није испловио",
+          "Тишина овде има пулс",
+        );
+        L(
+          "bg",
+          "Приливът помни онова, което брегът забрави|Някой брои светлините на пристанището|Всяка вълна носи име, което не е твое|Сигналът пристигна, преди да бъде изпратен",
+          "не отговаряй, когато водата говори|дълбочината не е празна — тя слуша|последният кораб още не е отплавал",
+          "Тишината тук има пулс",
+        );
+        L(
+          "mk",
+          "Плимата памети што брегот го заборави|Некој ги брои светлата на пристаништето|Секој бран носи име што не е твое|Сигналот пристигна пред да биде испратен",
+          "не одговарај кога зборува водата|длабочината не е празна — таа слуша|последниот брод сè уште не заминал",
+          "Тишината тука има пулс",
+        );
+        L(
+          "de",
+          "Die Flut erinnert sich, was das Ufer vergaß|Jemand zählt die Lichter des Hafens|Jede Welle trägt einen Namen, der nicht deiner ist|Das Signal kam an, bevor es gesendet wurde",
+          "antworte nicht, wenn das Wasser spricht|die Tiefe ist nicht leer — sie hört zu|das letzte Schiff ist noch nicht ausgelaufen",
+          "Die Stille hat hier einen Puls",
+        );
+        L(
+          "nl",
+          "Het getij herinnert zich wat de kust vergat|Iemand telt de lichten van de haven|Elke golf draagt een naam die niet de jouwe is|Het signaal kwam aan voordat het werd verzonden",
+          "antwoord niet wanneer het water spreekt|de diepte is niet leeg — ze luistert|het laatste schip is nog niet vertrokken",
+          "De stilte heeft hier een hartslag",
+        );
+        L(
+          "sv",
+          "Tidvattnet minns vad stranden glömde|Någon räknar hamnens ljus|Varje våg bär ett namn som inte är ditt|Signalen anlände innan den skickades",
+          "svara inte när vattnet talar|djupet är inte tomt — det lyssnar|det sista skeppet har ännu inte lämnat",
+          "Tystnaden har puls här",
+        );
+        L(
+          "no",
+          "Tidevannet husker det stranden glemte|Noen teller lysene i havnen|Hver bølge bærer et navn som ikke er ditt|Signalet kom før det ble sendt",
+          "ikke svar når vannet snakker|dypet er ikke tomt — det lytter|det siste skipet har ennå ikke forlatt havnen",
+          "Stillheten har puls her",
+        );
+        L(
+          "da",
+          "Tidevandet husker, hvad stranden glemte|Nogen tæller havnens lys|Hver bølge bærer et navn, der ikke er dit|Signalet ankom, før det blev sendt",
+          "svar ikke, når vandet taler|dybet er ikke tomt — det lytter|det sidste skib er endnu ikke sejlet",
+          "Stilheden har puls her",
+        );
+        L(
+          "is",
+          "Flóðið man það sem ströndin gleymdi|Einhver telur ljósin í höfninni|Sérhver alda ber nafn sem er ekki þitt|Merkið barst áður en það var sent",
+          "svaraðu ekki þegar vatnið talar|djúpið er ekki tómt — það hlustar|síðasta skipið er ekki enn farið",
+          "Þögnin hefur púls hér",
+        );
+        L(
+          "fi",
+          "Vuorovesi muistaa sen, minkä ranta unohti|Joku laskee sataman valoja|Jokainen aalto kantaa nimeä, joka ei ole sinun|Signaali saapui ennen kuin se lähetettiin",
+          "älä vastaa, kun vesi puhuu|syvyys ei ole tyhjä — se kuuntelee|viimeinen laiva ei ole vielä lähtenyt",
+          "Hiljaisuudella on täällä syke",
+        );
+        L(
+          "et",
+          "Tõus mäletab seda, mida kallas unustas|Keegi loendab sadama tulesid|Iga laine kannab nime, mis pole sinu oma|Signaal saabus enne, kui see saadeti",
+          "ära vasta, kui vesi räägib|sügavik pole tühi — see kuulab|viimane laev pole veel lahkunud",
+          "Vaikusel on siin pulss",
+        );
+        L(
+          "lv",
+          "Paisums atceras to, ko krasts aizmirsa|Kāds skaita ostas gaismas|Katrs vilnis nes vārdu, kas nav tavs|Signāls ieradās, pirms tika nosūtīts",
+          "neatbildi, kad ūdens runā|dziļums nav tukšs — tas klausās|pēdējais kuģis vēl nav aizgājis",
+          "Klusumam šeit ir pulss",
+        );
+        L(
+          "lt",
+          "Potvynis prisimena tai, ką krantas pamiršo|Kažkas skaičiuoja uosto šviesas|Kiekviena banga neša vardą, kuris ne tavo|Signalas atkeliavo anksčiau, nei buvo išsiųstas",
+          "neatsakyk, kai kalba vanduo|gelmė nėra tuščia — ji klausosi|paskutinis laivas dar neišplaukė",
+          "Tyla čia turi pulsą",
+        );
+        L(
+          "fr",
+          "La marée se souvient de ce que le rivage a oublié|Quelqu'un compte les lumières du port|Chaque vague porte un nom qui n'est pas le tien|Le signal est arrivé avant d'être envoyé",
+          "ne réponds pas quand l'eau parle|l'abîme n'est pas vide — il écoute|le dernier navire n'est pas encore parti",
+          "Le silence a ici un pouls",
+        );
+        L(
+          "es",
+          "La marea recuerda lo que la orilla olvidó|Alguien cuenta las luces del puerto|Cada ola lleva un nombre que no es tuyo|La señal llegó antes de ser enviada",
+          "no respondas cuando el agua habla|el abismo no está vacío — escucha|el último barco aún no ha partido",
+          "El silencio tiene aquí un pulso",
+        );
+        L(
+          "pt",
+          "A maré lembra o que a margem esqueceu|Alguém conta as luzes do porto|Cada onda carrega um nome que não é teu|O sinal chegou antes de ser enviado",
+          "não respondas quando a água fala|o abismo não está vazio — ele escuta|o último navio ainda não partiu",
+          "O silêncio tem aqui um pulso",
+        );
+        L(
+          "it",
+          "La marea ricorda ciò che la riva ha dimenticato|Qualcuno conta le luci del porto|Ogni onda porta un nome che non è tuo|Il segnale è arrivato prima di essere inviato",
+          "non rispondere quando l'acqua parla|l'abisso non è vuoto — ascolta|l'ultima nave non è ancora partita",
+          "Il silenzio qui ha un battito",
+        );
+        L(
+          "ro",
+          "Fluxul își amintește ce a uitat țărmul|Cineva numără luminile portului|Fiecare val poartă un nume care nu e al tău|Semnalul a sosit înainte de a fi trimis",
+          "nu răspunde când apa vorbește|adâncul nu e gol — ascultă|ultima corabie nu a plecat încă",
+          "Tăcerea are aici puls",
+        );
+        L(
+          "ca",
+          "La marea recorda el que la riba va oblidar|Algú compta els llums del port|Cada onada porta un nom que no és teu|El senyal va arribar abans de ser enviat",
+          "no responguis quan l'aigua parla|l'abisme no és buit — escolta|l'últim vaixell encara no ha salpat",
+          "El silenci té aquí un pols",
+        );
+        L(
+          "gl",
+          "A marea lembra o que a beira esqueceu|Alguén conta as luces do porto|Cada onda leva un nome que non é teu|O sinal chegou antes de ser enviado",
+          "non respondas cando a auga fala|o abismo non está baleiro — escoita|o último barco aínda non marchou",
+          "O silencio ten aquí un pulso",
+        );
+        L(
+          "eu",
+          "Mareak gogoratzen du itsasertzak ahaztu zuena|Norbaitek portuko argiak zenbatzen ditu|Uhin bakoitzak zureak ez den izen bat darama|Seinalea bidali baino lehen iritsi zen",
+          "ez erantzun urak hitz egiten duenean|sakonera ez dago hutsik — entzuten ari da|azken ontzia ez da oraindik joan",
+          "Isiltasunak pultsua du hemen",
+        );
+        L(
+          "cy",
+          "Mae'r llanw'n cofio'r hyn a anghofiodd y lan|Mae rhywun yn cyfrif goleuadau'r harbwr|Mae pob ton yn cario enw nad yw'n eiddo i ti|Cyrhaeddodd y signal cyn iddo gael ei anfon",
+          "paid ag ateb pan fydd y dŵr yn siarad|nid yw'r dyfnder yn wag — mae'n gwrando|nid yw'r llong olaf wedi gadael eto",
+          "Mae gan y tawelwch guriad yma",
+        );
+        L(
+          "ga",
+          "Cuimhníonn an taoide ar an méid a rinne an cladach dearmad air|Tá duine éigin ag comhaireamh soilse an chuain|Iompraíonn gach tonn ainm nach leatsa é|Tháinig an comhartha sula ndearnadh é a sheoladh",
+          "ná freagair nuair a labhraíonn an t-uisce|níl an doimhneacht folamh — éisteann sí|níor fhág an long dheireanach fós",
+          "Tá cuisle ag an tost anseo",
+        );
+        L(
+          "gd",
+          "Tha an làn a’ cuimhneachadh na dhìochuimhnich an tràigh|Tha cuideigin a’ cunntadh solais a’ chala|Tha gach tonn a’ giùlan ainm nach buin dhut|Ràinig an comharra mus deach a chur",
+          "na freagair nuair a bhruidhneas an t-uisge|chan eil an doimhneachd falamh — tha i ag èisteachd|chan eil an long mu dheireadh air falbh fhathast",
+          "Tha cuisle aig an t-sàmhchair an seo",
+        );
+        L(
+          "la",
+          "Aestus meminit quod litus oblitum est|Aliquis lumina portus numerat|Omnis unda nomen portat quod tuum non est|Signum advenit antequam missum est",
+          "ne respondeas cum aqua loquitur|profundum non est vacuum — audit|ultima navis nondum abiit",
+          "Silentium hic pulsum habet",
+        );
+        L(
+          "grc",
+          "ὁ αἰγιαλὸς ἐπελάθετο, ἡ θάλασσα μέμνηται|τις τὰ φῶτα τοῦ λιμένος ἀριθμεῖ|πᾶν κῦμα φέρει ὄνομα οὐ σόν|τὸ σημεῖον ἧκε πρὶν πεμφθῆναι",
+          "μὴ ἀποκρίνου ὅταν τὸ ὕδωρ λαλῇ|τὸ βάθος οὐ κενόν ἐστιν· ἀκούει|ἡ τελευταία ναῦς οὔπω ἀπέπλευσεν",
+          "ἡ σιγὴ ἐνθάδε σφυγμὸν ἔχει",
+        );
+        L(
+          "el",
+          "Η παλίρροια θυμάται ό,τι η ακτή ξέχασε|Κάποιος μετρά τα φώτα του λιμανιού|Κάθε κύμα φέρει ένα όνομα που δεν είναι δικό σου|Το σήμα έφτασε πριν σταλεί",
+          "μην απαντάς όταν μιλά το νερό|το βάθος δεν είναι άδειο — ακούει|το τελευταίο πλοίο δεν έχει φύγει ακόμη",
+          "Η σιωπή εδώ έχει σφυγμό",
+        );
+        L(
+          "tr",
+          "Gelgit, kıyının unuttuğunu hatırlar|Biri limanın ışıklarını sayıyor|Her dalga senin olmayan bir ad taşır|Sinyal gönderilmeden önce ulaştı",
+          "su konuştuğunda cevap verme|derinlik boş değil — dinliyor|son gemi henüz ayrılmadı",
+          "Sessizliğin burada bir nabzı var",
+        );
+        L(
+          "az",
+          "Qabarma sahilin unutduğunu xatırlayır|Kimsə limanın işıqlarını sayır|Hər dalğa sənin olmayan bir ad daşıyır|Siqnal göndərilməzdən əvvəl çatdı",
+          "su danışanda cavab vermə|dərinlik boş deyil — dinləyir|son gəmi hələ ayrılmayıb",
+          "Sükutun burada nəbzi var",
+        );
+        L(
+          "kk",
+          "Тасқын жағалау ұмытқанды есте сақтайды|Біреу айлақтың жарықтарын санап тұр|Әр толқын сенікі емес есімді алып жүр|Сигнал жіберілместен бұрын жетті",
+          "су сөйлегенде жауап берме|тереңдік бос емес — ол тыңдап тұр|соңғы кеме әлі кетпеді",
+          "Мұнда үнсіздіктің тамыр соғысы бар",
+        );
+        L(
+          "uz",
+          "To'lqin qirg'oq unutganini eslaydi|Kimdir portning chiroqlarini sanamoqda|Har bir to'lqin seniki bo'lmagan ismni olib yuradi|Signal yuborilishidan oldin yetib keldi",
+          "suv gapirganda javob berma|chuqurlik bo'sh emas — u tinglaydi|oxirgi kema hali ketmadi",
+          "Sukunatning bu yerda pulsi bor",
+        );
+        L(
+          "ka",
+          "მოქცევა იხსენებს იმას, რაც ნაპირმა დაივიწყა|ვიღაც ითვლის ნავსადგურის შუქებს|ყოველი ტალღა ატარებს სახელს, რომელიც შენი არ არის|სიგნალი მივიდა გაგზავნამდე",
+          "ნუ უპასუხებ, როცა წყალი ლაპარაკობს|სიღრმე ცარიელი არ არის — ის უსმენს|ბოლო გემი ჯერ არ გასულა",
+          "სიჩუმეს აქ პულსი აქვს",
+        );
+        L(
+          "hy",
+          "Մակընթացությունը հիշում է այն, ինչ ափը մոռացել է|Ինչ-որ մեկը հաշվում է նավահանգստի լույսերը|Յուրաքանչյուր ալիք կրում է մի անուն, որը քոնը չէ|Ազդանշանը հասավ նախքան ուղարկվելը",
+          "մի պատասխանիր, երբ ջուրը խոսում է|խորությունը դատարկ չէ — այն լսում է|վերջին նավը դեռ չի մեկնել",
+          "Լռությունն այստեղ զարկերակ ունի",
+        );
+        L(
+          "he",
+          "הגאות זוכרת את מה שהחוף שכח|מישהו סופר את אורות הנמל|כל גל נושא שם שאינו שלך|האות הגיע לפני שנשלח",
+          "אל תענה כשהמים מדברים|המעמקים אינם ריקים — הם מקשיבים|הספינה האחרונה טרם יצאה",
+          "לשקט יש כאן דופק",
+        );
+        L(
+          "ar",
+          "المدّ يتذكّر ما نسيه الشاطئ|أحدهم يعدّ أضواء الميناء|كل موجة تحمل اسمًا ليس لك|وصلت الإشارة قبل أن تُرسَل",
+          "لا تجب حين يتكلم الماء|العمق ليس فارغًا — إنه يصغي|السفينة الأخيرة لم تغادر بعد",
+          "للصمت هنا نبض",
+        );
+        L(
+          "fa",
+          "جزر و مد آنچه را ساحل فراموش کرد به یاد دارد|کسی چراغ‌های بندر را می‌شمارد|هر موج نامی با خود دارد که از آنِ تو نیست|سیگنال پیش از ارسال رسید",
+          "وقتی آب سخن می‌گوید پاسخ نده|ژرفا تهی نیست — گوش می‌دهد|آخرین کشتی هنوز نرفته است",
+          "سکوت اینجا نبض دارد",
+        );
+        L(
+          "ur",
+          "جوار بھاٹا اسے یاد رکھتا ہے جو ساحل بھول گیا|کوئی بندرگاہ کی روشنیاں گن رہا ہے|ہر لہر ایک ایسا نام اٹھائے ہوئے ہے جو تمہارا نہیں|اشارہ بھیجے جانے سے پہلے پہنچ گیا",
+          "جب پانی بولے تو جواب مت دو|گہرائی خالی نہیں — وہ سن رہی ہے|آخری جہاز ابھی روانہ نہیں ہوا",
+          "یہاں خاموشی کی نبض ہے",
+        );
+        L(
+          "ku",
+          "Mod tiştê ku peravê ji bîr kir tîne bîra xwe|Kesek ronahiyên bendergehê dijmêre|Her pêl navekî hildigire ku ne yê te ye|Sînyal beriya ku were şandin gihîşt",
+          "gava av diaxive bersiv nede|kûrahî ne vala ye — guhdarî dike|keştiya dawîn hê neçûye",
+          "Bêdengiyê li vir nebz heye",
+        );
+        L(
+          "hi",
+          "ज्वार वह याद रखता है जो किनारा भूल गया|कोई बंदरगाह की बत्तियाँ गिन रहा है|हर लहर एक ऐसा नाम ढोती है जो तुम्हारा नहीं है|संकेत भेजे जाने से पहले ही पहुँच गया",
+          "जब पानी बोले तो जवाब मत देना|गहराई खाली नहीं है — वह सुन रही है|आख़िरी जहाज़ अभी गया नहीं है",
+          "यहाँ ख़ामोशी की नब्ज़ चलती है",
+        );
+        L(
+          "bn",
+          "জোয়ার মনে রাখে সৈকত যা ভুলে গেছে|কেউ বন্দরের আলো গুনছে|প্রতিটি ঢেউ এমন একটি নাম বয়ে আনে যা তোমার নয়|সংকেত পাঠানোর আগেই পৌঁছে গেল",
+          "জল কথা বললে উত্তর দিও না|গভীরতা শূন্য নয় — সে শুনছে|শেষ জাহাজটি এখনও ছাড়েনি",
+          "এখানে নীরবতার নাড়ি আছে",
+        );
+        L(
+          "ta",
+          "கரை மறந்ததை அலை நினைவில் வைத்திருக்கிறது|யாரோ துறைமுக விளக்குகளை எண்ணுகிறார்கள்|ஒவ்வொரு அலையும் உன்னுடையதல்லாத ஒரு பெயரைச் சுமக்கிறது|சமிக்ஞை அனுப்பப்படுவதற்கு முன்பே வந்துவிட்டது",
+          "நீர் பேசும்போது பதில் சொல்லாதே|ஆழம் காலியல்ல — அது கேட்கிறது|கடைசிக் கப்பல் இன்னும் புறப்படவில்லை",
+          "இங்கே அமைதிக்கு நாடித்துடிப்பு உண்டு",
+        );
+        L(
+          "te",
+          "ఒడ్డు మరచిపోయినదాన్ని అలలు గుర్తుంచుకుంటాయి|ఎవరో ఓడరేవు దీపాలను లెక్కిస్తున్నారు|ప్రతి అల నీది కాని పేరును మోస్తుంది|సంకేతం పంపబడకముందే చేరుకుంది",
+          "నీరు మాట్లాడినప్పుడు బదులివ్వకు|లోతు ఖాళీ కాదు — అది వింటోంది|చివరి ఓడ ఇంకా బయలుదేరలేదు",
+          "ఇక్కడ నిశ్శబ్దానికి నాడి ఉంది",
+        );
+        L(
+          "kn",
+          "ದಡ ಮರೆತದ್ದನ್ನು ಉಬ್ಬರ ನೆನಪಿಟ್ಟುಕೊಳ್ಳುತ್ತದೆ|ಯಾರೋ ಬಂದರಿನ ದೀಪಗಳನ್ನು ಎಣಿಸುತ್ತಿದ್ದಾರೆ|ಪ್ರತಿ ಅಲೆಯೂ ನಿನ್ನದಲ್ಲದ ಹೆಸರನ್ನು ಹೊತ್ತಿದೆ|ಸಂಕೇತ ಕಳುಹಿಸುವ ಮೊದಲೇ ತಲುಪಿತು",
+          "ನೀರು ಮಾತನಾಡಿದಾಗ ಉತ್ತರಿಸಬೇಡ|ಆಳ ಖಾಲಿಯಲ್ಲ — ಅದು ಕೇಳುತ್ತಿದೆ|ಕೊನೆಯ ಹಡಗು ಇನ್ನೂ ಹೊರಟಿಲ್ಲ",
+          "ಇಲ್ಲಿ ಮೌನಕ್ಕೆ ನಾಡಿಮಿಡಿತವಿದೆ",
+        );
+        L(
+          "ml",
+          "തീരം മറന്നത് വേലിയേറ്റം ഓർക്കുന്നു|ആരോ തുറമുഖത്തെ വിളക്കുകൾ എണ്ണുന്നു|ഓരോ തിരയും നിന്റേതല്ലാത്ത ഒരു പേര് വഹിക്കുന്നു|സിഗ്നൽ അയയ്ക്കുന്നതിന് മുൻപേ എത്തി",
+          "വെള്ളം സംസാരിക്കുമ്പോൾ മറുപടി പറയരുത്|ആഴം ശൂന്യമല്ല — അത് കേൾക്കുന്നു|അവസാനത്തെ കപ്പൽ ഇതുവരെ പുറപ്പെട്ടിട്ടില്ല",
+          "ഇവിടെ നിശ്ശബ്ദതയ്ക്ക് നാഡിമിടിപ്പുണ്ട്",
+        );
+        L(
+          "mr",
+          "किनारा जे विसरला ते भरती लक्षात ठेवते|कोणीतरी बंदरातले दिवे मोजत आहे|प्रत्येक लाट एक असे नाव वाहते जे तुझे नाही|संकेत पाठवला जाण्यापूर्वीच पोहोचला",
+          "पाणी बोलते तेव्हा उत्तर देऊ नकोस|खोली रिकामी नाही — ती ऐकते आहे|शेवटचे जहाज अजून निघालेले नाही",
+          "इथे शांततेला नाडी आहे",
+        );
+        L(
+          "gu",
+          "કિનારો જે ભૂલી ગયો તે ભરતી યાદ રાખે છે|કોઈ બંદરની બત્તીઓ ગણી રહ્યું છે|દરેક મોજું એવું નામ વહન કરે છે જે તારું નથી|સંકેત મોકલાય તે પહેલાં જ પહોંચી ગયો",
+          "પાણી બોલે ત્યારે જવાબ ન આપ|ઊંડાણ ખાલી નથી — તે સાંભળે છે|છેલ્લું જહાજ હજી ગયું નથી",
+          "અહીં મૌનને નાડી છે",
+        );
+        L(
+          "pa",
+          "ਕਿਨਾਰਾ ਜੋ ਭੁੱਲ ਗਿਆ, ਜਵਾਰ ਉਹ ਯਾਦ ਰੱਖਦਾ ਹੈ|ਕੋਈ ਬੰਦਰਗਾਹ ਦੀਆਂ ਬੱਤੀਆਂ ਗਿਣ ਰਿਹਾ ਹੈ|ਹਰ ਲਹਿਰ ਅਜਿਹਾ ਨਾਮ ਚੁੱਕੀ ਫਿਰਦੀ ਹੈ ਜੋ ਤੇਰਾ ਨਹੀਂ|ਸੰਕੇਤ ਭੇਜੇ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਪਹੁੰਚ ਗਿਆ",
+          "ਜਦੋਂ ਪਾਣੀ ਬੋਲੇ ਤਾਂ ਜਵਾਬ ਨਾ ਦੇ|ਡੂੰਘਾਈ ਖਾਲੀ ਨਹੀਂ — ਉਹ ਸੁਣ ਰਹੀ ਹੈ|ਆਖ਼ਰੀ ਜਹਾਜ਼ ਅਜੇ ਗਿਆ ਨਹੀਂ",
+          "ਇੱਥੇ ਚੁੱਪ ਦੀ ਨਬਜ਼ ਹੈ",
+        );
+        L(
+          "si",
+          "වෙරළ අමතක කළ දේ උදම මතක තබා ගනී|කවුරුහරි වරායේ එළි ගණන් කරයි|සෑම රැල්ලක්ම ඔබේ නොවන නමක් රැගෙන යයි|සංඥාව යවන්නට පෙර ළඟා විය",
+          "ජලය කතා කරන විට පිළිතුරු නොදෙන්න|ගැඹුර හිස් නොවේ — එය සවන් දෙයි|අවසාන නැව තවම ගමන් අරඹා නැත",
+          "මෙහි නිශ්ශබ්දතාවට නාඩි ගැස්මක් ඇත",
+        );
+        L(
+          "ne",
+          "किनाराले बिर्सेको कुरा ज्वारले सम्झन्छ|कसैले बन्दरगाहका बत्तीहरू गनिरहेको छ|हरेक छालले तिम्रो नभएको नाम बोकेको छ|सङ्केत पठाइनुअघि नै आइपुग्यो",
+          "पानी बोल्दा जवाफ नदेऊ|गहिराइ खाली छैन — त्यसले सुनिरहेको छ|अन्तिम जहाज अझै गएको छैन",
+          "यहाँ मौनताको नाडी छ",
+        );
+        L(
+          "th",
+          "น้ำขึ้นจดจำสิ่งที่ชายฝั่งลืมไป|ใครบางคนกำลังนับแสงไฟของท่าเรือ|คลื่นทุกลูกแบกชื่อที่ไม่ใช่ของเจ้า|สัญญาณมาถึงก่อนที่จะถูกส่ง",
+          "อย่าตอบเมื่อสายน้ำเอ่ยปาก|ห้วงลึกไม่ว่างเปล่า — มันกำลังฟังอยู่|เรือลำสุดท้ายยังไม่ออกเดินทาง",
+          "ความเงียบที่นี่มีชีพจร",
+        );
+        L(
+          "lo",
+          "ນ້ຳຂຶ້ນຈື່ສິ່ງທີ່ຝັ່ງລືມໄປ|ມີຜູ້ໜຶ່ງກຳລັງນັບໄຟຂອງທ່າເຮືອ|ຄື້ນທຸກລູກແບກຊື່ທີ່ບໍ່ແມ່ນຂອງເຈົ້າ|ສັນຍານມາເຖິງກ່ອນຖືກສົ່ງ",
+          "ຢ່າຕອບເມື່ອນ້ຳເວົ້າ|ຄວາມເລິກບໍ່ວ່າງເປົ່າ — ມັນກຳລັງຟັງ|ເຮືອລຳສຸດທ້າຍຍັງບໍ່ອອກເດີນທາງ",
+          "ຄວາມງຽບທີ່ນີ້ມີຊີບພະຈອນ",
+        );
+        L(
+          "km",
+          "ជំនន់ចងចាំអ្វីដែលឆ្នេរភ្លេច|មានអ្នកខ្លះកំពុងរាប់ភ្លើងកំពង់ផែ|រលកនីមួយៗផ្ទុកឈ្មោះដែលមិនមែនជារបស់អ្នក|សញ្ញាបានមកដល់មុនពេលត្រូវបានផ្ញើ",
+          "កុំឆ្លើយនៅពេលទឹកនិយាយ|ជម្រៅមិនទទេទេ — វាកំពុងស្តាប់|នាវាចុងក្រោយមិនទាន់ចេញទេ",
+          "ភាពស្ងប់ស្ងាត់នៅទីនេះមានចង្វាក់",
+        );
+        L(
+          "my",
+          "ကမ်းခြေမေ့သွားသည်ကို ဒီရေက မှတ်မိနေသည်|တစ်စုံတစ်ယောက်က ဆိပ်ကမ်းမီးများကို ရေတွက်နေသည်|သင့်ပိုင်မဟုတ်သော အမည်တစ်ခုကို လှိုင်းတိုင်း သယ်ဆောင်လာသည်|အချက်ပြမှု ပို့မီကပင် ရောက်လာခဲ့သည်",
+          "ရေစကားပြောသောအခါ မဖြေပါနှင့်|နက်ရှိုင်းမှုသည် ဗလာမဟုတ်ပါ — နားထောင်နေသည်|နောက်ဆုံးသင်္ဘောမထွက်သေးပါ",
+          "ဤနေရာ၌ တိတ်ဆိတ်မှုတွင် သွေးခုန်နှုန်းရှိသည်",
+        );
+        L(
+          "vi",
+          "Thủy triều nhớ điều bờ biển đã quên|Ai đó đang đếm những ngọn đèn của bến cảng|Mỗi con sóng mang một cái tên không phải của bạn|Tín hiệu đến trước khi nó được gửi đi",
+          "đừng trả lời khi nước cất tiếng|vực sâu không trống rỗng — nó đang lắng nghe|con tàu cuối cùng vẫn chưa rời đi",
+          "Sự im lặng ở đây có mạch đập",
+        );
+        L(
+          "id",
+          "Pasang ingat apa yang dilupakan pantai|Seseorang menghitung lampu pelabuhan|Setiap ombak membawa nama yang bukan milikmu|Sinyal tiba sebelum dikirim",
+          "jangan menjawab ketika air berbicara|kedalaman tidak kosong — ia mendengarkan|kapal terakhir belum berangkat",
+          "Keheningan di sini berdenyut",
+        );
+        L(
+          "tl",
+          "Naaalala ng along ang nakalimutan ng dalampasigan|May nagbibilang ng mga ilaw ng daungan|Bawat alon ay may dalang pangalang hindi sa iyo|Dumating ang hudyat bago ito ipinadala",
+          "huwag kang sumagot kapag nagsasalita ang tubig|hindi walang laman ang kailaliman — nakikinig ito|hindi pa umaalis ang huling barko",
+          "May pintig ang katahimikan dito",
+        );
+        L(
+          "jv",
+          "Pasang ngelingi apa sing dilalekake pesisir|Ana wong ngitung lampu pelabuhan|Saben ombak nggawa jeneng sing dudu duwekmu|Sinyal teka sadurunge dikirim",
+          "aja mangsuli nalika banyu ngomong|jero ora kosong — iku ngrungokake|kapal pungkasan durung budhal",
+          "Kasepen ing kene duwe detak",
+        );
+        L(
+          "zh",
+          "潮水记得海岸遗忘的事|有人在数港口的灯|每一道浪都背着一个不属于你的名字|信号在发出之前就已抵达",
+          "水开口时，不要回答|深处并非空无一物，它在聆听|最后一艘船尚未离港",
+          "这里的寂静有脉搏",
+        );
+        L(
+          "zht",
+          "潮水記得海岸遺忘的事|有人在數港口的燈|每一道浪都揹著一個不屬於你的名字|訊號在發出之前就已抵達",
+          "水開口時，不要回答|深處並非空無一物，它在聆聽|最後一艘船尚未離港",
+          "這裡的寂靜有脈搏",
+        );
+        L(
+          "ja",
+          "潮は岸が忘れたことを覚えている|誰かが港の灯りを数えている|すべての波は、あなたのものではない名前を運んでいる|信号は送られる前に届いた",
+          "水が語るとき、答えてはならない|深みは空ではない、聴いている|最後の船はまだ出ていない",
+          "ここでは沈黙に脈がある",
+        );
+        L(
+          "ko",
+          "밀물은 해안이 잊은 것을 기억한다|누군가 항구의 불빛을 세고 있다|모든 파도는 네 것이 아닌 이름을 싣고 온다|신호는 보내지기 전에 도착했다",
+          "물이 말할 때 대답하지 마라|심연은 비어 있지 않다 — 듣고 있다|마지막 배는 아직 떠나지 않았다",
+          "이곳의 침묵에는 맥박이 있다",
+        );
+        L(
+          "mn",
+          "Түрлэг эрэг мартсаныг санадаг|Хэн нэгэн боомтын гэрлийг тоолж байна|Давалгаа бүр чинийх биш нэрийг тээдэг|Дохио илгээгдэхээс өмнө ирсэн",
+          "ус ярихад хариулж болохгүй|гүн хоосон биш — тэр сонсож байна|сүүлийн хөлөг онгоц хараахан явсангүй",
+          "Энд нам гүмд судасны цохилт бий",
+        );
+        L(
+          "am",
+          "ማዕበሉ ዳርቻው የረሳውን ያስታውሳል|አንድ ሰው የወደቡን መብራቶች እየቆጠረ ነው|እያንዳንዱ ማዕበል የአንተ ያልሆነ ስም ይሸከማል|ምልክቱ ሳይላክ በፊት ደረሰ",
+          "ውሃው ሲናገር አትመልስ|ጥልቁ ባዶ አይደለም — ያዳምጣል|የመጨረሻው መርከብ ገና አልወጣም",
+          "ዝምታ እዚህ የልብ ምት አለው",
+        );
+        L(
+          "sw",
+          "Wimbi la maji hukumbuka kile ufuo ulichosahau|Mtu anahesabu taa za bandari|Kila wimbi hubeba jina ambalo si lako|Ishara ilifika kabla ya kutumwa",
+          "usijibu maji yanaposema|kina si tupu — kinasikiliza|meli ya mwisho haijaondoka bado",
+          "Ukimya una mapigo hapa",
+        );
+        L(
+          "af",
+          "Die gety onthou wat die kus vergeet het|Iemand tel die ligte van die hawe|Elke golf dra 'n naam wat nie joune is nie|Die sein het aangekom voordat dit gestuur is",
+          "moenie antwoord wanneer die water praat nie|die diepte is nie leeg nie — dit luister|die laaste skip het nog nie vertrek nie",
+          "Die stilte het hier 'n polsslag",
+        );
+        L(
+          "ha",
+          "Igiyar ruwa tana tunawa da abin da bakin teku ya manta|Wani yana kirga fitilun tashar jirgin ruwa|Kowane kalaman ruwa yana ɗauke da sunan da ba naka ba|Siginar ta iso kafin a aika ta",
+          "kada ka amsa lokacin da ruwa ke magana|zurfin ba fanko ba ne — yana sauraro|jirgin ƙarshe bai tafi ba tukuna",
+          "Shiru yana da bugun zuciya a nan",
+        );
+        L(
+          "mt",
+          "Il-marea tiftakar dak li x-xatt insa|Xi ħadd qed jgħodd id-dwal tal-port|Kull mewġa ġġorr isem li mhuwiex tiegħek|Is-sinjal wasal qabel ma ntbagħat",
+          "tweġibx meta l-ilma jitkellem|il-fond mhuwiex vojt — qed jisma’|l-aħħar vapur għadu ma telaqx",
+          "Is-skiet hawn għandu polz",
+        );
+        L(
+          "sq",
+          "Batica kujton atë që bregu harroi|Dikush po numëron dritat e portit|Çdo valë mbart një emër që nuk është i yti|Sinjali mbërriti para se të dërgohej",
+          "mos u përgjigj kur flet uji|thellësia nuk është bosh — ajo dëgjon|anija e fundit ende nuk ka ikur",
+          "Heshtja këtu ka puls",
+        );
+        L(
+          "bs",
+          "Plima se sjeća onoga što je obala zaboravila|Neko broji svjetla luke|Svaki talas nosi ime koje nije tvoje|Signal je stigao prije nego što je poslan",
+          "ne odgovaraj kad voda govori|dubina nije prazna — ona sluša|posljednji brod još nije isplovio",
+          "Tišina ovdje ima puls",
+        );
+        L(
+          "hu",
+          "Az ár emlékszik arra, amit a part elfelejtett|Valaki a kikötő fényeit számolja|Minden hullám egy nevet hordoz, amely nem a tiéd|A jel megérkezett, mielőtt elküldték",
+          "ne válaszolj, amikor a víz szól|a mélység nem üres — hallgat|az utolsó hajó még nem indult el",
+          "A csendnek itt pulzusa van",
+        );
+        L(
+          "eo",
+          "La tajdo memoras tion, kion la bordo forgesis|Iu kalkulas la lumojn de la haveno|Ĉiu ondo portas nomon, kiu ne estas via|La signalo alvenis antaŭ ol ĝi estis sendita",
+          "ne respondu kiam la akvo parolas|la profundo ne estas malplena — ĝi aŭskultas|la lasta ŝipo ankoraŭ ne foriris",
+          "La silento havas ĉi tie pulson",
+        );
+        L(
+          "yi",
+          "דער ים דערמאָנט זיך וואָס דער ברעג האָט פֿאַרגעסן|עמעצער צײלט די ליכט פֿון האַפֿן|יעדע כוואַליע טראָגט אַ נאָמען וואָס איז נישט דײנער|דער סיגנאַל איז אָנגעקומען איידער מען האָט אים געשיקט",
+          "ענטפֿער נישט ווען דאָס וואַסער רעדט|די טיפֿקײט איז נישט ליידיק — זי הערט זיך צו|דאָס לעצטע שיף איז נאָך נישט אַוועק",
+          "די שטילקײט האָט דאָ אַ פּולס",
+        );
+        L(
+          "sa",
+          "ज्वारः स्मरति यत् तटं विस्मृतवत्|कश्चित् बन्दरदीपान् गणयति|प्रत्येका तरङ्गा त्वदीयं न यत् नाम वहति|सङ्केतः प्रेषणात् पूर्वमेव आगतः",
+          "जले वदति सति मा प्रत्युत्तरं देहि|गम्भीरं न शून्यम् — शृणोति|अन्तिमा नौः अद्यापि न गता",
+          "अत्र मौनस्य नाडी अस्ति",
+        );
+        L(
+          "haw",
+          "Ke hoʻomanaʻo nei ke kai i ka mea a ke kahakai i poina ai|Aia kekahi e helu ana i nā kukui o ke awa|Lawe nā nalu a pau i kekahi inoa ʻaʻole nou|Ua hōʻea mai ka hōʻailona ma mua o kona hoʻouna ʻia ʻana",
+          "mai pane aku i ka wā e ʻōlelo ai ka wai|ʻaʻole hakahaka ka hohonu — e hoʻolohe ana ia|ʻaʻole i haʻalele ka moku hope loa",
+          "He puʻuwai ko ka mālie ma ʻaneʻi",
+        );
+        L(
+          "mi",
+          "Ka maumahara te tai ki ngā mea i warewaretia e te tahatika|Kei te tatau tētahi i ngā rama o te tauranga|He ingoa tō ia ngaru, ehara i tōu|I tae mai te tohu i mua i tana tukunga",
+          "kaua e whakahoki kōrero ina kōrero te wai|kāore te hōhonu i te kau — kei te whakarongo ia|kāore anō te waka whakamutunga kia wehe",
+          "He manawa tō te noho puku i konei",
+        );
+        L(
+          "ht",
+          "Mare a sonje sa rivaj la bliye|Yon moun ap konte limyè pò a|Chak vag pote yon non ki pa pa w|Siyal la rive anvan yo voye l",
+          "pa reponn lè dlo a pale|pwofondè a pa vid — li tande|dènye bato a poko pati",
+          "Silans la gen yon batman isit la",
+        );
+        L(
+          "lb",
+          "D'Gezäit erënnert sech u wat d'Ufer vergiess huet|Een zielt d'Luuchte vum Hafen|All Well dréit en Numm deen net däin ass|D'Signal ass ukomm ier et geschéckt gouf",
+          "äntwer net wann d'Waasser schwätzt|d'Déift ass net eidel — si lauschtert|dat läscht Schëff ass nach net fortgaang",
+          "D'Rou huet hei e Pols",
+        );
+        L(
+          "fo",
+          "Fallið minnist tað sum strondin gloymdi|Onkur telur ljósini í havnini|Hvør alda ber eitt navn, sum ikki er títt|Boðið kom, áðrenn tað varð sent",
+          "svara ikki, tá vatnið tosar|djúpið er ikki tómt — tað lurtar|seinasta skipið er ikki farið enn",
+          "Tøgnin hevur púls her",
+        );
+        L(
+          "oc",
+          "La mareja se remembra çò que la ribièra a doblidat|Qualqu'un compta las lutz del pòrt|Cada vaga pòrta un nom que es pas lo teu|Lo senhal arribèt abans d'èsser mandat",
+          "respondas pas quand l'aiga parla|l'abís es pas void — escota|lo darrièr batèu a pas encara partit",
+          "Lo silenci a aicí un pols",
+        );
+        L(
+          "so",
+          "Mawjadaha waxay xasuustaan wixii xeebtu illowday|Qof baa tirinaya iftiinka dekedda|Mowjad kasta waxay sidataa magac aan adiga kuu ahayn|Calaamaddu way timid ka hor intaan la dirin",
+          "ha jawaabin marka biyuhu hadlayaan|moolku madhan ma aha — wuu dhegaysanayaa|markabkii ugu dambeeyay weli ma bixin",
+          "Aamusnaanta halkan waxay leedahay garaaq",
+        );
+        L(
+          "rw",
+          "Umuhengeri wibuka ibyo inkombe yibagiwe|Hari umuntu ubara amatara y'icyambu|Buri muhengeri ujyana izina atari iryawe|Ikimenyetso cyahageze mbere y'uko cyoherezwa",
+          "ntisubize amazi avuga|ubujyakuzimu ntibusa — buratega amatwi|ubwato bwa nyuma ntiburagenda",
+          "Guceceka hano gufite umutima utera",
+        );
+        L(
+          "fy",
+          "It tij ûnthâldt wat de kust fergeat|Immen telt de ljochten fan de haven|Elke weach draacht in namme dy't net dyn is|It sinjaal kaam oan eardat it stjoerd waard",
+          "antwurdzje net as it wetter praat|de djipte is net leech — it harket|it lêste skip is noch net fuortgien",
+          "De stilte hat hjir in pols",
+        );
+        L(
+          "tg",
+          "Мадд он чиро, ки соҳил фаромӯш кард, ба ёд дорад|Касе чароғҳои бандарро мешуморад|Ҳар мавҷ номеро мебарад, ки аз они ту нест|Сигнал пеш аз фиристода шуданаш расид",
+          "вақте ки об сухан мегӯяд, ҷавоб надеҳ|умқ холӣ нест — он гӯш мекунад|охирин киштӣ ҳанӯз нарафтааст",
+          "Хомӯшӣ дар ин ҷо набз дорад",
+        );
+        L(
+          "ky",
+          "Агым жээк унуткан нерсени эстейт|Кимдир порттун чырактарын санап жатат|Ар бир толкун сеники эмес ысымды алып жүрөт|Сигнал жөнөтүлгөнгө чейин жетти",
+          "суу сүйлөгөндө жооп бербе|тереңдик бош эмес — ал угуп турат|акыркы кеме дагы кете элек",
+          "Бул жерде үнсүздүктүн пульсу бар",
+        );
+        L(
+          "tk",
+          "Gabarma kenaryň ýatdan çykaranyny ýada salýar|Kimdir biri portuň yşyklaryny sanaýar|Her tolkun seniň däl bir at göterýär|Signal iberilmänkä ýetdi",
+          "suw geplände jogap berme|çuňluk boş däl — ol diňleýär|iň soňky gämi entek gitmedi",
+          "Dymyşlygyň bu ýerde urgusy bar",
+        );
+        L(
+          "ps",
+          "جزر و مد هغه یادوي چې ساحل هېر کړل|یو څوک د بندر څراغونه شمېري|هره څپه یو نوم وړي چې ستا نه دی|سیګنال مخکې له لېږلو رسېدلی و",
+          "کله چې اوبه خبرې کوي، ځواب مه ورکوه|ژوروالی تش نه دی — اوري|وروستۍ بېړۍ لا نه ده تللې",
+          "دلته چپتیا نبض لري",
+        );
+        L(
+          "yue",
+          "潮水記得海岸忘記咗嘅嘢|有人喺度數緊港口嘅燈|每一浪都揹住一個唔屬於你嘅名|訊號喺發出之前就已經到咗",
+          "水開口嗰陣，唔好答|深處唔係空嘅，佢喺度聽|最後一艘船仲未開",
+          "呢度嘅寂靜有脈搏",
+        );
+        L(
+          "or",
+          "କୂଳ ଯାହା ଭୁଲିଗଲା, ଜୁଆର ତାହା ମନେ ରଖେ|କେହି ବନ୍ଦରର ଆଲୁଅ ଗଣୁଛି|ପ୍ରତ୍ୟେକ ଢେଉ ଏପରି ନାମ ବହନ କରେ ଯାହା ତୁମର ନୁହେଁ|ସଂକେତ ପଠାଯିବା ପୂର୍ବରୁ ପହଞ୍ଚିଲା",
+          "ଜଳ କଥା କହିଲେ ଉତ୍ତର ଦିଅନାହିଁ|ଗଭୀରତା ଖାଲି ନୁହେଁ — ସେ ଶୁଣୁଛି|ଶେଷ ଜାହାଜ ଏପର୍ଯ୍ୟନ୍ତ ଛାଡ଼ିନାହିଁ",
+          "ଏଠି ନୀରବତାର ନାଡ଼ି ଅଛି",
+        );
+        L(
+          "yo",
+          "Ìṣàn omi ń rántí ohun tí etíkun gbàgbé|Ẹnìkan ń ka àwọn ìmọ́lẹ̀ èbúté|Gbogbo ìgbì ń gbé orúkọ tí kì í ṣe tìrẹ|Àmì náà dé kí a tó fi ránṣẹ́",
+          "má ṣe dáhùn nígbà tí omi bá ń sọ̀rọ̀|ọ̀gbun kò ṣófo — ó ń gbọ́|ọkọ̀ ojú omi ìkẹyìn kò tíì lọ",
+          "Ìdákẹ́jẹ́ẹ́ ní ìlù ọkàn níbí",
+        );
+        L(
+          "mg",
+          "Ny onja dia mahatsiaro izay hadinon'ny morontsiraka|Misy olona manisa ny jiron'ny seranana|Ny onja rehetra dia mitondra anarana tsy anao|Tonga ny famantarana talohan'ny nandefasana azy",
+          "aza mamaly rehefa miteny ny rano|tsy foana ny lalina — mihaino izy|mbola tsy lasa ny sambo farany",
+          "Ny fahanginana eto dia manana fitempon-po",
+        );
+        L(
+          "ms",
+          "Air pasang mengingati apa yang dilupakan pantai|Seseorang sedang mengira lampu pelabuhan|Setiap ombak membawa nama yang bukan milikmu|Isyarat tiba sebelum dihantar",
+          "jangan menjawab apabila air bercakap|kedalaman tidak kosong — ia mendengar|kapal terakhir belum berlepas",
+          "Kesunyian di sini berdenyut",
+        );
+        L(
+          "ceb",
+          "Ang tubig-dagat nagsamdan sa gikalimtan sa baybayon|Adunay nagkuwenta sa mga suga sa pantalan|Matag balud nagdala og ngalan nga dili imo|Ang signal miabot sa wala pa kini ipadala",
+          "ayaw tubaga kon mosulti ang tubig|ang lawom dili walay sulod — namati kini|ang katapusang barko wala pa mobiya",
+          "Ang kahilom dinhi adunay pulso",
+        );
+        L(
+          "tt",
+          "Ташкын яр онытканны исендә тота|Кемдер портның утларын саный|Һәр дулкын синеке булмаган исем йөртә|Сигнал җибәрелгәнче үк килеп җитте",
+          "су сөйләшкәндә җавап бирмә|тирәнлек буш түгел — ул тыңлый|соңгы корабль әле китмәгән",
+          "Монда тынлыкның пульсы бар",
+        );
+        L(
+          "sco",
+          "The tide mynds whit the shore forgot|Somebody's coontin the lichts o the hairbour|Every wave cairries a name that's no yours|The signal cam afore it wis sent",
+          "dinnae answer whan the watter speaks|the deep's no teem — it harks|the last ship hasnae left yet",
+          "Silence haes a pulse here",
+        );
+        L(
+          "as",
+          "জোৱাৰে সেই কথা মনত ৰাখে যি পাৰে পাহৰিলে|কোনোবাই বন্দৰৰ বন্তিবোৰ গণিছে|প্ৰতিটো ঢৌৱে তোমাৰ নহয় এনে নাম কঢ়িয়াই আনে|সংকেত পঠোৱাৰ আগতেই পালেহি",
+          "পানীয়ে কথা ক'লে উত্তৰ নিদিবা|গভীৰতা খালী নহয় — সি শুনি আছে|শেষ জাহাজখন এতিয়াও যোৱা নাই",
+          "ইয়াত নীৰৱতাৰ নাড়ী আছে",
+        );
+        L(
+          "nn",
+          "Tidevatnet hugsar det stranda gløymde|Nokon tel ljosa i hamna|Kvar bølgje ber eit namn som ikkje er ditt|Signalet kom før det vart sendt",
+          "ikkje svar når vatnet talar|djupet er ikkje tomt — det lyttar|det siste skipet har enno ikkje reist",
+          "Stilla har puls her",
+        );
+
+        const FONTS = [
+          "Georgia,serif",
+          '"Times New Roman",Times,serif',
+          '"Palatino Linotype","Book Antiqua",Palatino,serif',
+          'Garamond,"EB Garamond","Cormorant Garamond",serif',
+          'Baskerville,"Libre Baskerville","Baskerville Old Face",serif',
+          '"Bodoni MT",Didot,"Bodoni 72","Playfair Display",serif',
+          'Cambria,"Noto Serif",serif',
+          'Constantia,"Hoefler Text",serif',
+          '"Iowan Old Style",Charter,"Bitstream Charter",serif',
+          '"Source Serif Pro","Source Serif 4","DejaVu Serif",serif',
+          '"Liberation Serif","Nimbus Roman","Nimbus Roman No9 L",serif',
+          'Rockwell,"Rockwell Extra Bold","Roboto Slab",serif',
+          '"Century Schoolbook","New Century Schoolbook",C059,serif',
+          '"Big Caslon",Caslon,"Adobe Caslon Pro",serif',
+          '"Goudy Old Style",Perpetua,"Goudy Bookletter 1911",serif',
+          '"Bookman Old Style","URW Bookman",Bookman,serif',
+          '"Droid Serif",Merriweather,serif',
+          'Cormorant,"Cormorant Infant","Cormorant Garamond",serif',
+          'Lora,"Crimson Text","Crimson Pro",serif',
+          '"Trajan Pro",Cinzel,Copperplate,serif',
+          'Copperplate,"Copperplate Gothic Light","Copperplate Gothic Bold",fantasy',
+          '"American Typewriter","Courier Prime",serif',
+          "Arial,Helvetica,sans-serif",
+          '"Helvetica Neue",Helvetica,Arial,sans-serif',
+          "Verdana,Geneva,sans-serif",
+          'Tahoma,"Segoe UI",sans-serif',
+          '"Trebuchet MS","Lucida Grande",sans-serif',
+          '"Segoe UI","Segoe UI Variable",system-ui,sans-serif',
+          'Calibri,Candara,"Gill Sans MT",sans-serif',
+          'Corbel,"Lucida Sans","Lucida Sans Unicode",sans-serif',
+          '"Gill Sans","Gill Sans MT","Gillius ADF",sans-serif',
+          'Futura,"Century Gothic",Jost,sans-serif',
+          "Optima,Candara,Marcellus,sans-serif",
+          '"Avenir Next",Avenir,"Nunito Sans",sans-serif',
+          '"Franklin Gothic Medium","Libre Franklin",sans-serif',
+          'Impact,Haettenschweiler,"Arial Narrow Bold",sans-serif',
+          '"Arial Narrow","Liberation Sans Narrow","Roboto Condensed",sans-serif',
+          '"Noto Sans","Open Sans",sans-serif',
+          '"DejaVu Sans","Bitstream Vera Sans",sans-serif',
+          '"Liberation Sans","Nimbus Sans","Nimbus Sans L",sans-serif',
+          'Ubuntu,Cantarell,"Droid Sans",sans-serif',
+          "Roboto,Heebo,sans-serif",
+          'Inter,"SF Pro Text","SF Pro Display",system-ui,sans-serif',
+          '"Fira Sans","Source Sans Pro","Source Sans 3",sans-serif',
+          '"IBM Plex Sans","Work Sans",sans-serif',
+          '"Century Gothic","URW Gothic","Avant Garde",sans-serif',
+          '"Lucida Grande","Lucida Sans Unicode",sans-serif',
+          "Montserrat,Raleway,Poppins,sans-serif",
+          'Oswald,"Bebas Neue","League Gothic",sans-serif',
+          '"Courier New",Courier,monospace',
+          "Menlo,Monaco,monospace",
+          'Consolas,"Lucida Console",monospace',
+          '"DejaVu Sans Mono","Liberation Mono",monospace',
+          '"Ubuntu Mono","Fira Mono","Droid Sans Mono",monospace',
+          '"Fira Code","JetBrains Mono","Source Code Pro",monospace',
+          '"SF Mono","Cascadia Code","Cascadia Mono",monospace',
+          '"Andale Mono","Nimbus Mono PS","Nimbus Mono L",monospace',
+          '"IBM Plex Mono","Space Mono","Roboto Mono",monospace',
+          '"Noto Sans Mono","Overpass Mono",monospace',
+          '"Brush Script MT","Brush Script Std",cursive',
+          '"Lucida Handwriting","Segoe Script","Segoe Print",cursive',
+          '"Apple Chancery","Monotype Corsiva","URW Chancery L",Z003,cursive',
+          'Zapfino,"Snell Roundhand","Edwardian Script ITC",cursive',
+          "Papyrus,Luminari,Trattatello,fantasy",
+          '"Comic Sans MS","Chalkboard SE","Comic Neue",cursive',
+          '"Marker Felt","Bradley Hand",Noteworthy,cursive',
+          'Stencil,"Stencil Std",Allerton,fantasy',
+          '"Old English Text MT","Blackadder ITC",UnifrakturCook,Luminari,fantasy',
+          'Gabriola,Mistral,"Kunstler Script",cursive',
+          "Harrington,Algerian,Jokerman,fantasy",
+          'Chiller,"Curlz MT",Ravie,fantasy',
+          'Bahnschrift,"DIN Alternate","DIN Condensed",sans-serif',
+          '"Hiragino Mincho ProN","Yu Mincho","MS Mincho","Noto Serif CJK JP",serif',
+          '"Hiragino Sans","Yu Gothic",Meiryo,"Noto Sans CJK JP",sans-serif',
+          '"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif',
+          '"Songti SC",SimSun,"Noto Serif CJK SC",serif',
+          '"Malgun Gothic","Apple SD Gothic Neo","Noto Sans CJK KR",sans-serif',
+          '"Nirmala UI","Kohinoor Devanagari","Noto Sans Devanagari",sans-serif',
+          '"Segoe UI Historic","Segoe UI Symbol","Apple Symbols",serif',
+          '"Noto Serif Display","Noto Serif Georgian",serif',
+          'Sylfaen,"Noto Serif Armenian",serif',
+          '"Arial Unicode MS","Lucida Sans Unicode",sans-serif',
+          'Times,"Times New Roman",serif',
+        ];
+
+        const GL = Array.from(
+          "ΞΨΩΣДЖЯЩѪꙮ∆∑∅∞∇∮≈≠≡⊕⊗⊘⌬⌖⍟⎔ᛟᚦᚱᛉᛞ◬◭◮▓▒░ƛʯꝏꚙ҉¥§¶†‡※⁂⸎⸮ʘǂǃ⌿⍙⍾",
+        );
+
+        const LOAD_V = [
+          "Aligning",
+          "Unfolding",
+          "Counting",
+          "Winding",
+          "Calibrating",
+          "Rehearsing",
+          "Untangling",
+          "Listening to",
+          "Charting",
+          "Rinsing",
+          "Descending into",
+          "Smoothing",
+          "Indexing",
+          "Waking",
+          "Drawing in",
+          "Folding",
+          "Mooring",
+          "Tuning",
+          "Sifting",
+          "Sounding",
+          "Translating",
+          "Recalling",
+          "Weighing",
+          "Re-threading",
+        ];
+        const LOAD_N = [
+          "the tide tables",
+          "the lantern registry",
+          "the salt ledger",
+          "the horizon seam",
+          "mooring #N",
+          "buoy N of ∞",
+          "the undertow index",
+          "harbor memory",
+          "dormant sonar",
+          "night shipping lanes",
+          "borrowed echoes",
+          "the lighthouse schedule",
+          "foghorn harmonics",
+          "the lower currents",
+          "drowned coordinates",
+          "sea-glass inventory",
+          "the ninth bell",
+          "unsent letters",
+          "yesterday's weather",
+          "a map of nothing in particular",
+          "ballast",
+          "the second moon",
+          "the anchor's opinion",
+          "vessels that never docked",
+        ];
+        const LOAD_S = [
+          "Rehearsing the tide table",
+          "Teaching the harbor its own name",
+          "Reconciling echoes with origins",
+          "Listening for the second signal",
+          "Indexing what the fog withheld",
+          "Sorting salt by age",
+          "Calibrating the undertow",
+          "Replaying yesterday's weather backwards",
+          "Borrowing light from the lighthouse",
+          "Synchronizing with a distant bell",
+          "Reading the sea reading you",
+          "Rinsing static from the foghorn",
+          "Charting islands that are not there",
+          "Compiling the silence",
+          "Counting lanterns — 11, 12, 11",
+          "Waking the lower currents",
+          "Aligning shoreline to memory",
+          "Descending to sounding depth",
+          "Unfolding the horizon in seven parts",
+          "Negotiating with the depth",
+          "Warming the cold side of the water",
+          "Rewinding the departure",
+          "Assembling a quiet that fits",
+          "Whispering to the buoys in order",
+          "Measuring distance in hours of dark",
+          "Stitching the pier to its shadow",
+          "Loading the part of the sea you were not shown",
+          "Decoding salt crystals",
+          "Resolving who is waiting",
+          "Updating the list of the absent",
+        ];
+        const ERR_S = [
+          "the harbor refused its own name",
+          "a second signal answered first",
+          "depth exceeds known depth",
+          "lantern count mismatch: expected 12, found 13",
+          "the tide returned an empty set",
+          "horizon checksum does not match the horizon",
+          "someone confirmed receipt before the request",
+          "the shore reports no shore",
+          "loop closed from the other side",
+          "ledger contains a name nobody wrote",
+          "undertow index points to itself",
+          "the echo arrived without a source",
+          "mooring #7 is occupied by silence",
+          "the lighthouse answered in your voice",
+          "the bell returned a different bell",
+          "unexpected tenant in the lower deck",
+          "the map contains a room you are standing in",
+          "salt count negative",
+          "the departure was already logged",
+          "no vessel matches the sound it made",
+          "the water acknowledged you",
+          "stack overflow in the undertow",
+          "signal came back with a face",
+          "the fog read the message first",
+          "timestamp is in the sea",
+          "a number was added to the count that you did not say",
+          "the pier extends past its own end",
+          "something resumed from the last time",
+          "the page is being watched by the page",
+          "nothing was lost — that is the fault",
+          "handshake completed with something else",
+          "the registry lists you as arriving",
+          "the second moon is not responding",
+          "the anchor returned unchanged — and heavier",
+          "unreadable: it is reading you back",
+          "index 0 contains the sea",
+          "the answer was sent before the silence",
+          "the ledger of the absent is up to date and wrong",
+          "a lantern went out that was never lit",
+          "connection to the deep: established",
+        ];
+        const ERR_N = [
+          "the harbor",
+          "the tide",
+          "a lantern",
+          "the second signal",
+          "the ledger",
+          "the horizon",
+          "mooring 7",
+          "the lighthouse",
+          "the echo",
+          "a ship without a name",
+          "the undertow",
+          "the bell",
+          "the pier",
+          "the lower deck",
+          "the chart",
+          "the fog",
+        ];
+        const ERR_P = [
+          "refused its own name",
+          "answered before the question",
+          "returned an empty set",
+          "is counted twice",
+          "reports no shore",
+          "has no checksum",
+          "answered in your voice",
+          "contains a name nobody wrote",
+          "does not match the moon",
+          "closed the loop from the other side",
+          "cannot be reached from here",
+          "is already listening",
+          "stopped agreeing with itself",
+          "remembers a different night",
+          "has been replaced by silence",
+          "points to itself",
+        ];
+        return {
+          LANGS,
+          FONTS,
+          GL,
+          LOAD_V,
+          LOAD_N,
+          LOAD_S,
+          ERR_S,
+          ERR_N,
+          ERR_P,
+        };
+      })();
+    </script>
+
+    <script>
       (() => {
         "use strict";
+        const {
+          LANGS,
+          FONTS,
+          GL,
+          LOAD_V,
+          LOAD_N,
+          LOAD_S,
+          ERR_S,
+          ERR_N,
+          ERR_P,
+        } = HD;
+
+        /* ================= HELPERS ================= */
         const TAU = Math.PI * 2;
         const $ = (s) => document.querySelector(s);
         const rnd = (a, b) => a + Math.random() * (b - a);
+        const rint = (a, b) => Math.floor(rnd(a, b + 1));
         const pick = (a) => a[(Math.random() * a.length) | 0];
-        const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
-        const sstep = (a, b, x) => {
-          const t = clamp((x - a) / (b - a), 0, 1);
-          return t * t * (3 - 2 * t);
+        const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        const raf = (f) => requestAnimationFrame(f);
+        const E = {
+          io: (t) =>
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+          out: (t) => 1 - Math.pow(1 - t, 3),
+          inn: (t) => t * t * t,
         };
-        const frac = (x) => x - Math.floor(x);
-        function bag(arr) {
-          let q = [];
-          return () => {
-            if (!q.length) {
-              q = arr.slice();
-              for (let i = q.length - 1; i > 0; i--) {
-                const j = (Math.random() * (i + 1)) | 0;
-                const t = q[i];
-                q[i] = q[j];
-                q[j] = t;
-              }
-            }
-            return q.pop();
+        const tween = (ms, fn) =>
+          new Promise((res) => {
+            const t0 = performance.now();
+            const f = (now) => {
+              const u = Math.min(1, (now - t0) / ms);
+              fn(u);
+              u < 1 ? raf(f) : res();
+            };
+            raf(f);
+          });
+        const hex = (n) => {
+          let s = "";
+          for (let i = 0; i < n; i++)
+            s += "0123456789ABCDEF"[(Math.random() * 16) | 0];
+          return s;
+        };
+        const NG = new Float32Array(256);
+        for (let i = 0; i < 256; i++) NG[i] = Math.random() * 2 - 1;
+        const noise = (x) => {
+          const i = Math.floor(x),
+            f = x - i,
+            u = f * f * (3 - 2 * f),
+            a = NG[i & 255],
+            b = NG[(i + 1) & 255];
+          return a + (b - a) * u;
+        };
+        const root = document.documentElement;
+        const state = { void: false, fx: false, shake: false };
+        const SCR = Array.from("▓▒░#@%&*+=/\\|<>?!01").concat(GL);
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+        function scramble(el, to, ms) {
+          const tok = {};
+          el._sc = tok;
+          const chars = Array.from(to),
+            t0 = performance.now();
+          const f = (now) => {
+            if (el._sc !== tok) return;
+            const u = clamp((now - t0) / ms, 0, 1),
+              rev = Math.floor(u * chars.length);
+            let o = "";
+            for (let i = 0; i < chars.length; i++)
+              o += i < rev || chars[i] === " " ? chars[i] : pick(SCR);
+            el.textContent = u < 1 ? o : to;
+            if (u < 1) raf(f);
           };
+          raf(f);
         }
-        function mulberry32(a) {
-          return function () {
-            a |= 0;
-            a = (a + 0x6d2b79f5) | 0;
-            let t = Math.imul(a ^ (a >>> 15), 1 | a);
-            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+
+        /* ================= FILM GRAIN ================= */
+        (function () {
+          const tile = (size) => {
+            const c = document.createElement("canvas");
+            c.width = c.height = size;
+            const x = c.getContext("2d");
+            const id = x.createImageData(size, size),
+              d = id.data;
+            for (let i = 0; i < d.length; i += 4) {
+              const w = Math.random() < 0.5;
+              d[i] = w ? 255 : 0;
+              d[i + 1] = w ? 238 : 0;
+              d[i + 2] = w ? 220 : 0;
+              d[i + 3] = Math.pow(Math.random(), 2.2) * 255;
+            }
+            x.putImageData(id, 0, 0);
+            return c.toDataURL("image/png");
           };
-        }
+          const a = $("#grain"),
+            b = $("#grain2");
+          a.style.backgroundImage = "url(" + tile(256) + ")";
+          b.style.backgroundImage = "url(" + tile(160) + ")";
+          setInterval(() => {
+            if (document.hidden) return;
+            a.style.transform =
+              "translate3d(" + rint(0, 255) + "px," + rint(0, 255) + "px,0)";
+            b.style.transform =
+              "translate3d(" + rint(0, 319) + "px," + rint(0, 319) + "px,0)";
+          }, 83);
+        })();
 
-        /* ---------- tables & noise ---------- */
-        const ST = new Float32Array(4096);
-        for (let i = 0; i < 4096; i++) ST[i] = Math.sin((i / 4096) * TAU);
-        const sc = (c) => ST[(c * 4096) & 4095]; // sin, argument in cycles
-        const sr = (r) => ST[(r * 651.8986469) & 4095]; // sin, argument in radians
-        const NZ = new Float32Array(65536);
-        {
-          const r = mulberry32(1337);
-          for (let i = 0; i < 65536; i++) NZ[i] = r();
-        }
-        function vn(x, y) {
-          const xi = Math.floor(x),
-            yi = Math.floor(y);
-          let xf = x - xi,
-            yf = y - yi;
-          xf = xf * xf * (3 - 2 * xf);
-          yf = yf * yf * (3 - 2 * yf);
-          const x0 = xi & 255,
-            y0 = (yi & 255) << 8,
-            x1 = (xi + 1) & 255,
-            y1 = ((yi + 1) & 255) << 8;
-          const a = NZ[y0 | x0],
-            b = NZ[y0 | x1],
-            c = NZ[y1 | x0],
-            d = NZ[y1 | x1];
-          return a + (b - a) * xf + (c - a) * yf + (a - b - c + d) * xf * yf;
-        }
-        function fbm(x, y) {
-          return (
-            vn(x, y) * 0.5 +
-            vn(x * 2.03 + 5.2, y * 2.03 + 1.3) * 0.3 +
-            vn(x * 4.1 + 9.1, y * 4.1 + 3.7) * 0.2
-          );
-        }
-
-        /* ---------- text pools ---------- */
-        const GHOST = [
-          // english
-          "the tide remembers what you forgot",
-          "nobody moored here tonight",
-          "salt, salt, salt, and then a door",
-          "the third wave is not a wave",
-          "someone is counting you",
-          "low water. high silence.",
-          "the lamp does not belong to the lighthouse",
-          "under the pier, a second pier",
-          "do not answer the bell",
-          "your shadow arrived early",
-          "the horizon is thinner today",
-          "a ship passed through itself",
-          "fog has a pulse",
-          "the sand keeps minutes",
-          "there are more gulls than sky",
-          "the water is reading over your shoulder",
-          "it was always low tide somewhere in you",
-          "seven knots, none of them yours",
-          "the moon forgot its password",
-          "harbor is a verb",
-          "a rope sinks upward",
-          "listen: the dock is breathing in reverse",
-          "whatever you left here has grown",
-          "the sea signs in lowercase",
-          "echo (unattended)",
-          "north is a rumour",
-          "an anchor dreaming of ground",
-          "the reflection arrived late",
-          "static in the shells",
-          "tomorrow's foam, yesterday's weather",
-          "the tide table has a hidden page",
-          "someone rowed here without a boat",
-          "kelp writes in cursive",
-          "the lighthouse is looking the other way",
-          "wet footprints, dry floor",
-          "the bottle was empty on purpose",
-          "count the waves backwards",
-          "you are the third tide",
-          "the harbour will not be photographed",
-          "a bell under the water has your birthday",
-          "lost: one horizon, slightly used",
-          "found: a quiet that fits no one",
-          "do not trust the reflection of the moon",
-          "the net holds only wind",
-          "a door is open in the surf",
-          "no vessel, only wake",
-          "it is raining upward in the north cove",
-          "the water kept your place",
-          "somebody erased the far shore",
-          "blue is just a rumour told by the deep",
-          "salt-lamp, salt-lamp, who goes there",
-          "tide in, thought out",
-          "seagull.exe has stopped being a bird",
-          "the gap between waves is inhabited",
-          "another harbor underneath, upside down",
-          "you were here before the water",
-          "the fog is a letter, unread",
-          "mind the step that isn't there",
-          "the buoy hums a number",
-          "nothing is moored. everything is held.",
-          "the past is shallow here",
-          "hold still, the sea is drawing you",
-          "a lighthouse inside a lighthouse inside",
-          "ask the foam",
-          "stones remember being water",
-          "the wind is carrying someone's name",
-          "white noise, white noise, white sail",
-          "the quay is longer at night",
-          "you cannot leave the way you came",
-          "shhh - the kelp is dreaming",
-          "all ships here are called Tomorrow",
-          "drift is a kind of address",
-          "the morning arrives in pieces",
-          "the water counts to eleven",
-          "a coin on the seabed, face up, still warm",
-          "every wave is a draft",
-          "the map folded itself",
-          "leave the lantern, take the dark",
-          "what the harbor swallows it keeps in tune",
-          "glass tide / glass hour",
-          "the reef has opinions",
-          "somewhere a clock is full of sand",
-          "a whisper docked at pier nine",
-          "do not whistle at the sea",
-          "the rain wrote this",
-          "the second moon is on loan",
-          "pier 0 does not exist, but it is crowded",
-          "the sea is a very slow door",
-          "gulls file their reports at dusk",
-          "one more wave than yesterday",
-          // ukrainian
-          "припливу байдуже, хто ти",
-          "хтось залишив світло під водою",
-          "туман пам'ятає твоє ім'я",
-          "берег порожній, але зайнятий",
-          "море мовчить лише вдень",
-          "третя хвиля — вже не хвиля",
-          "чайки рахують твої кроки",
-          "маяк дивиться всередину",
-          "сіль шепоче в кишенях",
-          "човен без імені чекає",
-          "глибина відповідає із запізненням",
-          "дзвін під водою не твій",
-          "не відповідай на хвилю",
-          "горизонт сьогодні тонший",
-          "піском пишуть листи без адреси",
-          // russian
-          "прилив помнит больше, чем ты",
-          "чайки считают твои шаги",
-          "туман знает твоё имя",
-          "в порту никого — но шумно",
-          "третья волна не волна",
-          "не отвечай колоколу",
-          "маяк смотрит внутрь",
-          "соль шепчет в карманах",
-          "лодка без имени ждёт",
-          "глубина отвечает с опозданием",
-          "тень пришла раньше тебя",
-          "горизонт сегодня тоньше",
-          "пирс длиннее ночью",
-          "вода читает через плечо",
-          "здесь всегда немного отлив",
-          // german
-          "das Meer hat deinen Namen vergessen",
-          "Nebel, der sich erinnert",
-          "die dritte Welle gehört niemandem",
-          "Salz im Gedächtnis",
-          "der Hafen atmet rückwärts",
-          "niemand legt heute Nacht an",
-          "die Tiefe antwortet später",
-          "ein Anker träumt vom Boden",
-          "leise, die Flut hört mit",
-          "der Leuchtturm schaut weg",
-          // french
-          "la marée se souvient de toi",
-          "le brouillard a un pouls",
-          "personne n'accoste ce soir",
-          "le phare regarde ailleurs",
-          "sel sur la langue, silence dans l'os",
-          "la troisième vague n'existe pas",
-          "l'eau lit par-dessus ton épaule",
-          "un quai sous le quai",
-          "ne réponds pas à la cloche",
-          "l'horizon est plus mince aujourd'hui",
-          // spanish / italian / portuguese
-          "la marea sabe tu nombre",
-          "nadie amarra esta noche",
-          "la niebla late",
-          "el faro mira hacia adentro",
-          "sal en la memoria",
-          "la tercera ola no es una ola",
-          "un ancla sueña con el suelo",
-          "el agua lee por encima de tu hombro",
-          "la marea non dimentica",
-          "nessuno approda stanotte",
-          "la nebbia ha un battito",
-          "il faro guarda altrove",
-          "un molo sotto il molo",
-          "sale nella memoria dell'acqua",
-          "a maré lembra-se de ti",
-          "ninguém atraca hoje",
-          "o nevoeiro tem pulso",
-          // latin
-          "mare tacet, sed audit",
-          "portus nomen tuum scit",
-          "sal in memoria manet",
-          "tertia unda non est unda",
-          "umbra ante te venit",
-          "lumen sub aqua ardet",
-          "nemo hic navigat",
-          "aestus redit, tu non",
-          "nebula cor habet",
-          "quis numerat fluctus?",
-          // japanese
-          "潮は名前を覚えている",
-          "霧には脈がある",
-          "今夜、誰も着岸しない",
-          "三番目の波は波ではない",
-          "灯台は内側を見ている",
-          "水底の鐘が鳴っている",
-          "砂は時間を数えている",
-          "港は後ろ向きに息をする",
-          "影が先に着いた",
-          "水平線が薄くなる",
-          "海は小文字で署名する",
-          "波の隙間に誰かいる",
-          "塩の記憶",
-          "帰り道は存在しない",
-          // chinese
-          "潮水记得你的名字",
-          "雾有脉搏",
-          "今夜无人靠岸",
-          "第三个浪不是浪",
-          "灯塔望向内部",
-          "海底的钟在响",
-          "沙子在数分钟",
-          "影子比你先到",
-          "港口倒着呼吸",
-          "地平线今天更薄",
-          // korean
-          "조수는 네 이름을 기억한다",
-          "안개에는 맥박이 있다",
-          "오늘 밤 아무도 정박하지 않는다",
-          "세 번째 파도는 파도가 아니다",
-          "등대는 안쪽을 본다",
-          "모래는 시간을 센다",
-          "그림자가 먼저 도착했다",
-          "항구는 거꾸로 숨 쉰다",
-          // arabic / hebrew
-          "المد يتذكر اسمك",
-          "للضباب نبض",
-          "لا أحد يرسو هذه الليلة",
-          "الموجة الثالثة ليست موجة",
-          "الفنار ينظر إلى الداخل",
-          "الرمل يعدّ الدقائق",
-          "ظلك وصل قبلك",
-          "الميناء يتنفس إلى الوراء",
-          "הגאות זוכרת את שמך",
-          "לערפל יש דופק",
-          "איש לא עוגן הלילה",
-          "הגל השלישי אינו גל",
-          "המגדלור מביט פנימה",
-          "הצל הגיע לפניך",
-          // greek
-          "η παλίρροια θυμάται το όνομά σου",
-          "η ομίχλη έχει σφυγμό",
-          "κανείς δεν δένει απόψε",
-          "το τρίτο κύμα δεν είναι κύμα",
-          "ο φάρος κοιτάζει μέσα",
-          "η σκιά σου έφτασε πρώτη",
-          // polish / turkish / finnish / swedish / dutch / icelandic
-          "przypływ pamięta twoje imię",
-          "mgła ma puls",
-          "nikt dziś nie cumuje",
-          "trzecia fala nie jest falą",
-          "latarnia patrzy do środka",
-          "piasek liczy minuty",
-          "gelgit adını hatırlıyor",
-          "sisin bir nabzı var",
-          "bu gece kimse demirlemiyor",
-          "üçüncü dalga dalga değil",
-          "vuorovesi muistaa nimesi",
-          "sumulla on pulssi",
-          "kukaan ei laiturille tänä yönä",
-          "kolmas aalto ei ole aalto",
-          "tidvattnet minns ditt namn",
-          "dimman har puls",
-          "ingen lägger till i natt",
-          "fyren ser inåt",
-          "het getij onthoudt je naam",
-          "de mist heeft een hartslag",
-          "niemand meert vannacht af",
-          "sjávarfallið man nafnið þitt",
-          "þokan hefur púls",
-          "enginn leggst að bryggju í nótt",
-          // hindi / welsh / irish / esperanto
-          "ज्वार तुम्हारा नाम याद रखता है",
-          "कोहरे की अपनी धड़कन है",
-          "आज रात कोई नाव नहीं लगती",
-          "तीसरी लहर लहर नहीं है",
-          "mae'r llanw'n cofio dy enw",
-          "mae gan y niwl guriad",
-          "cuimhníonn an taoide ar d'ainm",
-          "níl aon duine ag duga anocht",
-          "la tajdo memoras vian nomon",
-          "la maro aŭskultas",
-          // glyph noise
-          "∴ ∵ ∴ ∵ ∴",
-          "░▒▓ low tide ▓▒░",
-          "⌬ ⌬ ⌬",
-          "◬ no signal ◬",
-          "≈≈≈ ≋≋≋ ≈≈≈",
-          "0 1 1 0 tide",
-          "ᚺᚨᚱᛒᛟᚱ",
-          "ᛋᚨᛚᛏ ᛗᛖᛗᛟᚱᛁ",
-          "⟁ ⟁ ⟁ ⟁",
-          "Δ drift Δ",
-        ];
-
-        const LOAD = [
-          "winding the tide back onto its spool",
-          "counting the gulls that were never here",
-          "asking the pier for its name",
-          "indexing the salt",
-          "unfolding the horizon, one crease at a time",
-          "listening for the bell beneath the water",
-          "rinsing the fog",
-          "mooring unlit boats to nothing",
-          "calibrating the moon's low tide",
-          "mapping footprints that arrive before you",
-          "drying the harbor map",
-          "feeding lanterns to the dark",
-          "untying the knots in the rope",
-          "borrowing silence from the lighthouse",
-          "polishing the sound of distance",
-          "negotiating with the undertow",
-          "re-teaching sand to remember",
-          "translating wind into rope",
-          "assembling a shore from loose minutes",
-          "sorting bottles by what they almost said",
-          "weighing the weight of fog",
-          "stitching reflections to their owners",
-          "adjusting the lamp that isn't lit",
-          "waiting for permission from the tide",
-          "tracing the outline of a missing ship",
-          "sanding the edges of the horizon",
-          "rehearsing low tide",
-          "dissolving the last receipt of the sea",
-          "checking if the water is still listening",
-          "aligning anchors with forgotten stars",
-          "indexing the noise between waves",
-          "folding the evening into the cove",
-          "reading the sea's handwriting",
-          "boiling the harbor down to its name",
-          "teaching the buoy to count",
-          "retrieving the third wave",
-          "combing the kelp for messages",
-          "warming the stones for the night shift",
-          "hanging the mist out to dry",
-          "tuning the foghorn to your breathing",
-          "приручаем морской туман",
-          "считаем волны, которых нет",
-          "прислушиваемся ко дну",
-          "розплітаємо вузли припливу",
-          "збираємо берег із уламків хвилин",
-          "wir ordnen das Salz alphabetisch",
-          "les marées apprennent ton nom",
-          "el ancla busca un fondo",
-          "ricuciamo l'orizzonte",
-          "mare cogitat, portus exspectat",
-          "港の記憶を読み込み中",
-          "潮の満ち引きを数えています",
-          "正在打捞海底的回声",
-          "항구의 숨소리를 맞추는 중",
-          "جارٍ تسريح الضباب",
-          "מסדרים את הגלים לפי גודל",
-          "μετράμε τα αστέρια του λιμανιού",
-          "satamaa kehrätään hiljaa",
-          "höfnin man þig",
-          "liman seni hatırlıyor",
-          "pelabuhan sedang mengingat ombak",
-          "sal in memoria ligatur",
-          "portus nomen tuum discit",
-          "⌬ syncing with something below ⌬",
-          "░░░ buffering the undertow ░░░",
-          "unpacking the sea, layer by layer",
-          "waiting for a wave to finish its sentence",
-        ];
-
-        const ERR = [
-          "ERR 0x7F3A: the tide declined",
-          "tide.sig ≠ moon.sig",
-          "SIGSALT — salt signal lost",
-          "handshake with the deep: no answer",
-          "lighthouse returned null (it blinked)",
-          "checksum mismatch: footprints.dat",
-          "anchor not found in this reality",
-          "E_FOG_OVERFLOW",
-          "buffer of gulls exhausted",
-          "unexpected end of horizon",
-          "the pier replied in a language you don't have",
-          "permission denied by the sea",
-          "ERR_REFLECTION_UNPAIRED",
-          "stack of waves: underflow",
-          "tide table is on fire (quietly)",
-          "кто-то уже здесь",
-          "ошибка: глубина занята",
-          "помилка: берег не відповідає",
-          "ошибка 404: горизонт не найден",
-          "Fehler: das Meer ist besetzt",
-          "erreur : la marée a changé d'avis",
-          "error: el faro respondió con un sueño",
-          "errore: l'ombra non coincide con il molo",
-          "エラー：海が応答しません",
-          "接続が潮に拒否されました",
-          "错误：海没有回答",
-          "오류: 항구가 기억나지 않음",
-          "خطأ: الميناء لا يتذكر",
-          "שגיאה: הים לא עונה",
-          "σφάλμα: ο ωκεανός δεν υπογράφει",
-          "virhe: aalto ei tunne sinua",
-          "villa: sjórinn svarar ekki",
-          "hata: dalga bulunamadı",
-          "0xDEAD·TIDE",
-          "segfault in the undertow",
-          "unhandled exception: moonlight",
-          "NaN% of the sea",
-          "recursive reflection detected",
-          "connection reset by horizon",
-          "cert expired: the stars are 3 minutes late",
-          "rope.length = -1",
-          "socket closed by someone below",
-          "timeout: the wave never arrived",
-          "invalid sand",
-          "kernel panic: gulls in ring 0",
-          "ERR_NAME_NOT_RESOLVED: you",
-          "who left the lamp on",
-          "do not trust the second lighthouse",
-          "the loading was already finished — somewhere else",
-          "no route to the shore",
-          "Δ drift: anchor dragging",
-          "buoy.dll missing",
-          "ENOTIDE",
-          "EBADHARBOR",
-          "ECONNREFUSED: by the water",
-          "stack smashing detected: waves",
-          "the sea has revoked your read access",
-          "fatal: salt in the database",
-          "assert(horizon != horizon)",
-          "out of tide: swap exhausted",
-          "it is not loading. it is being loaded.",
-          "ошибка: корабль вернулся без вас",
-          "помилка: хвиля вже була",
-        ];
-
-        const SYM = [..."ᚺᚨᚱᛒᛟ◬⍙⌬⧖⟁⏃ꓧꓮꓣꓐꓳⴰⵔⴱꙮ҂∆ΩЖ░▒▓☍⊘⌖⍉⌿⎔⏁Ħ₳ɌɃ◯Ꝋ⟡⚶ʘ¤¶§Ӂ"];
-        const GLOW = [
-          "rgba(255,244,222,.95)",
-          "rgba(205,235,232,.9)",
-          "rgba(240,205,205,.85)",
-          "rgba(245,228,170,.9)",
-          "rgba(214,205,240,.85)",
-        ];
-
-        /* ---------- scene ---------- */
-        const sea = $("#sea"),
-          sctx = sea.getContext("2d");
-        const HY = 0.4,
-          SB = 0.8,
-          TS = 11,
-          LS = 1.6,
-          TC = 4.7,
-          LC = 0.6;
-        const ZS = 1 / (SB - HY + 0.012);
-        let scaleLong = 640,
-          W = 0,
-          H = 0,
-          A = 1,
-          invW = 1,
-          px = 1,
-          ew = 8,
-          img,
-          bg,
-          hyRow = 0,
-          eL,
-          eR,
-          frontV,
-          wetV,
-          colWf,
-          colTau,
-          colG,
-          sunCol;
-        const LAY = [
-          {
-            extL: 0.52,
-            aL: 0.1,
-            extR: 0.46,
-            aR: 0.085,
-            s: 11,
-            isl: 1,
-            col: [203, 197, 183],
-          },
-          {
-            extL: 0.4,
-            aL: 0.155,
-            extR: 0.34,
-            aR: 0.12,
-            s: 23,
-            isl: 0,
-            col: [180, 173, 158],
-          },
-        ];
-        function layerH(u, L) {
-          let h = 0;
-          const sL = (L.extL - u) / L.extL;
-          if (sL > 0)
-            h = L.aL * Math.pow(sL, 0.8) * (0.65 + 0.7 * fbm(u * 5 + L.s, 4.2));
-          const sR = (u - (1 - L.extR)) / L.extR;
-          if (sR > 0) {
-            const h2 =
-              L.aR *
-              Math.pow(sR, 0.8) *
-              (0.65 + 0.7 * fbm(u * 5 + L.s + 20, 7.7));
-            if (h2 > h) h = h2;
+        /* ================= WAVES ================= */
+        const Waves = (() => {
+          const cv = $("#waves"),
+            ctx = cv.getContext("2d", { alpha: false });
+          const N = 11,
+            PAL = [
+              [118, 56, 32],
+              [96, 42, 54],
+              [74, 50, 42],
+            ];
+          let W = 2,
+            H = 2,
+            Q = 1,
+            t = rnd(0, 60),
+            last = performance.now(),
+            active = true,
+            ema = 16,
+            slow = 0,
+            dx = 4;
+          const layers = [];
+          for (let i = 0; i < N; i++) {
+            const d = i / (N - 1),
+              L1 = (0.22 + 0.5 * d) * rnd(0.85, 1.2),
+              v1 = (0.022 + 0.05 * d) * rnd(0.55, 1.6);
+            layers.push({
+              ampF: (0.012 + 0.085 * Math.pow(d, 1.25)) * rnd(0.85, 1.15),
+              L1,
+              v1,
+              L2: L1 * rnd(0.42, 0.6),
+              v2: v1 * rnd(0.55, 1.5),
+              L3: L1 * rnd(0.16, 0.26),
+              v3: v1 * rnd(1.1, 2.1),
+              p1: rnd(0, TAU),
+              p2: rnd(0, TAU),
+              p3: rnd(0, TAU),
+              c0: rnd(-0.5, 0.9),
+              cA: rnd(0.05, 0.2),
+              cW: rnd(0.02, 0.06),
+              cP: rnd(0, TAU),
+              shape: rnd(0.25, 0.6) * (0.6 + 0.6 * d),
+              envF: rnd(1.1, 2.3),
+              envV: rnd(0.012, 0.04),
+              seed: rnd(0, 200),
+              tilt: rnd(-0.6, 0.6),
+              tiltW: rnd(0.015, 0.04),
+              tiltP: rnd(0, TAU),
+              warpF: rnd(1.5, 3),
+              warpV: rnd(0.03, 0.08),
+              warpA: rnd(0.35, 0.9),
+              bobW: rnd(0.05, 0.12),
+              bobP: rnd(0, TAU),
+              surgeP: rnd(0, TAU),
+              hue: i % 3,
+            });
           }
-          if (L.isl) {
-            const d = (u - 0.585) / 0.045;
-            const h3 = 0.022 * Math.exp(-d * d) * (0.7 + 0.6 * fbm(u * 30, 9));
-            if (h3 > h) h = h3;
+          const sh = (th, s) => {
+            const f = Math.sin(th - s * Math.sin(th));
+            return f > 0 ? Math.pow(f, 1.2) : -Math.pow(-f, 0.85);
+          };
+          function resize() {
+            const cw = innerWidth + 48,
+              ch = innerHeight + 48,
+              s = clamp(1100 / cw, 0.5, 1) * Q;
+            W = Math.max(2, Math.round(cw * s));
+            H = Math.max(2, Math.round(ch * s));
+            cv.width = W;
+            cv.height = H;
+            dx = Math.max(3.5, W / 240);
           }
-          return h;
-        }
-        function nearH(u) {
-          const e0L = 0.3,
-            e0R = 0.23;
-          let h = 0;
-          const sL = (e0L - u) / e0L;
-          if (sL > 0)
-            h =
-              0.235 *
-              Math.pow(sL, 0.85) *
-              (0.7 + 0.6 * fbm(u * 7 + 3, 2.2)) *
-              (0.92 + 0.16 * vn(u * 70, 1.5));
-          const sR = (u - (1 - e0R)) / e0R;
-          if (sR > 0) {
-            let h2 =
-              0.15 *
-              Math.pow(sR, 0.85) *
-              (0.7 + 0.6 * fbm(u * 7 + 13, 5.2)) *
-              (0.92 + 0.16 * vn(u * 70 + 9, 1.5));
-            h2 += 0.05 * Math.exp(-Math.pow((u - 0.94) / 0.035, 2));
-            if (h2 > h) h = h2;
-          }
-          return h;
-        }
-        let CR = 0,
-          CG = 0,
-          CB = 0;
-        function nearRock(u, v) {
-          const n1 = fbm(u * A * 9 + 2, v * 16 + 5),
-            n2 = fbm(u * A * 26 + 7, v * 40 + 3),
-            n3 = vn(u * A * 4 + 1, v * 9 + 8);
-          const sh = clamp(n1 * 1.15 - 0.08 + (n2 - 0.5) * 0.45, 0, 1);
-          let r = 98 + 72 * sh,
-            g = 92 + 68 * sh,
-            b = 82 + 60 * sh;
-          const tn = sstep(0.62, 0.82, n3) * 0.35;
-          r += (128 - r) * tn;
-          g += (134 - g) * tn;
-          b += (112 - b) * tn;
-          const up = 1 - sstep(HY - 0.2, HY + 0.12, v);
-          r += (206 - r) * up * 0.18;
-          g += (198 - g) * up * 0.18;
-          b += (180 - b) * up * 0.18;
-          const fa = (1 - sstep(0, 0.07, Math.abs(v - HY))) * 0.5;
-          r += (228 - r) * fa;
-          g += (218 - g) * fa;
-          b += (200 - b) * fa;
-          const dk = 1 - sstep(HY, SB, v) * 0.2;
-          CR = r * dk;
-          CG = g * dk;
-          CB = b * dk;
-        }
-
-        function setup() {
-          const vw = innerWidth,
-            vh = innerHeight,
-            k = Math.min(1, scaleLong / Math.max(vw, vh));
-          W = Math.max(120, Math.round(vw * k));
-          H = Math.max(120, Math.round(vh * k));
-          A = W / H;
-          invW = 1 / W;
-          px = W / 640;
-          ew = 0.012 * W;
-          sea.width = W;
-          sea.height = H;
-          img = sctx.createImageData(W, H);
-          frontV = new Float32Array(W);
-          wetV = new Float32Array(W);
-          colWf = new Float32Array(W);
-          colTau = new Float32Array(W);
-          colG = new Float32Array(W);
-          sunCol = new Float32Array(W);
-          for (let x = 0; x < W; x++) {
-            const d = (x * invW - 0.62) * 3;
-            sunCol[x] = Math.exp(-d * d);
-          }
-          buildStatic();
-        }
-        function buildStatic() {
-          bg = new Uint8ClampedArray(W * H * 4);
-          hyRow = Math.round(HY * H);
-          eL = new Float32Array(H);
-          eR = new Float32Array(H);
-          for (let y = hyRow; y < H; y++) {
-            const t = (y / H - HY) / (SB - HY);
-            if (t < 1) {
-              const k = Math.pow(1 - t, 1.6),
-                j = (vn(y * 0.5, 3.3) - 0.5) * 0.014 * W * (1 - t);
-              eL[y] = Math.max(0, 0.3 * W * k + j);
-              eR[y] = Math.max(
-                0,
-                0.23 * W * k + (vn(y * 0.5, 8.1) - 0.5) * 0.014 * W * (1 - t),
-              );
-            }
-          }
-          for (let x = 0; x < W; x++) {
-            const u = x / W,
-              h0 = layerH(u, LAY[0]),
-              h1 = layerH(u, LAY[1]),
-              hn = nearH(u);
-            for (let y = 0; y < H; y++) {
-              const v = y / H;
-              let r, g, b;
-              if (y < hyRow) {
-                const s = v / HY,
-                  t1 = sstep(0, 0.75, s),
-                  t2 = sstep(0.6, 1, s);
-                r = 206 + 20 * t1;
-                g = 203 + 15 * t1;
-                b = 194 + 9 * t1;
-                r += (240 - r) * t2;
-                g += (229 - g) * t2;
-                b += (210 - b) * t2;
-                const c1 = sstep(0.5, 0.8, fbm(u * A * 2.6 + 3, v * 7 + 1)),
-                  c2 = sstep(0.5, 0.8, fbm(u * A * 2.6 + 3.15, v * 7 + 1.12));
-                const lt = c1 * (1 - 0.7 * s) * 0.5;
-                r += (247 - r) * lt;
-                g += (242 - g) * lt;
-                b += (231 - b) * lt;
-                const shd = Math.max(0, c1 - c2) * (1 - s) * 14;
-                r -= shd;
-                g -= shd;
-                b -= shd * 0.8;
-                const gx = (u - 0.62) * A,
-                  gy = (v - (HY - 0.03)) * 1.4,
-                  gl = Math.exp(-(gx * gx + gy * gy) * 10) * 0.6;
-                r += (255 - r) * gl;
-                g += (241 - g) * gl;
-                b += (216 - b) * gl;
-                if (h0 > 0 && v >= HY - h0) {
-                  const d = (v - (HY - h0)) / h0,
-                    n = fbm(u * A * 8 + LAY[0].s, v * 18) - 0.5,
-                    L = LAY[0].col,
-                    hz = 0.55 * d * d;
-                  r = L[0] + n * 16;
-                  g = L[1] + n * 15;
-                  b = L[2] + n * 14;
-                  r += (240 - r) * hz;
-                  g += (229 - g) * hz;
-                  b += (210 - b) * hz;
-                }
-                if (h1 > 0 && v >= HY - h1) {
-                  const d = (v - (HY - h1)) / h1,
-                    n = fbm(u * A * 8 + LAY[1].s, v * 18) - 0.5,
-                    L = LAY[1].col,
-                    hz = 0.5 * d * d;
-                  r = L[0] + n * 20;
-                  g = L[1] + n * 19;
-                  b = L[2] + n * 17;
-                  r += (238 - r) * hz;
-                  g += (227 - g) * hz;
-                  b += (208 - b) * hz;
-                }
-                if (hn > 0 && v >= HY - hn) {
-                  nearRock(u, v);
-                  r = CR;
-                  g = CG;
-                  b = CB;
-                  const top = y - (HY - hn) * H;
-                  if (top < 2.5) {
-                    const k = (1 - top / 2.5) * 18;
-                    r += k;
-                    g += k;
-                    b += k * 0.9;
-                  }
-                }
-              } else {
-                if (x < eL[y] || x > W - 1 - eR[y]) {
-                  nearRock(u, v);
-                  r = CR;
-                  g = CG;
-                  b = CB;
-                  const dist = x < eL[y] ? eL[y] - x : x - (W - 1 - eR[y]);
-                  if (dist < 3) {
-                    const k = (1 - dist / 3) * 20;
-                    r += k;
-                    g += k;
-                    b += k * 0.9;
-                  }
-                } else {
-                  r = 232;
-                  g = 222;
-                  b = 204;
-                }
-              }
-              const i = (y * W + x) << 2;
-              bg[i] = r;
-              bg[i + 1] = g;
-              bg[i + 2] = b;
-              bg[i + 3] = 255;
-            }
-          }
-          img.data.set(bg);
-        }
-
-        function swash(t) {
-          if (t < 0.2) {
-            const k = 1 - t / 0.2;
-            return 1 - k * k * k;
-          }
-          if (t < 0.88) {
-            const k = (t - 0.2) / 0.68;
-            return 0.5 + 0.5 * Math.cos(Math.PI * k);
-          }
-          return 0;
-        }
-
-        function render(t, dt) {
-          const d = img.data;
-          const tS = t / TS,
-            tC = t / TC,
-            t17 = t * 0.17;
-          const alpha = 0.55 * sr(t * 0.045) + 0.2,
-            cosA = Math.cos(alpha),
-            sinA = Math.sin(alpha);
-          const pS0 = ZS / LS + tS,
-            dry = 0.0065 * dt;
-          for (let x = 0; x < W; x++) {
-            const u = x * invW;
-            const wf =
-              0.2 * sr(u * 5.3 + 1) +
-              0.1 * sr(u * 11.7 + 2.2) +
-              0.18 * u +
-              0.07 * sr(u * 9 + t * 0.13) +
-              0.05 * sr(u * 3.7 - t * 0.09 + 1);
-            colWf[x] = wf;
-            const P = pS0 + wf + 0.07 * sr((u - 0.5) * A * ZS * 0.9 + t17);
-            const g = 0.5 + 0.5 * vn(P * 0.8 + 7, 3.1);
-            const tau = P - Math.floor(P);
-            const w = swash(tau),
-              w2 = swash(frac(t / 6.7 + 0.3 * u + 0.2 * sr(u * 6 + 1)));
-            let D = Math.max(0.05 * g * w, 0.022 * w2);
-            if (w > 0.02) D += 0.003 * (vn(u * 30, t * 0.2) - 0.5);
-            const fv =
-              SB + 0.02 * sr(u * 3.1 + 0.7) + 0.012 * sr(u * 8.3 + 2) + D;
-            frontV[x] = fv;
-            wetV[x] = Math.max(fv, wetV[x] - dry);
-            colTau[x] = tau;
-            colG[x] = g;
-          }
-          for (let y = hyRow; y < H; y++) {
-            const v = y / H,
-              q = v - HY,
-              z = 1 / (q + 0.012);
-            const Pb = z / LS + tS,
-              Pcb = (z * cosA) / LC + tC;
-            const Asw = sstep(0.05, 0.22, q),
-              Ach = sstep(0.1, 0.26, q) * 0.9,
-              Ar = sstep(0.12, 0.3, q) * 0.8,
-              brk = sstep(0.06, 0.26, q);
-            const fres = 0.42 + 0.43 * (1 - sstep(0, 0.4, q));
-            const bt = sstep(0, 0.4, q),
-              bwr = 198 - 56 * bt,
-              bwg = 206 - 46 * bt,
-              bwb = 198 - 41 * bt;
-            const yr = Math.max(0, (hyRow - (y - hyRow) * 0.9 - 2) | 0);
-            const xl = Math.ceil(eL[y]),
-              xr = Math.floor(W - 1 - eR[y]);
-            const eLy = eL[y],
-              eRy = eR[y];
-            for (let x = xl; x <= xr; x++) {
-              const i = (y * W + x) << 2,
-                fv = frontV[x];
-              let cr, cg, cb;
-              if (v < fv) {
-                const d0 = fv - v,
-                  u = x * invW,
-                  xw = (u - 0.5) * A * z;
-                const P = Pb + colWf[x] + 0.07 * sr(xw * 0.9 + t17);
-                const cS = sc(P + 0.25),
-                  sS = sc(P);
-                const gg = 0.5 + 0.5 * vn(P * 0.8 + 7, 3.1);
-                const sC = sc(Pcb + (xw * sinA) / LC);
-                const n3 = vn(xw * 2.2 + t * 0.11, z * 1.7 + t * 0.35);
-                const dx =
-                  ((cS * Asw * gg * 2.2 +
-                    sC * Ach * 1.4 +
-                    (n3 - 0.5) * Ar * 2) *
-                    px) |
-                  0;
-                let sx = x + dx;
-                sx = sx < 0 ? 0 : sx >= W ? W - 1 : sx;
-                const ri = (yr * W + sx) << 2;
-                cr = bwr + (bg[ri] - bwr) * fres;
-                cg = bwg + (bg[ri + 1] - bwg) * fres;
-                cb = bwb + (bg[ri + 2] - bwb) * fres;
-                const add =
-                  (0.5 * cS - 0.22 * sS) * Asw * gg * 44 +
-                  sC * Ach * 15 +
-                  (n3 - 0.5) * Ar * 22;
-                cr += add;
-                cg += add;
-                cb += add * 0.9;
-                // breaking crest + trailing foam
-                const cs = cS > 0 ? cS : 0;
-                let cr4 = cs * cs;
-                cr4 *= cr4;
-                const fP = P - Math.floor(P);
-                let tr = fP < 0.38 ? 1 - fP / 0.38 : 0;
-                tr *= tr;
-                const lace = clamp(
-                  (vn(xw * 2.6 + 3.1, P * 5) - 0.33) * 3,
-                  0,
-                  1,
-                );
-                let foam =
-                  brk *
-                  (0.55 + 0.45 * gg) *
-                  (0.9 * cr4 + 0.42 * tr) *
-                  (0.3 + 0.7 * lace);
-                if (foam > 0) {
-                  foam = clamp(foam, 0, 1) * 0.92;
-                  cr += (244 - cr) * foam;
-                  cg += (240 - cg) * foam;
-                  cb += (228 - cb) * foam;
-                }
-                // sun glints
-                const sp = sC * Ach + (n3 - 0.5) * Ar * 2.4 + cS * 0.25 * Asw;
-                if (sp > 0.42) {
-                  const k = Math.min(
-                    90,
-                    (sp - 0.42) * sunCol[x] * (1 - 0.6 * q) * 170,
+          function draw() {
+            let g = ctx.createLinearGradient(0, 0, 0, H);
+            g.addColorStop(0, "#050404");
+            g.addColorStop(0.3, "#150a08");
+            g.addColorStop(0.46, "#2a140d");
+            g.addColorStop(0.7, "#120908");
+            g.addColorStop(1, "#040303");
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, W, H);
+            const gx = W * (0.64 + 0.09 * Math.sin(t * 0.031)),
+              gy = H * (0.42 + 0.025 * Math.sin(t * 0.047));
+            let rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * 0.55);
+            rg.addColorStop(0, "rgba(190,90,46,.34)");
+            rg.addColorStop(0.4, "rgba(128,56,32,.14)");
+            rg.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = rg;
+            ctx.fillRect(0, 0, W, H);
+            const hx = W * (0.2 + 0.06 * Math.sin(t * 0.023 + 1)),
+              hy = H * 0.5;
+            rg = ctx.createRadialGradient(hx, hy, 0, hx, hy, W * 0.42);
+            rg.addColorStop(0, "rgba(104,44,66,.16)");
+            rg.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = rg;
+            ctx.fillRect(0, 0, W, H);
+            for (let i = 0; i < N; i++) {
+              const Lr = layers[i],
+                d = i / (N - 1);
+              const baseY =
+                H * (0.31 + 0.6 * Math.pow(d, 1.05)) +
+                Math.sin(t * Lr.bobW + Lr.bobP) * H * 0.012 * (0.4 + d);
+              const surge =
+                1 +
+                0.3 *
+                  Math.pow(
+                    0.5 + 0.5 * Math.sin(t * 0.085 + Lr.surgeP + d * 1.7),
+                    3,
                   );
-                  cr += k;
-                  cg += k * 0.97;
-                  cb += k * 0.9;
-                }
-                // land-edge foam
-                const dm = Math.min(x - eLy, W - 1 - eRy - x);
-                if (dm < ew * 3.2) {
-                  const ef =
-                    Math.exp(-dm / ew) *
-                    (0.35 + 0.65 * (0.5 + 0.5 * cS)) *
-                    (0.45 + 0.55 * vn(x * 0.4 + t * 0.25, y * 0.5)) *
-                    sstep(0.01, 0.08, q) *
-                    0.85;
-                  cr += (244 - cr) * ef;
-                  cg += (240 - cg) * ef;
-                  cb += (228 - cb) * ef;
-                }
-                // shallow water over wet sand + rim foam
-                if (d0 < 0.06) {
-                  const tt = (1 - sstep(0, 0.06, d0)) * 0.7;
-                  cr += (150 - cr) * tt;
-                  cg += (140 - cg) * tt;
-                  cb += (121 - cb) * tt;
-                  const rim = 1 - sstep(0, 0.014, d0);
-                  if (rim > 0) {
-                    const l2 = clamp(
-                        (vn(x * 0.35 + t * 0.1, y * 0.6) - 0.3) * 2.5,
-                        0,
-                        1,
-                      ),
-                      fa =
-                        rim * (0.55 + 0.45 * l2) * (0.6 + 0.4 * colG[x]) * 0.95;
-                    cr += (244 - cr) * fa;
-                    cg += (240 - cg) * fa;
-                    cb += (228 - cb) * fa;
-                  }
-                }
-                // horizon haze
-                const hz = (1 - sstep(0, 0.075, q)) * 0.9;
-                if (hz > 0) {
-                  const fi = ((hyRow - 1) * W + x) << 2;
-                  cr += (bg[fi] - cr) * hz;
-                  cg += (bg[fi + 1] - cg) * hz;
-                  cb += (bg[fi + 2] - cb) * hz;
-                }
-              } else {
-                const wv = wetV[x],
-                  span = wv - fv,
-                  f = span > 0.0005 ? clamp((v - fv) / span, 0, 1) : 1;
-                const dk = sstep(0.8, 1, v);
-                cr = 216 - 40 * dk;
-                cg = 202 - 42 * dk;
-                cb = 176 - 42 * dk;
-                const tex =
-                  (vn(x * 0.16, y * 0.3) - 0.5) * 20 +
-                  (vn(x * 0.7 + 9, y * 1.1 + 3) - 0.5) * 8;
-                cr += tex;
-                cg += tex;
-                cb += tex * 0.9;
-                const peb =
-                  sstep(0.74, 0.82, vn(x * 0.3 + 31, y * 0.5 + 17)) *
-                  (0.25 + 0.75 * dk);
-                cr -= peb * 22;
-                cg -= peb * 24;
-                cb -= peb * 24;
-                if (v < wv) {
-                  const wet = 1 - sstep(0.5, 1, f);
-                  if (wet > 0) {
-                    cr *= 1 - 0.28 * wet;
-                    cg *= 1 - 0.27 * wet;
-                    cb *= 1 - 0.34 * wet;
-                    const sh = wet * (1 - f) * 0.4 * (1 - dk * 0.5);
-                    cr += (232 - cr) * sh;
-                    cg += (226 - cg) * sh;
-                    cb += (212 - cb) * sh;
-                  }
-                }
-                const rf = clamp(span * 70, 0, 1) * (1 - f);
-                if (rf > 0) {
-                  const lc = clamp(
-                      (vn(x * 0.28 + t * 0.015, y * 0.55) - (0.36 + 0.42 * f)) *
-                        5,
-                      0,
-                      1,
-                    ),
-                    fa = rf * lc * 0.9;
-                  cr += (244 - cr) * fa;
-                  cg += (240 - cg) * fa;
-                  cb += (228 - cb) * fa;
-                }
+              const ampB = H * Lr.ampF * surge;
+              const c = Lr.c0 + Lr.cA * Math.sin(t * Lr.cW + Lr.cP);
+              const tiltK = Lr.tilt * Math.cos(t * Lr.tiltW + Lr.tiltP);
+              ctx.beginPath();
+              let x = 0,
+                first = true;
+              for (;;) {
+                const xn = x / W;
+                const env =
+                  0.5 + 0.5 * noise(xn * Lr.envF - t * Lr.envV + Lr.seed);
+                const A =
+                  ampB *
+                  (0.3 + 0.95 * Math.pow(env, 1.35)) *
+                  (1 + tiltK * (2 * xn - 1));
+                const warp =
+                  noise(xn * Lr.warpF - t * Lr.warpV + Lr.seed * 1.7) *
+                  Lr.warpA;
+                const xx = x + (c * x * x) / (2 * W);
+                const th1 =
+                  TAU * (xx / (Lr.L1 * W) - (t * Lr.v1) / Lr.L1) + Lr.p1 + warp;
+                const th2 =
+                  TAU * (xx / (Lr.L2 * W) - (t * Lr.v2) / Lr.L2) +
+                  Lr.p2 +
+                  warp * 0.6;
+                const th3 =
+                  TAU * (xx / (Lr.L3 * W) - (t * Lr.v3) / Lr.L3) + Lr.p3;
+                const y =
+                  baseY -
+                  A *
+                    (sh(th1, Lr.shape) +
+                      0.32 * sh(th2, Lr.shape * 0.7) +
+                      0.1 * Math.sin(th3));
+                if (first) {
+                  ctx.moveTo(x, y);
+                  first = false;
+                } else ctx.lineTo(x, y);
+                if (x >= W) break;
+                x = Math.min(W, x + dx);
               }
-              d[i] = cr;
-              d[i + 1] = cg;
-              d[i + 2] = cb;
+              ctx.lineTo(W, H + 4);
+              ctx.lineTo(0, H + 4);
+              ctx.closePath();
+              const pc = PAL[Lr.hue],
+                dk = 1 - 0.62 * d;
+              const lg = ctx.createLinearGradient(
+                0,
+                baseY - ampB * 1.3,
+                0,
+                baseY + H * 0.3,
+              );
+              lg.addColorStop(
+                0,
+                "rgba(" +
+                  ((pc[0] * dk) | 0) +
+                  "," +
+                  ((pc[1] * dk) | 0) +
+                  "," +
+                  ((pc[2] * dk) | 0) +
+                  "," +
+                  (0.8 - 0.16 * d).toFixed(2) +
+                  ")",
+              );
+              lg.addColorStop(
+                0.55,
+                "rgba(" +
+                  ((pc[0] * 0.22 * dk) | 0) +
+                  "," +
+                  ((pc[1] * 0.22 * dk) | 0) +
+                  "," +
+                  ((pc[2] * 0.22 * dk) | 0) +
+                  ",.9)",
+              );
+              lg.addColorStop(1, "rgba(6,4,5,.96)");
+              ctx.fillStyle = lg;
+              ctx.fill();
+              ctx.globalCompositeOperation = "lighter";
+              const gg = ctx.createLinearGradient(
+                  0,
+                  baseY - ampB * 1.7,
+                  0,
+                  baseY - ampB * 0.3,
+                ),
+                ga = (0.26 - 0.17 * d).toFixed(3);
+              gg.addColorStop(0, "rgba(214,128,76," + ga + ")");
+              gg.addColorStop(1, "rgba(214,128,76,0)");
+              ctx.fillStyle = gg;
+              ctx.fill();
+              ctx.globalCompositeOperation = "source-over";
             }
+            let fg = ctx.createLinearGradient(0, H * 0.55, 0, H);
+            fg.addColorStop(0, "rgba(0,0,0,0)");
+            fg.addColorStop(1, "rgba(0,0,0,.55)");
+            ctx.fillStyle = fg;
+            ctx.fillRect(0, H * 0.55, W, H * 0.45);
+            fg = ctx.createLinearGradient(0, 0, 0, H * 0.32);
+            fg.addColorStop(0, "rgba(0,0,0,.4)");
+            fg.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = fg;
+            ctx.fillRect(0, 0, W, H * 0.32);
           }
-        }
+          function frame(now) {
+            raf(frame);
+            if (!active) return;
+            let dt = (now - last) / 1000;
+            last = now;
+            if (!(dt > 0)) dt = 0.016;
+            dt = Math.min(dt, 0.05);
+            t += dt;
+            ema = ema * 0.95 + dt * 1000 * 0.05;
+            if (ema > 30) {
+              if (++slow > 150 && Q > 0.55) {
+                Q *= 0.82;
+                slow = 0;
+                ema = 16;
+                resize();
+              }
+            } else slow = 0;
+            draw();
+          }
+          resize();
+          raf(frame);
+          return {
+            resize,
+            setActive(b) {
+              active = b;
+              last = performance.now();
+            },
+          };
+        })();
 
-        /* ---------- main loop ---------- */
-        const t0 = performance.now();
-        let lastFrame = 0,
-          avgMs = 16,
-          slow = 0;
-        function loop(now) {
-          requestAnimationFrame(loop);
-          if (now - lastFrame < 32) return;
-          const dt = Math.min(0.1, (now - lastFrame) / 1000);
-          lastFrame = now;
-          const t = (now - t0) / 1000,
-            s0 = performance.now();
-          render(t, dt);
-          sctx.putImageData(img, 0, 0);
-          const ms = performance.now() - s0;
-          avgMs = avgMs * 0.9 + ms * 0.1;
-          if (avgMs > 26 && scaleLong > 360) {
-            if (++slow > 20) {
-              slow = 0;
-              scaleLong *= 0.82;
-              setup();
-            }
-          } else slow = 0;
-          audioUpdate();
-        }
-
-        /* ---------- lens dirt ---------- */
-        const dirt = $("#dirt");
-        function buildDirt() {
-          const w = (dirt.width = Math.ceil(innerWidth / 2)),
-            h = (dirt.height = Math.ceil(innerHeight / 2)),
-            c = dirt.getContext("2d");
-          c.clearRect(0, 0, w, h);
-          const R = mulberry32(7),
-            r = (a, b) => a + R() * (b - a),
-            s = Math.sqrt(w * h) / 620,
-            M = Math.max(w, h);
-          for (let i = 0; i < 14; i++) {
-            const x = r(0, w),
-              y = r(0, h),
-              rad = r(0.08, 0.32) * M,
-              a = r(0.04, 0.14),
-              gr = c.createRadialGradient(x, y, 0, x, y, rad);
-            gr.addColorStop(0, `rgba(255,248,232,${a})`);
-            gr.addColorStop(1, "rgba(255,248,232,0)");
-            c.fillStyle = gr;
-            c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
-          }
-          for (let i = 0; i < 12; i++) {
-            const x = R() < 0.5 ? r(-0.05, 0.22) * w : r(0.78, 1.05) * w,
-              y = r(-0.05, 1.05) * h,
-              rad = r(0.06, 0.2) * M,
-              a = r(0.05, 0.13),
-              gr = c.createRadialGradient(x, y, 0, x, y, rad);
-            gr.addColorStop(0, `rgba(118,100,76,${a})`);
-            gr.addColorStop(1, "rgba(118,100,76,0)");
-            c.fillStyle = gr;
-            c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
-          }
-          c.lineCap = "round";
-          for (let i = 0; i < 8; i++) {
-            c.strokeStyle = `rgba(255,250,238,${r(0.03, 0.08)})`;
-            c.lineWidth = r(10, 38) * s;
-            c.beginPath();
-            const x0 = r(0, w),
-              y0 = r(0, h);
-            c.moveTo(x0, y0);
-            c.bezierCurveTo(
-              x0 + r(-120, 120),
-              y0 + r(-80, 80),
-              x0 + r(-200, 200),
-              y0 + r(-120, 120),
-              x0 + r(-260, 260),
-              y0 + r(-160, 160),
-            );
-            c.stroke();
-          }
-          for (let i = 0; i < 260; i++) {
-            const x = r(0, w),
-              y = r(0, h),
-              rad = Math.pow(R(), 3) * 3.2 * s + 0.4,
-              dark = R() < 0.6;
-            c.fillStyle = dark
-              ? `rgba(66,56,46,${r(0.08, 0.34)})`
-              : `rgba(255,252,244,${r(0.18, 0.5)})`;
-            c.beginPath();
-            c.arc(x, y, rad, 0, TAU);
-            c.fill();
-          }
-          for (let i = 0; i < 8; i++) {
-            c.strokeStyle = `rgba(60,52,44,${r(0.12, 0.28)})`;
-            c.lineWidth = r(0.4, 0.9);
-            c.beginPath();
-            const x0 = r(0, w),
-              y0 = r(0, h);
-            c.moveTo(x0, y0);
-            c.quadraticCurveTo(
-              x0 + r(-60, 60) * s,
-              y0 + r(-60, 60) * s,
-              x0 + r(-110, 110) * s,
-              y0 + r(-70, 70) * s,
-            );
-            c.stroke();
-          }
-          for (let i = 0; i < 6; i++) {
-            const x = r(0, w),
-              y = r(0, h),
-              rad = r(6, 26) * s;
-            c.strokeStyle = `rgba(255,250,240,${r(0.05, 0.12)})`;
-            c.lineWidth = r(1, 3);
-            c.beginPath();
-            c.arc(x, y, rad, 0, TAU);
-            c.stroke();
-            c.fillStyle = `rgba(255,250,240,${r(0.02, 0.05)})`;
-            c.fill();
-          }
-        }
-
-        /* ---------- title glitch ---------- */
-        const letters = [...document.querySelectorAll("#title span")],
-          base = letters.map((s) => s.textContent);
-        let burstUntil = 0;
-        function fixWidths() {
-          letters.forEach((s, i) => {
-            s.style.width = "";
-            s.textContent = base[i];
+        /* ================= TITLE ================= */
+        const Title = (() => {
+          const el = $("#title"),
+            word = "HARBOR";
+          const letters = Array.from(word).map((c) => {
+            const s = document.createElement("span");
+            s.className = "l";
+            s.textContent = c;
+            s.dataset.c = c;
+            s.setAttribute("aria-hidden", "true");
+            el.appendChild(s);
+            return s;
           });
-          letters.forEach((s) => {
-            s.style.width = Math.ceil(s.getBoundingClientRect().width) + "px";
-          });
-        }
-        function flick(i) {
-          const s = letters[i];
-          if (s._b) return;
-          s._b = true;
-          let k = 0;
-          const steps = 1 + ((Math.random() * 3) | 0);
-          (function step() {
-            if (k < steps) {
-              s.textContent = pick(SYM);
-              s.classList.add("g");
-              s.style.setProperty("--gx", rnd(-4, 4) + "px");
-              s.style.setProperty("--gy", rnd(-3, 3) + "px");
-              s.style.setProperty("--gs", rnd(-9, 9) + "deg");
-              k++;
-              setTimeout(step, rnd(40, 140));
-            } else {
-              s.textContent = base[i];
-              s.classList.remove("g");
-              s._b = false;
+          const S = letters.map(() => ({
+            gx: 0,
+            gy: 0,
+            ox: 0,
+            oy: 0,
+            fx: 0,
+            fy: 0,
+            fr: 0,
+            gone: false,
+            falling: false,
+          }));
+          const T = {
+            dx: 0,
+            dy: 0,
+            sk: 0,
+            sx: 1,
+            sy: 1,
+            kx: 1,
+            ky: 1,
+            ga: 0,
+            gx: 0,
+          };
+          const applyL = (i) => {
+            const s = S[i];
+            letters[i].style.transform =
+              "translate3d(" +
+              (s.gx + s.ox + s.fx).toFixed(2) +
+              "px," +
+              (s.gy + s.oy + s.fy).toFixed(2) +
+              "px,0) rotate(" +
+              s.fr.toFixed(2) +
+              "deg)";
+          };
+          const render = () => {
+            el.style.transform =
+              "translate3d(" +
+              T.dx.toFixed(2) +
+              "px," +
+              T.dy.toFixed(2) +
+              "px,0) skewX(" +
+              T.sk.toFixed(2) +
+              "deg) scale(" +
+              (T.kx * T.sx).toFixed(4) +
+              "," +
+              (T.ky * T.sy).toFixed(4) +
+              ")";
+            el.style.setProperty("--gx", T.gx.toFixed(2) + "px");
+            el.style.setProperty("--ga", T.ga.toFixed(3));
+            el.style.setProperty("--ga2", (T.ga * 0.7).toFixed(3));
+          };
+          function measure() {
+            if (state.void) return;
+            letters.forEach((l) => {
+              l.style.width = "";
+            });
+            letters.forEach((l) => {
+              const w = l.getBoundingClientRect().width;
+              if (w > 0) l.style.width = Math.ceil(w) + "px";
+            });
+          }
+          const SYMS = GL.filter((c) => !/[\u0300-\u036f]/.test(c));
+          function glitchLetter(i) {
+            const s = S[i],
+              el_ = letters[i];
+            if (s.gone || s.falling || el_._busy) return;
+            el_._busy = true;
+            const steps = rint(1, 3);
+            let n = 0;
+            const step = () => {
+              if (s.gone) {
+                el_._busy = false;
+                return;
+              }
+              if (n < steps) {
+                el_.textContent = pick(SYMS);
+                el_.classList.add("gl");
+                s.gx = rnd(-2.5, 2.5);
+                s.gy = rnd(-1.8, 1.8);
+                applyL(i);
+                n++;
+                setTimeout(step, rnd(40, 115));
+              } else {
+                el_.textContent = el_.dataset.c;
+                el_.classList.remove("gl");
+                s.gx = s.gy = 0;
+                applyL(i);
+                el_._busy = false;
+              }
+            };
+            step();
+          }
+          function clearFx() {
+            T.dx = T.dy = T.sk = 0;
+            T.sx = T.sy = 1;
+            T.ga = 0;
+            T.gx = 0;
+            el.style.opacity = "";
+            S.forEach((s, i) => {
+              s.ox = s.oy = 0;
+              applyL(i);
+            });
+            render();
+          }
+          function runFx(dur, fn) {
+            return new Promise((res) => {
+              const t0 = performance.now(),
+                seed = Math.random() * 500;
+              const f = (now) => {
+                const u = (now - t0) / dur;
+                if (u >= 1) {
+                  clearFx();
+                  res();
+                  return;
+                }
+                fn(u, now, seed);
+                render();
+                S.forEach((_, i) => applyL(i));
+                raf(f);
+              };
+              raf(f);
+            });
+          }
+          const FX = {
+            shiver() {
+              return (u, now, seed) => {
+                const e = Math.pow(1 - u, 1.4),
+                  n = (k, sp) => noise(seed + k + now * (sp || 0.05));
+                T.dx = n(0) * 3.4 * e;
+                T.dy = n(10) * 1.8 * e;
+                T.sk = n(20, 0.03) * 2.4 * e;
+                T.gx = Math.abs(n(30)) * 4.5 * e;
+                T.ga = 0.65 * e;
+                S.forEach((s, i) => {
+                  s.oy = n(40 + i * 7) * 2.6 * e;
+                  s.ox = n(90 + i * 5) * 1.6 * e;
+                });
+              };
+            },
+            jump() {
+              const tx = (Math.random() < 0.5 ? -1 : 1) * rnd(24, 110),
+                ty = rnd(-36, 36);
+              return (u, now, seed) => {
+                let p;
+                if (u < 0.12) p = E.out(u / 0.12);
+                else if (u < 0.72) p = 1;
+                else p = 1 - E.io((u - 0.72) / 0.28);
+                const j = u < 0.72 ? noise(seed + now * 0.08) * 4 : 0;
+                T.dx = tx * p + j;
+                T.dy = ty * p + j * 0.4;
+                T.gx = 1 + Math.abs(tx) * 0.1 * p;
+                T.ga = 0.6 * p;
+              };
+            },
+            stretch() {
+              const f = rnd(2, 4.5),
+                a = rnd(0.1, 0.22);
+              return (u) => {
+                const e = Math.sin(Math.PI * u),
+                  w = Math.sin(u * Math.PI * f);
+                T.sx = 1 + a * w * e;
+                T.sy = 1 - a * 0.18 * w * e;
+                T.gx = 2.6 * Math.abs(w) * e;
+                T.ga = 0.45 * e;
+                S.forEach((s, i) => {
+                  s.ox = (i - 2.5) * w * e * 14;
+                });
+              };
+            },
+            tear() {
+              let last = -1,
+                rs = S.map(() => [0, 0]);
+              return (u, now) => {
+                const st = Math.floor(now / 65);
+                if (st !== last) {
+                  last = st;
+                  rs = S.map(() => [rnd(-1, 1), rnd(-1, 1)]);
+                }
+                const e = Math.sin(Math.PI * Math.min(1, u * 1.1));
+                S.forEach((s, i) => {
+                  s.oy = rs[i][0] * 7 * e;
+                  s.ox = rs[i][1] * 5 * e;
+                });
+                T.dx = rs[0][1] * 3 * e;
+                T.gx = 5 * e;
+                T.ga = 0.6 * e;
+              };
+            },
+            flicker() {
+              return (u, now, seed) => {
+                const v = noise(seed + now * 0.045),
+                  e = 1 - u;
+                el.style.opacity = v > 0.3 ? 1 : v > -0.15 ? 0.55 : 0.2;
+                T.dx = v * 3 * e;
+                T.gx = 3 * e;
+                T.ga = 0.4 * e;
+              };
+            },
+          };
+          const DUR = {
+            shiver: () => rnd(380, 950),
+            jump: () => rnd(180, 440),
+            stretch: () => rnd(450, 950),
+            tear: () => rnd(280, 640),
+            flicker: () => rnd(320, 720),
+          };
+          function effect(kind) {
+            state.fx = true;
+            return runFx(DUR[kind](), FX[kind]()).then(() => {
+              state.fx = false;
+            });
+          }
+          const pickKind = () => {
+            const k = Math.random();
+            return k < 0.3
+              ? "shiver"
+              : k < 0.52
+                ? "jump"
+                : k < 0.7
+                  ? "stretch"
+                  : k < 0.9
+                    ? "tear"
+                    : "flicker";
+          };
+          function reset() {
+            T.dx = T.dy = T.sk = 0;
+            T.sx = T.sy = T.kx = T.ky = 1;
+            T.ga = 0;
+            T.gx = 0;
+            el.style.opacity = "";
+            S.forEach((s, i) => {
+              Object.assign(s, {
+                gx: 0,
+                gy: 0,
+                ox: 0,
+                oy: 0,
+                fx: 0,
+                fy: 0,
+                fr: 0,
+                gone: false,
+                falling: false,
+              });
+              letters[i].style.visibility = "";
+              letters[i].textContent = letters[i].dataset.c;
+              letters[i].classList.remove("gl");
+              letters[i]._busy = false;
+              applyL(i);
+            });
+            render();
+          }
+          (async () => {
+            for (;;) {
+              await sleep(state.shake ? rnd(160, 700) : rnd(380, 1900));
+              if (document.hidden) continue;
+              const n = Math.random() < 0.18 ? rint(2, 3) : 1;
+              for (let k = 0; k < n; k++) glitchLetter(rint(0, 5));
             }
           })();
-        }
-        function glitchTick() {
-          const burst = performance.now() < burstUntil,
-            n = burst
-              ? 1 + ((Math.random() * 3) | 0)
-              : Math.random() < 0.25
-                ? 2
-                : 1;
-          for (let k = 0; k < n; k++)
-            flick((Math.random() * letters.length) | 0);
-          setTimeout(glitchTick, burst ? rnd(70, 260) : rnd(800, 2800));
-        }
+          (async () => {
+            for (;;) {
+              await sleep(rnd(5500, 16000));
+              if (state.void || state.fx || document.hidden) continue;
+              await effect(pickKind());
+              if (Math.random() < 0.25 && !state.void) {
+                await sleep(rnd(120, 420));
+                await effect(pickKind());
+              }
+            }
+          })();
+          render();
+          return {
+            el,
+            T,
+            S,
+            letters,
+            render,
+            applyL,
+            measure,
+            effect,
+            reset,
+            glitchLetter,
+          };
+        })();
 
-        /* ---------- loader ---------- */
-        const loader = $(".loader"),
-          fill = $(".bar i"),
-          pctEl = $(".pct"),
-          msgEl = $(".msg");
-        const nextLoad = bag(LOAD),
-          nextErr = bag(ERR);
-        let st = "load",
-          p = 0,
-          failAt = rnd(7, 96),
-          baseSpeed = rnd(1.3, 2.6),
-          seed = rnd(0, 100),
-          msgAt = 0,
-          phaseEnd = 0,
-          flickNext = 0,
-          lastUi = performance.now();
-        function setMsg(txt, instant) {
-          if (instant) {
-            msgEl.textContent = txt;
-            msgEl.style.opacity = 0.85;
-            return;
+        /* ================= CRYPTIC MESSAGES ================= */
+        const Msgs = (() => {
+          const host = $("#cryptic"),
+            active = new Set();
+          let running = false,
+            token = 0;
+          const SCRIPTS = [
+            [0x16a0, 0x16ea],
+            [0x2800, 0x28ff],
+            [0xac00, 0xd7a3],
+            [0x4e00, 0x9fa5],
+            [0x0410, 0x044f],
+            [0x03b1, 0x03c9],
+            [0x1200, 0x1248],
+            [0x1401, 0x1450],
+            [0x10d0, 0x10f0],
+            [0x0531, 0x0556],
+            [0x05d0, 0x05ea],
+          ];
+          const OPS = [
+            " — ",
+            " / ",
+            " :: ",
+            " … ",
+            " ∴ ",
+            " ⟶ ",
+            " ⊢ ",
+            " ⇒ ",
+            " ∷ ",
+          ];
+          function glosso() {
+            const sc = pick(SCRIPTS),
+              cjk = sc[0] === 0xac00 || sc[0] === 0x4e00 || sc[0] === 0x2800,
+              nw = rint(3, 9),
+              ws = [];
+            for (let w = 0; w < nw; w++) {
+              let s = "";
+              const len = cjk ? rint(2, 6) : rint(2, 7);
+              for (let k = 0; k < len; k++)
+                s += String.fromCodePoint(rint(sc[0], sc[1]));
+              ws.push(s);
+            }
+            return {
+              t: ws.join(cjk && Math.random() < 0.5 ? "" : " "),
+              rtl: sc[0] === 0x05d0,
+              c: "x",
+            };
           }
-          msgEl.style.opacity = 0;
-          setTimeout(() => {
-            msgEl.textContent = txt;
-            msgEl.style.opacity = 0.85;
-          }, 460);
-        }
-        function showP() {
-          fill.style.width = p.toFixed(2) + "%";
-          pctEl.textContent = Math.floor(p) + "%";
-        }
-        function uiLoop(now) {
-          requestAnimationFrame(uiLoop);
-          const dt = Math.min(0.1, (now - lastUi) / 1000);
-          lastUi = now;
-          if (st === "load") {
-            const f = vn(now * 0.00035 + seed, 2),
-              sp = baseSpeed * Math.pow(clamp(f * 2, 0.08, 1.8), 1.5);
-            p += sp * dt;
-            if (now > msgAt) {
-              setMsg(nextLoad());
-              msgAt = now + rnd(2800, 5200);
-            }
-            if (p >= failAt) {
-              p = failAt;
-              st = "flick";
-              phaseEnd = now + rnd(700, 1100);
-              flickNext = now;
-              burstUntil = now + 1500;
-              setMsg(nextErr());
-            }
-            showP();
-          } else if (st === "flick") {
-            if (now >= flickNext) {
-              loader.classList.toggle("bad");
-              flickNext = now + rnd(50, 150);
-            }
-            if (now >= phaseEnd) {
-              loader.classList.add("bad");
-              st = "err";
-              phaseEnd = now + rnd(2800, 4200);
-            }
-          } else if (st === "err") {
-            if (now >= phaseEnd) {
-              st = "reset";
-              phaseEnd = now + 1100;
-              msgEl.style.opacity = 0;
-              fill.style.transition = "width .9s ease";
-              p = 0;
-              showP();
-            }
-          } else if (st === "reset") {
-            if (now >= phaseEnd) {
-              loader.classList.remove("bad");
-              fill.style.transition = "";
-              st = "load";
-              failAt = rnd(7, 96);
-              baseSpeed = rnd(1.3, 2.6);
-              seed = rnd(0, 100);
-              msgAt = 0;
-            }
+          function stamp() {
+            const r = Math.random();
+            return r < 0.2
+              ? "⟦" + hex(4) + "⟧"
+              : r < 0.4
+                ? "Δ" + rint(1, 999)
+                : r < 0.55
+                  ? "№ " + rint(1, 9999)
+                  : r < 0.7
+                    ? (Math.random() * 90).toFixed(2) +
+                      "°N " +
+                      (Math.random() * 180).toFixed(2) +
+                      "°E"
+                    : r < 0.85
+                      ? "T−" + rint(1, 99) + ":" + rint(10, 59)
+                      : "0x" + hex(6);
           }
-        }
-
-        /* ---------- ghosts ---------- */
-        const ghostsEl = $("#ghosts"),
-          nextGhost = bag(GHOST);
-        let active = 0;
-        const maxGhosts = () =>
-          clamp(Math.round((innerWidth * innerHeight) / 110000), 6, 18);
-        function spawnGhost() {
-          if (document.hidden) return;
-          const el = document.createElement("div"),
-            txt = nextGhost();
-          el.className = "ghost";
-          el.textContent = txt;
-          el.dir = "auto";
-          el.style.fontSize = rnd(11, 20).toFixed(1) + "px";
-          el.style.letterSpacing = rnd(0.02, 0.2).toFixed(3) + "em";
-          if (Math.random() < 0.35) el.style.fontStyle = "normal";
-          el.style.setProperty("--o", rnd(0.38, 0.78).toFixed(2));
-          el.style.setProperty("--gc", pick(GLOW));
-          el.style.setProperty("--gd", rnd(2.4, 6.5).toFixed(2) + "s");
-          el.style.setProperty("--dl", (-rnd(0, 6)).toFixed(2) + "s");
-          el.style.setProperty("--gg", rnd(3, 7).toFixed(2) + "s");
-          el.style.setProperty("--dl2", (-rnd(0, 6)).toFixed(2) + "s");
-          el.style.rotate = rnd(-2.2, 2.2).toFixed(2) + "deg";
-          ghostsEl.appendChild(el);
-          const vw = innerWidth,
-            vh = innerHeight,
-            w = el.offsetWidth,
-            h = el.offsetHeight;
-          let x = 8,
-            y = 8;
-          for (let k = 0; k < 14; k++) {
-            x = w < vw - 16 ? rnd(8, vw - w - 8) : 8;
-            y = rnd(8, Math.max(9, vh - h - 8));
-            const inC =
-              x + w > vw * 0.2 &&
-              x < vw * 0.8 &&
-              y + h > vh * 0.3 &&
-              y < vh * 0.76;
-            if (!inC) break;
+          function compose() {
+            const L = pick(LANGS),
+              mix = Math.random() < 0.16;
+            const S = (k) => {
+              const l = mix && Math.random() < 0.65 ? pick(LANGS) : L;
+              return {
+                t: k === "h" ? pick(l.h) : k === "t" ? pick(l.t) : l.s,
+                rtl: l.rtl,
+                c: l.c,
+              };
+            };
+            const C = (o) => ({ t: cap(o.t), rtl: o.rtl, c: o.c });
+            const r = Math.random();
+            let p;
+            if (r < 0.2) p = [S("h"), pick(OPS), S("t")];
+            else if (r < 0.3) p = ["¬ ", S("h"), " ⇒ ", S("t")];
+            else if (r < 0.38) p = ["⟦ ", S("h"), " ⟧ ⊢ ⟦ ", S("t"), " ⟧"];
+            else if (r < 0.46) p = [S("h"), " / ", S("t"), " / ", S("s")];
+            else if (r < 0.53) p = [S("s"), " … ", S("h"), " … ", S("t")];
+            else if (r < 0.6) p = ["「", S("h"), "」→「", S("t"), "」"];
+            else if (r < 0.67) p = [C(S("h")), ". ", C(S("t")), "."];
+            else if (r < 0.75) p = [S("h"), " ⊕ ", S("h"), " ⇒ ", S("t")];
+            else if (r < 0.82)
+              p = [S("h"), " — ", S("h"), " — ", S("t"), " — ", S("s")];
+            else if (r < 0.87)
+              p = [String(rint(1, 99)).padStart(2, "0") + " · ", S("h")];
+            else if (r < 0.91) p = [S("s")];
+            else if (r < 0.94) p = [C(S("t"))];
+            else if (r < 0.97) p = [glosso()];
+            else p = [glosso(), " ∴ ", S("h")];
+            if (Math.random() < 0.22) {
+              const st = stamp();
+              if (Math.random() < 0.5) p.unshift(st + "  ");
+              else p.push("  " + st);
+            }
+            return p;
           }
-          el.style.left = x + "px";
-          el.style.top = y + "px";
-          let iv = 0;
-          if (Math.random() < 0.3) {
-            const orig = [...txt];
-            iv = setInterval(
-              () => {
-                if (!el.isConnected) return;
-                const a = orig.slice(),
-                  j = (Math.random() * a.length) | 0;
-                a[j] = pick(SYM);
-                el.textContent = a.join("");
-                setTimeout(
+          const maxA = () => (innerWidth < 700 ? 3 : 6);
+          function overlaps(a, b) {
+            return !(a.r < b.l || a.l > b.r || a.b < b.t || a.t > b.b);
+          }
+          function avoidRect() {
+            const tr = $("#title").getBoundingClientRect(),
+              lr = $("#loader").getBoundingClientRect();
+            return {
+              l: tr.left - 28,
+              r: tr.right + 28,
+              t: tr.top - 28,
+              b: Math.max(tr.bottom, lr.bottom) + 28,
+            };
+          }
+          function spawn() {
+            const segs = [],
+              m = document.createElement("div"),
+              mi = document.createElement("div"),
+              mj = document.createElement("div");
+            m.className = "msg";
+            mi.className = "mi";
+            mj.className = "mj";
+            const parts = compose();
+            let n = 0,
+              allRtl = true,
+              c0 = null,
+              same = true;
+            for (const p of parts) {
+              if (typeof p === "string") {
+                mj.appendChild(document.createTextNode(p));
+                n += p.length;
+                continue;
+              }
+              const s = document.createElement("span");
+              s.dir = p.rtl ? "rtl" : "ltr";
+              s.style.unicodeBidi = "isolate";
+              s.textContent = p.t;
+              mj.appendChild(s);
+              segs.push({ el: s, t: p.t });
+              n += p.t.length;
+              if (!p.rtl) allRtl = false;
+              if (c0 === null) c0 = p.c;
+              else if (c0 !== p.c) same = false;
+            }
+            mj.dir = allRtl && same && segs.length ? "rtl" : "ltr";
+            let fs;
+            const r = Math.random();
+            if (n > 140) fs = rnd(11, 15);
+            else if (n > 80) fs = rnd(12, 19);
+            else
+              fs =
+                r < 0.55 ? rnd(12, 18) : r < 0.85 ? rnd(16, 26) : rnd(26, 44);
+            m.style.fontFamily = pick(FONTS);
+            m.style.fontSize = fs.toFixed(1) + "px";
+            m.style.fontWeight = pick([300, 400, 400, 400, 500, 700]);
+            if (Math.random() < 0.22) m.style.fontStyle = "italic";
+            if (Math.random() < 0.14) m.style.textTransform = "uppercase";
+            if (Math.random() < 0.08) m.style.fontVariant = "small-caps";
+            m.style.letterSpacing = pick([
+              "-0.01em",
+              "0",
+              "0",
+              "0.02em",
+              "0.06em",
+              "0.12em",
+              "0.22em",
+              "0.34em",
+            ]);
+            m.style.textAlign = Math.random() < 0.5 ? "center" : "start";
+            m.style.maxWidth = "min(78vw," + rint(280, 620) + "px)";
+            if (n < 48 && Math.random() < 0.06) {
+              mj.style.writingMode = "vertical-rl";
+              m.style.maxWidth = "none";
+              mj.style.maxHeight = "62vh";
+            }
+            if (Math.random() < 0.1)
+              m.style.transform = "rotate(" + rnd(-3, 3).toFixed(2) + "deg)";
+            if (Math.random() < 0.04) mi.style.transform = "scaleX(-1)";
+            mi.appendChild(mj);
+            m.appendChild(mi);
+            host.appendChild(m);
+            const rc = m.getBoundingClientRect(),
+              vw = innerWidth,
+              vh = innerHeight,
+              pad = Math.min(24, vw * 0.04);
+            const av = avoidRect(),
+              others = [...active].map((e) => e.rect);
+            let best = null,
+              ok = false;
+            for (let k = 0; k < 12 && !ok; k++) {
+              const left =
+                  rc.width > vw - pad * 2 ? pad : rnd(pad, vw - rc.width - pad),
+                top =
+                  rc.height > vh - pad * 2
+                    ? pad
+                    : rnd(pad, vh - rc.height - pad);
+              const bx = {
+                l: left,
+                t: top,
+                r: left + rc.width,
+                b: top + rc.height,
+              };
+              best = bx;
+              if (!overlaps(bx, av) && !others.some((o) => overlaps(bx, o)))
+                ok = true;
+            }
+            m.style.left = best.l.toFixed(1) + "px";
+            m.style.top = best.t.toFixed(1) + "px";
+            const peak = rnd(0.28, 0.62) * (ok ? 1 : 0.6),
+              tin = rnd(1300, 2300),
+              hold = rnd(5000, 10000),
+              tout = rnd(1300, 2400);
+            const e = {
+              rect: best,
+              dead: false,
+              timers: [],
+              anim: null,
+              kill(ms) {
+                if (e.dead) return;
+                e.dead = true;
+                e.timers.forEach(clearTimeout);
+                try {
+                  if (e.anim) e.anim.cancel();
+                  const a = m.animate(
+                    [
+                      {
+                        opacity: parseFloat(getComputedStyle(m).opacity) || 0,
+                        filter: "blur(0px)",
+                      },
+                      { opacity: 0, filter: "blur(8px)" },
+                    ],
+                    { duration: ms, easing: "ease", fill: "forwards" },
+                  );
+                  a.onfinish = () => {
+                    m.remove();
+                    active.delete(e);
+                  };
+                } catch (_) {
+                  m.remove();
+                  active.delete(e);
+                }
+                setTimeout(() => {
+                  m.remove();
+                  active.delete(e);
+                }, ms + 80);
+              },
+            };
+            active.add(e);
+            const later = (fn, ms) => {
+              const id = setTimeout(() => {
+                if (!e.dead) fn();
+              }, ms);
+              e.timers.push(id);
+            };
+            try {
+              e.anim = m.animate(
+                [
+                  { opacity: 0, filter: "blur(10px)", offset: 0 },
+                  { opacity: peak * 0.5, filter: "blur(6px)", offset: 0.16 },
+                  { opacity: peak * 0.06, filter: "blur(7px)", offset: 0.24 },
+                  { opacity: peak * 0.85, filter: "blur(2px)", offset: 0.45 },
+                  { opacity: peak * 0.25, filter: "blur(2px)", offset: 0.54 },
+                  { opacity: peak, filter: "blur(0px)", offset: 1 },
+                ],
+                {
+                  duration: tin,
+                  easing: "cubic-bezier(.2,.7,.2,1)",
+                  fill: "forwards",
+                },
+              );
+            } catch (_) {
+              m.style.opacity = peak;
+            }
+            const micro = () => {
+              if (e.dead) return;
+              const r2 = Math.random();
+              if (r2 < 0.7 && segs.length) {
+                const s = pick(segs),
+                  chars = Array.from(s.t),
+                  k = Math.max(1, Math.round(chars.length * rnd(0.03, 0.12)));
+                for (let q = 0; q < k; q++) {
+                  const ix = rint(0, chars.length - 1);
+                  if (!/\s/.test(chars[ix])) chars[ix] = pick(GL);
+                }
+                s.el.textContent = chars.join("");
+                later(
                   () => {
-                    el.textContent = txt;
+                    s.el.textContent = s.t;
                   },
                   rnd(70, 170),
                 );
-              },
-              rnd(1400, 3200),
-            );
+              }
+              if (r2 > 0.5 || r2 < 0.15) {
+                const dx = rnd(-3, 3),
+                  sk = rnd(-4, 4);
+                try {
+                  mj.animate(
+                    [
+                      { transform: "none", textShadow: "none" },
+                      {
+                        transform:
+                          "translate(" + dx + "px,0) skewX(" + sk + "deg)",
+                        textShadow:
+                          "1.5px 0 rgba(170,50,40,.55),-1.5px 0 rgba(222,160,96,.4)",
+                      },
+                      {
+                        transform: "translate(" + -dx * 0.6 + "px,1px)",
+                        textShadow:
+                          "-1px 0 rgba(170,50,40,.4),1px 0 rgba(222,160,96,.3)",
+                      },
+                      { transform: "none", textShadow: "none" },
+                    ],
+                    { duration: rnd(110, 260), easing: "steps(4)" },
+                  );
+                } catch (_) {}
+              }
+              later(micro, rnd(600, 2400));
+            };
+            later(micro, tin + rnd(300, 1400));
+            later(() => {
+              try {
+                e.anim = m.animate(
+                  [
+                    { opacity: peak, filter: "blur(0px)" },
+                    { opacity: peak * 0.4, filter: "blur(4px)" },
+                    { opacity: 0, filter: "blur(9px)" },
+                  ],
+                  { duration: tout, easing: "ease-in", fill: "forwards" },
+                );
+                e.anim.onfinish = () => {
+                  e.dead = true;
+                  m.remove();
+                  active.delete(e);
+                };
+              } catch (_) {
+                e.kill(300);
+              }
+            }, tin + hold);
           }
-          active++;
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() => el.classList.add("on")),
-          );
-          setTimeout(
-            () => {
-              el.classList.remove("on");
-              setTimeout(() => {
-                clearInterval(iv);
-                el.remove();
-                active--;
-              }, 1600);
-            },
-            rnd(5000, 10000) + 1400,
-          );
-        }
-        function ghostLoop() {
-          if (active < maxGhosts()) spawnGhost();
-          setTimeout(ghostLoop, rnd(260, 780));
-        }
-
-        /* ---------- sound (synthesised, driven by the same wave state) ---------- */
-        const btn = $("#snd");
-        let ac = null,
-          master = null,
-          chans = [],
-          soundOn = false;
-        function mkBuf(type) {
-          const sr0 = ac.sampleRate,
-            len = sr0 * 8,
-            N = sr0 >> 1,
-            buf = ac.createBuffer(1, len, sr0),
-            out = buf.getChannelData(0);
-          if (type === "w") {
-            for (let i = 0; i < len; i++)
-              out[i] = (Math.random() * 2 - 1) * 0.5;
-            return buf;
-          }
-          const gen = new Float32Array(len + N);
-          let b = 0,
-            mx = 0;
-          for (let i = 0; i < len + N; i++) {
-            b = (b + 0.02 * (Math.random() * 2 - 1)) / 1.02;
-            gen[i] = b;
-            if (Math.abs(b) > mx) mx = Math.abs(b);
-          }
-          const k = 0.9 / mx;
-          for (let i = 0; i < len; i++) out[i] = gen[i] * k;
-          for (let i = 0; i < N; i++) {
-            const a = i / N;
-            out[i] = (gen[i] * a + gen[len + i] * (1 - a)) * k;
-          }
-          return buf;
-        }
-        function srcNode(buf) {
-          const s = ac.createBufferSource();
-          s.buffer = buf;
-          s.loop = true;
-          s.start(0, Math.random() * 6);
-          return s;
-        }
-        function bq(type, f, q) {
-          const n = ac.createBiquadFilter();
-          n.type = type;
-          n.frequency.value = f;
-          if (q) n.Q.value = q;
-          return n;
-        }
-        function initAudio() {
-          const AC = window.AudioContext || window.webkitAudioContext;
-          if (!AC) return false;
-          ac = new AC();
-          master = ac.createGain();
-          master.gain.value = 0;
-          master.connect(ac.destination);
-          const mer = ac.createChannelMerger(2);
-          mer.connect(master);
-          const bb = [mkBuf("b"), mkBuf("b"), mkBuf("b"), mkBuf("b")],
-            wb = [mkBuf("w"), mkBuf("w")];
-          for (let c = 0; c < 2; c++) {
-            const lp = bq("lowpass", 300, 0.6),
-              gr = ac.createGain();
-            gr.gain.value = 0;
-            srcNode(bb[c]).connect(lp);
-            lp.connect(gr);
-            gr.connect(mer, 0, c);
-            const hp = bq("highpass", 2400),
-              lp2 = bq("lowpass", 9000),
-              gh = ac.createGain();
-            gh.gain.value = 0;
-            srcNode(wb[c]).connect(hp);
-            hp.connect(lp2);
-            lp2.connect(gh);
-            gh.connect(mer, 0, c);
-            const lpa = bq("lowpass", 420),
-              ga = ac.createGain();
-            ga.gain.value = 0.08;
-            srcNode(bb[2 + c]).connect(lpa);
-            lpa.connect(ga);
-            ga.connect(mer, 0, c);
-            chans.push({ lp, gr, gh, ga });
-          }
-          return true;
-        }
-        const rushF = (t) =>
-          (t < 0.13
-            ? Math.sin(((t / 0.13) * Math.PI) / 2)
-            : Math.exp(-(t - 0.13) * 5)) +
-          (t > 0.78 ? Math.pow((t - 0.78) / 0.22, 2) * 0.55 : 0);
-        const fizzF = (t) =>
-          t > 0.16 && t < 0.88
-            ? Math.pow(Math.sin((Math.PI * (t - 0.16)) / 0.72), 1.5) * 0.6
-            : 0;
-        function audioUpdate() {
-          if (!ac || !soundOn) return;
-          const e = [0, 0, 0, 0];
-          for (let s = 0; s < 2; s++)
-            for (let k = 0; k < 5; k++) {
-              const x = Math.min(
-                  W - 1,
-                  (((s ? 0.55 : 0.08) + k * 0.09) * W) | 0,
-                ),
-                tau = colTau[x],
-                g = colG[x];
-              e[s * 2] += (rushF(tau) * g) / 5;
-              e[s * 2 + 1] += (fizzF(tau) * g) / 5;
+          async function loop(tk) {
+            await sleep(rnd(300, 1100));
+            while (running && tk === token) {
+              if (active.size < maxA()) spawn();
+              await sleep(rnd(900, 2600));
             }
-          const now = ac.currentTime;
-          for (let c = 0; c < 2; c++) {
-            const o = 1 - c;
-            const rv = clamp(0.75 * e[c * 2] + 0.25 * e[o * 2], 0, 1.2),
-              fv = clamp(0.75 * e[c * 2 + 1] + 0.25 * e[o * 2 + 1], 0, 1);
-            const ch = chans[c];
-            ch.gr.gain.setTargetAtTime(0.05 + 0.62 * rv, now, 0.08);
-            ch.lp.frequency.setTargetAtTime(
-              200 + 2600 * Math.pow(rv, 0.8),
-              now,
-              0.08,
+          }
+          return {
+            start() {
+              if (running) return;
+              running = true;
+              token++;
+              loop(token);
+            },
+            stop() {
+              running = false;
+              token++;
+              [...active].forEach((e) => e.kill(700));
+            },
+          };
+        })();
+
+        /* ================= LOADER ================= */
+        const Loader = (() => {
+          const box = $("#loader"),
+            fill = $("#fill"),
+            msg = $("#msg"),
+            pct = $("#pct"),
+            red = $("#redpulse");
+          const S = {
+            p: 0,
+            shown: 0,
+            target: 0,
+            base: 1.4,
+            state: "run",
+            stall: 0,
+            seed: rnd(0, 100),
+            paused: false,
+            msgAt: 0,
+            last: performance.now(),
+          };
+          const loadMsg = () => {
+            if (Math.random() < 0.3) return pick(LOAD_S);
+            return (
+              pick(LOAD_V) +
+              " " +
+              pick(LOAD_N).replace("N", rint(1, 99)) +
+              pick([
+                "…",
+                "…",
+                " [pending]",
+                " (again)",
+                " — do not interrupt",
+                " ░░▒",
+                " · n/a",
+                " ·· ··",
+                "",
+              ])
             );
-            ch.gh.gain.setTargetAtTime(0.01 + 0.11 * fv + 0.05 * rv, now, 0.1);
-            ch.ga.gain.setTargetAtTime(0.07 + 0.05 * rv, now, 0.3);
+          };
+          const errMsg = () =>
+            "ERR 0x" +
+            hex(4) +
+            " · " +
+            (Math.random() < 0.3
+              ? pick(ERR_S)
+              : cap(pick(ERR_N)) + " " + pick(ERR_P)) +
+            pick([
+              "",
+              "",
+              " — retry impossible",
+              " — do not retry",
+              " — it knows",
+              " [∅]",
+              " (3/3)",
+            ]);
+          function newTarget() {
+            S.target = Math.random() < 0.22 ? rnd(4, 24) : rnd(26, 97);
+            S.base = rnd(0.9, 2.1);
+            S.p = 0;
           }
-        }
-        async function toggleSound() {
-          if (!ac && !initAudio()) return;
-          soundOn = !soundOn;
-          if (soundOn) {
+          const flick = () => {
             try {
-              await ac.resume();
-            } catch (e) {}
-            master.gain.cancelScheduledValues(ac.currentTime);
-            master.gain.setTargetAtTime(0.85, ac.currentTime, 0.35);
-          } else {
-            master.gain.setTargetAtTime(0, ac.currentTime, 0.25);
-            setTimeout(() => {
-              if (!soundOn) ac.suspend();
-            }, 1600);
+              return box
+                .animate(
+                  [
+                    { opacity: 1 },
+                    { opacity: 0.2 },
+                    { opacity: 1 },
+                    { opacity: 0.05 },
+                    { opacity: 0.85 },
+                    { opacity: 0.3 },
+                    { opacity: 1 },
+                  ],
+                  { duration: rnd(380, 520), easing: "linear" },
+                )
+                .finished.catch(() => {});
+            } catch (_) {
+              return sleep(450);
+            }
+          };
+          const pulse = () => {
+            try {
+              red.animate(
+                [
+                  { opacity: 0 },
+                  { opacity: 1 },
+                  { opacity: 0.25 },
+                  { opacity: 0.9 },
+                  { opacity: 0 },
+                ],
+                { duration: 1100, easing: "ease-out" },
+              );
+            } catch (_) {}
+          };
+          async function fail() {
+            S.state = "err";
+            const e = errMsg();
+            const fp = flick();
+            await sleep(140);
+            box.classList.add("err");
+            scramble(msg, e, 380);
+            pulse();
+            if (!state.void && !state.fx) Title.effect("tear");
+            await fp;
+            await sleep(rnd(2100, 3500));
+            await flick();
+            box.classList.remove("err");
+            scramble(msg, "…", 300);
+            S.state = "drain";
+            const p0 = S.p;
+            await tween(1100, (u) => {
+              S.p = p0 * (1 - E.io(u));
+            });
+            await sleep(rnd(500, 1200));
+            newTarget();
+            S.state = "run";
+            S.msgAt = 0;
           }
-          btn.setAttribute("aria-pressed", String(soundOn));
-          btn.classList.toggle("on", soundOn);
-        }
-        btn.addEventListener("click", toggleSound);
-        addEventListener("keydown", (e) => {
-          if (e.key === "m" || e.key === "M") toggleSound();
-        });
-        document.addEventListener("visibilitychange", () => {
-          if (!ac || !soundOn) return;
-          if (document.hidden) ac.suspend();
-          else ac.resume();
+          function tick(now) {
+            raf(tick);
+            let dt = (now - S.last) / 1000;
+            S.last = now;
+            if (!(dt > 0)) dt = 0.016;
+            dt = Math.min(dt, 0.05);
+            if (S.paused) return;
+            if (S.state === "run") {
+              if (now > S.msgAt) {
+                scramble(msg, loadMsg(), 520);
+                S.msgAt = now + rnd(2600, 5200);
+              }
+              if (now >= S.stall) {
+                S.p +=
+                  S.base *
+                  (0.25 + 1.15 * (0.5 + 0.5 * noise(now * 0.00035 + S.seed))) *
+                  dt;
+                if (Math.random() < dt * 0.28) S.stall = now + rnd(600, 2400);
+              }
+              if (S.p >= S.target) {
+                S.p = S.target;
+                fail();
+              }
+            }
+            S.shown = lerp(S.shown, S.p, 1 - Math.exp(-dt * 9));
+            const jit = S.state === "err" ? rnd(-0.8, 0.8) : 0;
+            fill.style.transform =
+              "scaleX(" + clamp((S.shown + jit) / 100, 0, 1).toFixed(4) + ")";
+            pct.textContent = Math.round(S.shown) + "%";
+          }
+          newTarget();
+          raf(tick);
+          return {
+            busy: () => S.state !== "run",
+            pause() {
+              S.paused = true;
+            },
+            reset() {
+              S.p = S.shown = 0;
+              S.state = "run";
+              S.msgAt = 0;
+              S.stall = 0;
+              box.classList.remove("err");
+              newTarget();
+              S.paused = false;
+            },
+          };
+        })();
+
+        /* ================= SOUND ================= */
+        const Snd = (() => {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          let ctx = null,
+            master,
+            rvIn,
+            oceanBus,
+            droneBus,
+            binBus,
+            fxBus,
+            wash,
+            fizz,
+            droneG,
+            droneLP,
+            binR1,
+            binR2,
+            pinkB;
+          let on = false,
+            voidOn = false;
+          const timers = new Set();
+          const later = (fn, ms) => {
+            const id = setTimeout(() => {
+              timers.delete(id);
+              fn();
+            }, ms);
+            timers.add(id);
+          };
+          function noiseBuf(kind, sec) {
+            const sr = ctx.sampleRate,
+              n = (sr * sec) | 0,
+              pad = (sr * 0.4) | 0,
+              b = ctx.createBuffer(2, n, sr);
+            for (let c = 0; c < 2; c++) {
+              const tmp = new Float32Array(n + pad);
+              let last = 0,
+                b0 = 0,
+                b1 = 0,
+                b2 = 0;
+              for (let i = 0; i < tmp.length; i++) {
+                const w = Math.random() * 2 - 1;
+                if (kind === "brown") {
+                  last = (last + 0.02 * w) / 1.02;
+                  tmp[i] = last * 3.5;
+                } else {
+                  b0 = 0.99765 * b0 + w * 0.099046;
+                  b1 = 0.963 * b1 + w * 0.2965164;
+                  b2 = 0.57 * b2 + w * 1.0526913;
+                  tmp[i] = (b0 + b1 + b2 + w * 0.1848) * 0.22;
+                }
+              }
+              const d = b.getChannelData(c);
+              for (let i = 0; i < n; i++) d[i] = tmp[i];
+              for (let i = 0; i < pad; i++) {
+                const f = i / pad;
+                d[i] = d[i] * f + tmp[n + i] * (1 - f);
+              }
+            }
+            return b;
+          }
+          function impulse(sec, decay) {
+            const sr = ctx.sampleRate,
+              n = (sr * sec) | 0,
+              b = ctx.createBuffer(2, n, sr);
+            for (let c = 0; c < 2; c++) {
+              const d = b.getChannelData(c);
+              for (let i = 0; i < n; i++)
+                d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, decay);
+            }
+            return b;
+          }
+          const filt = (type, f, q) => {
+            const b = ctx.createBiquadFilter();
+            b.type = type;
+            b.frequency.value = f;
+            b.Q.value = q;
+            return b;
+          };
+          const pan = (v) => {
+            if (ctx.createStereoPanner) {
+              const p = ctx.createStereoPanner();
+              p.pan.value = v;
+              return p;
+            }
+            return ctx.createGain();
+          };
+          const osc = (type, f) => {
+            const o = ctx.createOscillator();
+            o.type = type;
+            o.frequency.value = f;
+            o.start();
+            return o;
+          };
+          function bus(d, w) {
+            const g = ctx.createGain(),
+              gd = ctx.createGain();
+            gd.gain.value = d;
+            g.connect(gd);
+            gd.connect(master);
+            if (w) {
+              const gw = ctx.createGain();
+              gw.gain.value = w;
+              g.connect(gw);
+              gw.connect(rvIn);
+            }
+            return g;
+          }
+          function build() {
+            ctx = new AC();
+            master = ctx.createGain();
+            master.gain.value = 0;
+            const comp = ctx.createDynamicsCompressor();
+            comp.threshold.value = -22;
+            comp.knee.value = 20;
+            comp.ratio.value = 3.5;
+            comp.attack.value = 0.02;
+            comp.release.value = 0.4;
+            master.connect(comp);
+            comp.connect(ctx.destination);
+            const conv = ctx.createConvolver();
+            conv.buffer = impulse(3.6, 2.4);
+            const wetG = ctx.createGain();
+            wetG.gain.value = 0.6;
+            conv.connect(wetG);
+            wetG.connect(master);
+            rvIn = ctx.createGain();
+            rvIn.connect(conv);
+            oceanBus = bus(0.9, 0.28);
+            droneBus = bus(0.8, 0.4);
+            binBus = bus(1, 0);
+            fxBus = bus(0.8, 0.5);
+            pinkB = noiseBuf("pink", 8);
+            const brownB = noiseBuf("brown", 8);
+            const loopSrc = (b) => {
+              const s = ctx.createBufferSource();
+              s.buffer = b;
+              s.loop = true;
+              s.start(0, Math.random() * 4);
+              return s;
+            };
+            const ws = loopSrc(brownB),
+              wlp = filt("lowpass", 240, 0.5),
+              wg = ctx.createGain();
+            wg.gain.value = 0.08;
+            ws.connect(wlp);
+            wlp.connect(wg);
+            wg.connect(oceanBus);
+            wash = { lp: wlp, g: wg };
+            const fs = loopSrc(pinkB),
+              fbp = filt("bandpass", 1500, 0.6),
+              fg = ctx.createGain();
+            fg.gain.value = 0.004;
+            fs.connect(fbp);
+            fbp.connect(fg);
+            fg.connect(oceanBus);
+            fizz = { bp: fbp, g: fg };
+            const rs = loopSrc(brownB),
+              rlp = filt("lowpass", 70, 0.7),
+              rg = ctx.createGain();
+            rg.gain.value = 0.5;
+            rs.connect(rlp);
+            rlp.connect(rg);
+            rg.connect(oceanBus);
+            const mkPair = (f, gain) => {
+              const l = osc("sine", f),
+                r = osc("sine", f),
+                gl = ctx.createGain(),
+                gr = ctx.createGain();
+              gl.gain.value = gr.gain.value = gain;
+              const pl = pan(-1),
+                pr = pan(1);
+              l.connect(gl);
+              gl.connect(pl);
+              pl.connect(binBus);
+              r.connect(gr);
+              gr.connect(pr);
+              pr.connect(binBus);
+              const lfo = osc("sine", 0.085),
+                lg = ctx.createGain();
+              lg.gain.value = gain * 0.45;
+              lfo.connect(lg);
+              lg.connect(gl.gain);
+              lg.connect(gr.gain);
+              return r;
+            };
+            binR1 = mkPair(100, 0.07);
+            binR2 = mkPair(200, 0.03);
+            droneLP = filt("lowpass", 150, 2.5);
+            droneG = ctx.createGain();
+            droneG.gain.value = 0.04;
+            [
+              [41.2, "sawtooth", 0.5],
+              [43.65, "sawtooth", 0.4],
+              [58.27, "triangle", 0.25],
+              [82.41, "sine", 0.3],
+            ].forEach((a) => {
+              const o = osc(a[1], a[0]),
+                g = ctx.createGain();
+              g.gain.value = a[2] * 0.5;
+              o.connect(g);
+              g.connect(droneLP);
+            });
+            droneLP.connect(droneG);
+            droneG.connect(droneBus);
+            [880, 887].forEach((f) => {
+              const o = osc("sine", f),
+                g = ctx.createGain();
+              g.gain.value = 0.0018;
+              o.connect(g);
+              g.connect(droneBus);
+            });
+          }
+          function waveCycle() {
+            if (!on) return;
+            const t = ctx.currentTime + 0.05,
+              dur = rnd(7.5, 14),
+              peak = rnd(0.5, 1),
+              rise = dur * rnd(0.28, 0.4),
+              rec = t + rise + dur * 0.08;
+            wash.g.gain.cancelScheduledValues(t);
+            wash.g.gain.setTargetAtTime(0.12 + 0.6 * peak, t, rise * 0.45);
+            wash.g.gain.setTargetAtTime(0.07, rec, dur * 0.22);
+            wash.lp.frequency.cancelScheduledValues(t);
+            wash.lp.frequency.setTargetAtTime(380 + 620 * peak, t, rise * 0.5);
+            wash.lp.frequency.setTargetAtTime(210, rec, dur * 0.25);
+            fizz.g.gain.cancelScheduledValues(t);
+            fizz.g.gain.setTargetAtTime(
+              0.03 + 0.22 * peak,
+              t + rise * 0.7,
+              rise * 0.3,
+            );
+            fizz.g.gain.setTargetAtTime(0.004, rec + dur * 0.04, dur * 0.3);
+            fizz.bp.frequency.cancelScheduledValues(t);
+            fizz.bp.frequency.setTargetAtTime(
+              1000 + 1700 * peak,
+              t + rise * 0.6,
+              rise * 0.4,
+            );
+            fizz.bp.frequency.setTargetAtTime(1100, rec, dur * 0.3);
+            later(waveCycle, dur * 900);
+          }
+          function thump(t, v) {
+            const o = ctx.createOscillator(),
+              g = ctx.createGain();
+            o.type = "sine";
+            o.frequency.setValueAtTime(64, t);
+            o.frequency.exponentialRampToValueAtTime(34, t + 0.22);
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(0.26 * v, t + 0.012);
+            g.gain.exponentialRampToValueAtTime(0.0008, t + 0.42);
+            o.connect(g);
+            g.connect(fxBus);
+            o.start(t);
+            o.stop(t + 0.5);
+            const o2 = ctx.createOscillator(),
+              g2 = ctx.createGain();
+            o2.type = "triangle";
+            o2.frequency.setValueAtTime(96, t);
+            o2.frequency.exponentialRampToValueAtTime(60, t + 0.15);
+            g2.gain.setValueAtTime(0, t);
+            g2.gain.linearRampToValueAtTime(0.07 * v, t + 0.01);
+            g2.gain.exponentialRampToValueAtTime(0.0008, t + 0.25);
+            o2.connect(g2);
+            g2.connect(fxBus);
+            o2.start(t);
+            o2.stop(t + 0.3);
+          }
+          function heart() {
+            if (!on) return;
+            const t = ctx.currentTime + 0.06;
+            thump(t, 1);
+            thump(t + 0.34, 0.55);
+            later(heart, rnd(2.6, 3.3) * (voidOn ? 0.82 : 1) * 1000);
+          }
+          function beatDrift() {
+            if (!on) return;
+            const b = rnd(2.2, 5.6),
+              t = ctx.currentTime;
+            binR1.frequency.setTargetAtTime(100 + b, t, 6);
+            binR2.frequency.setTargetAtTime(200 + b * 1.5, t, 6);
+            later(beatDrift, rnd(18000, 35000));
+          }
+          function tension() {
+            if (!on) return;
+            const t = ctx.currentTime,
+              dur = rnd(24, 40),
+              hi = voidOn ? 0.2 : 0.12;
+            droneG.gain.cancelScheduledValues(t);
+            droneG.gain.setTargetAtTime(hi, t, dur * 0.25);
+            droneG.gain.setTargetAtTime(0.035, t + dur * 0.6, dur * 0.2);
+            droneLP.frequency.cancelScheduledValues(t);
+            droneLP.frequency.setTargetAtTime(240, t, dur * 0.25);
+            droneLP.frequency.setTargetAtTime(120, t + dur * 0.6, dur * 0.2);
+            later(tension, dur * 950);
+          }
+          function riser(dur) {
+            if (!on) return;
+            const t = ctx.currentTime + 0.1;
+            const src = ctx.createBufferSource();
+            src.buffer = pinkB;
+            src.loop = true;
+            const bp = filt("bandpass", 240, 4);
+            bp.frequency.setValueAtTime(240, t);
+            bp.frequency.exponentialRampToValueAtTime(2100, t + dur * 0.9);
+            const g = ctx.createGain();
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(0.05, t + dur * 0.85);
+            g.gain.linearRampToValueAtTime(0, t + dur);
+            src.connect(bp);
+            bp.connect(g);
+            g.connect(fxBus);
+            src.start(t, Math.random() * 4);
+            src.stop(t + dur + 0.3);
+            const o = ctx.createOscillator(),
+              og = ctx.createGain();
+            o.type = "sine";
+            o.frequency.setValueAtTime(196, t);
+            o.frequency.exponentialRampToValueAtTime(392, t + dur);
+            og.gain.setValueAtTime(0, t);
+            og.gain.linearRampToValueAtTime(0.012, t + dur * 0.85);
+            og.gain.linearRampToValueAtTime(0, t + dur);
+            o.connect(og);
+            og.connect(fxBus);
+            o.start(t);
+            o.stop(t + dur + 0.3);
+          }
+          function riserLoop(ms) {
+            later(() => {
+              if (!on) return;
+              riser(rnd(16, 24));
+              riserLoop(rnd(40000, 75000));
+            }, ms);
+          }
+          function fall(i) {
+            if (!on || !ctx) return;
+            const t = ctx.currentTime + 0.02,
+              ts = t + 0.3,
+              d = rnd(1.0, 1.35);
+            const cr = ctx.createBufferSource();
+            cr.buffer = pinkB;
+            const chp = filt("highpass", 1500, 0.7),
+              cg = ctx.createGain();
+            cg.gain.setValueAtTime(0, t);
+            cg.gain.linearRampToValueAtTime(0.12, t + 0.01);
+            cg.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+            cr.connect(chp);
+            chp.connect(cg);
+            cg.connect(fxBus);
+            cr.start(t, Math.random() * 3);
+            cr.stop(t + 0.2);
+            const ws = ctx.createBufferSource();
+            ws.buffer = pinkB;
+            ws.loop = true;
+            const bp = filt("bandpass", 2200, 1.1);
+            bp.frequency.setValueAtTime(2200, ts);
+            bp.frequency.exponentialRampToValueAtTime(140, ts + d);
+            const wg = ctx.createGain(),
+              pn = pan(rnd(-0.3, 0.3));
+            wg.gain.setValueAtTime(0, ts);
+            wg.gain.linearRampToValueAtTime(0.16, ts + d * 0.45);
+            wg.gain.linearRampToValueAtTime(0, ts + d + 0.1);
+            ws.connect(bp);
+            bp.connect(wg);
+            wg.connect(pn);
+            pn.connect(fxBus);
+            ws.start(ts, Math.random() * 3);
+            ws.stop(ts + d + 0.2);
+            const f0 = 520 * (1 - i * 0.07),
+              o = ctx.createOscillator(),
+              og = ctx.createGain();
+            o.type = "triangle";
+            o.frequency.setValueAtTime(f0, ts);
+            o.frequency.exponentialRampToValueAtTime(f0 * 0.1, ts + d);
+            og.gain.setValueAtTime(0, ts);
+            og.gain.linearRampToValueAtTime(0.06, ts + 0.12);
+            og.gain.linearRampToValueAtTime(0, ts + d);
+            o.connect(og);
+            og.connect(fxBus);
+            o.start(ts);
+            o.stop(ts + d + 0.1);
+            const ti = ts + d,
+              bo = ctx.createOscillator(),
+              bg = ctx.createGain(),
+              blp = filt("lowpass", 180, 0.7);
+            bo.type = "sine";
+            bo.frequency.setValueAtTime(90, ti);
+            bo.frequency.exponentialRampToValueAtTime(32, ti + 0.6);
+            bg.gain.setValueAtTime(0, ti);
+            bg.gain.linearRampToValueAtTime(0.3, ti + 0.02);
+            bg.gain.exponentialRampToValueAtTime(0.001, ti + 0.9);
+            bo.connect(blp);
+            blp.connect(bg);
+            bg.connect(fxBus);
+            bo.start(ti);
+            bo.stop(ti + 1);
+          }
+          function voidMode(b) {
+            voidOn = b;
+            if (!ctx) return;
+            const t = ctx.currentTime;
+            oceanBus.gain.setTargetAtTime(b ? 0.12 : 1, t, b ? 1.2 : 2.5);
+            droneBus.gain.setTargetAtTime(b ? 1.8 : 1, t, b ? 2 : 3);
+            binBus.gain.setTargetAtTime(b ? 0.75 : 1, t, 2);
+            if (b && on) riser(7);
+          }
+          async function toggle() {
+            if (!AC) return false;
+            if (!ctx) build();
+            if (!on) {
+              await ctx.resume();
+              on = true;
+              const t = ctx.currentTime;
+              master.gain.cancelScheduledValues(t);
+              master.gain.setTargetAtTime(0.8, t, 1.1);
+              waveCycle();
+              heart();
+              beatDrift();
+              tension();
+              riserLoop(9000);
+              if (voidOn) {
+                oceanBus.gain.value = 0.12;
+              }
+            } else {
+              on = false;
+              timers.forEach(clearTimeout);
+              timers.clear();
+              master.gain.cancelScheduledValues(ctx.currentTime);
+              master.gain.setTargetAtTime(0, ctx.currentTime, 0.35);
+              setTimeout(() => {
+                if (!on && ctx.state === "running") ctx.suspend();
+              }, 1700);
+            }
+            return on;
+          }
+          return { toggle, fall, voidMode };
+        })();
+
+        const sndBtn = $("#snd");
+        sndBtn.addEventListener("click", () => {
+          Snd.toggle()
+            .then((v) => {
+              sndBtn.classList.toggle("on", !!v);
+              sndBtn.setAttribute("aria-pressed", v ? "true" : "false");
+            })
+            .catch(() => {});
         });
 
-        /* ---------- boot ---------- */
-        let rt = 0;
-        addEventListener("resize", () => {
-          clearTimeout(rt);
-          rt = setTimeout(() => {
-            setup();
-            buildDirt();
-            fixWidths();
-          }, 250);
-        });
-        setup();
-        buildDirt();
-        fixWidths();
-        requestAnimationFrame(loop);
-        requestAnimationFrame(uiLoop);
-        setTimeout(glitchTick, 1800);
-        ghostLoop();
+        /* ================= COLLAPSE SEQUENCE ================= */
+        const Shake = {
+          amp: 0,
+          on: false,
+          start() {
+            if (this.on) return;
+            this.on = true;
+            state.shake = true;
+            raf(this.loop);
+          },
+          stop() {
+            this.on = false;
+            state.shake = false;
+            const T = Title.T;
+            T.dx = T.dy = T.sk = 0;
+            T.sx = T.sy = 1;
+            T.ga = 0;
+            T.gx = 0;
+            Title.S.forEach((s, i) => {
+              s.ox = s.oy = 0;
+              if (!s.falling && !s.gone) s.fr = 0;
+              Title.applyL(i);
+            });
+            Title.render();
+          },
+          loop(now) {
+            if (!Shake.on) return;
+            const a = Shake.amp,
+              T = Title.T,
+              n = (k, sp) => noise(k + now * (sp || 0.03));
+            T.dx = n(1) * 5 * a;
+            T.dy = n(2) * 3.2 * a;
+            T.sk = n(3) * 1.6 * a;
+            T.sx = 1 + n(4) * 0.008 * a;
+            T.sy = 1 + n(5) * 0.01 * a;
+            T.gx = Math.abs(n(6)) * 5 * a;
+            T.ga = 0.5 * a;
+            Title.S.forEach((s, i) => {
+              if (!s.gone && !s.falling) {
+                s.ox = (n(10 + i * 3, 0.05) * (3 + 6 * a) * a) / T.kx;
+                s.oy = (n(40 + i * 3, 0.05) * (2 + 5 * a) * a) / T.ky;
+                s.fr = n(70 + i, 0.04) * 1.6 * a;
+              }
+              Title.applyL(i);
+            });
+            Title.render();
+            raf(Shake.loop);
+          },
+        };
+
+        async function drop(i, h0) {
+          const s = Title.S[i],
+            T = Title.T;
+          s.falling = true;
+          Snd.fall(i);
+          const sd = rnd(0, 100);
+          await tween(rint(260, 380), (u) => {
+            s.fy = (noise(sd + u * 14) * 5 * u) / T.ky;
+            s.fr = noise(sd + 9 + u * 12) * 2.4 * u;
+            Title.applyL(i);
+          });
+          const D = (innerHeight * 0.5 + h0 * T.ky * 0.55 + 140) / T.ky,
+            dur = rnd(1050, 1400),
+            rot = (Math.random() < 0.5 ? -1 : 1) * rnd(6, 16),
+            dx = rnd(-28, 28);
+          await tween(dur, (u) => {
+            const p = Math.pow(u, 2.15);
+            s.fy = D * p;
+            s.fx = dx * u * u;
+            s.fr = rot * u * u;
+            Title.applyL(i);
+          });
+          s.gone = true;
+          s.falling = false;
+          Title.letters[i].style.visibility = "hidden";
+        }
+
+        async function recover() {
+          const el = Title.el;
+          el.style.transition = "none";
+          el.style.opacity = "0";
+          Title.reset();
+          void el.offsetWidth;
+          root.classList.remove("void");
+          Waves.setActive(true);
+          Snd.voidMode(false);
+          Loader.reset();
+          await sleep(40);
+          el.style.transition = "opacity 2.8s ease 1.2s,color 2.4s ease";
+          el.style.opacity = "1";
+          setTimeout(() => Msgs.start(), 2200);
+          await sleep(4400);
+          el.style.transition = "";
+          el.style.opacity = "";
+          Title.measure();
+          state.void = false;
+        }
+
+        async function collapse() {
+          if (state.void) return;
+          state.void = true;
+          while (state.fx || Loader.busy()) await sleep(80);
+          Msgs.stop();
+          Loader.pause();
+          Snd.voidMode(true);
+          root.classList.add("void");
+          setTimeout(() => Waves.setActive(false), 3200);
+          const h0 = Title.el.offsetHeight,
+            w0 = Title.el.offsetWidth;
+          const kx = clamp((innerWidth * 0.94) / w0, 1, 12),
+            ky = clamp(
+              Math.min(kx * 2.4, (innerHeight * 0.9) / h0),
+              kx * 0.9,
+              24,
+            );
+          await sleep(700);
+          await tween(3400, (u) => {
+            const e = E.io(u);
+            Title.T.kx = lerp(1, kx, e);
+            Title.T.ky = lerp(1, ky, e);
+            Title.render();
+          });
+          Shake.amp = 0.04;
+          Shake.start();
+          await tween(rnd(6500, 8500), (u) => {
+            Shake.amp = 0.04 + 0.96 * Math.pow(u, 1.7);
+          });
+          const jobs = [];
+          for (let i = 5; i >= 0; i--) {
+            jobs.push(drop(i, h0));
+            Shake.amp = 1 + (5 - i) * 0.12;
+            await sleep(rnd(850, 1150));
+          }
+          await Promise.all(jobs);
+          await tween(500, (u) => {
+            Shake.amp = Math.max(0, 1.6 * (1 - u));
+          });
+          Shake.stop();
+          await sleep(rnd(3000, 5200));
+          await recover();
+        }
+
+        function schedule(ms) {
+          setTimeout(async () => {
+            if (document.hidden || state.void) {
+              schedule(8000);
+              return;
+            }
+            try {
+              await collapse();
+            } catch (_) {
+              state.void = false;
+              root.classList.remove("void");
+            }
+            schedule(rnd(120000, 600000));
+          }, ms);
+        }
+
+        /* ================= INIT ================= */
+        (function init() {
+          const m = () => Title.measure();
+          raf(m);
+          window.addEventListener("load", m);
+          if (document.fonts && document.fonts.ready)
+            document.fonts.ready.then(m);
+          let rt = 0;
+          window.addEventListener("resize", () => {
+            clearTimeout(rt);
+            rt = setTimeout(() => {
+              Waves.resize();
+              m();
+            }, 150);
+          });
+          scramble($("#msg"), "Aligning the tide tables…", 900);
+          setTimeout(() => Msgs.start(), 1200);
+          schedule(location.hash === "#void" ? 3500 : rnd(120000, 600000));
+        })();
       })();
     </script>
   </body>
