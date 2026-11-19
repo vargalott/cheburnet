@@ -1,0 +1,75 @@
+listen: realm://YOUR-TOKEN@rendezvous.example.com/your-realm-name
+
+realm:
+  stunServers:
+    - stun.nextcloud.com:3478
+    - global.stun.twilio.com:3478
+    - stun.cloudflare.com:3478
+    - stun.l.google.com:19302
+    - stun1.l.google.com:19302
+    - stun2.l.google.com:19302
+    - stun3.l.google.com:19302
+    - stun4.l.google.com:19302
+    - stun.stunprotocol.org:3478
+    - stun.sipgate.net:3478
+    - stun.voip.blackberry.com:3478
+    - stun.ekiga.net:3478
+    - stun.1und1.de:3478
+    - stun.t-online.de:3478
+    - stun.telnyx.com:3478
+    - stun.miwifi.com:3478
+    - stun.syncthing.net:3478
+  stunTimeout: 5s
+  punchTimeout: 5s
+  heartbeatInterval: 30s
+  insecure: false
+  ipMode: dual
+  portMapping:
+    enabled: false
+    timeout: 10s
+    lifetime: 10m
+
+resolver:
+  type: https
+  https:
+    addr: 1.1.1.1:443
+    timeout: 10s
+    sni: cloudflare-dns.com
+    insecure: false
+
+# self-signed with pinSHA256
+# $ hysteria cert
+tls:
+  cert: server.crt
+  key: server.key
+  # sniGuard: disable
+
+sniff:
+  enable: true
+  timeout: 2s
+  rewriteDomain: false
+  tcpPorts: all
+  udpPorts: all
+
+auth:
+  type: userpass
+  userpass:
+    user: password
+
+# obfs:
+#   type: salamander
+#   salamander:
+#     password: password
+
+masquerade:
+  type: string
+  string:
+    content: "forbidden"
+    statusCode: 403
+
+# ignoreClientBandwidth: false
+# bandwidth:
+#   up: 100 mbps
+#   down: 100 mbps
+
+disableUDP: false
