@@ -1,0 +1,17 @@
+[Unit]
+Description=Hysteria Realm Server
+After=network.target NetworkManager.service systemd-networkd.service iwd.service
+
+[Service]
+Type=simple
+ExecStart=/root/hysteria-realm-server/hysteria-realm-server \
+  --token UUID \
+  --listen :8443 \
+  --cert fullchain.pem \
+  --key privkey.pem
+WorkingDirectory=/root/hysteria-realm-server
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
